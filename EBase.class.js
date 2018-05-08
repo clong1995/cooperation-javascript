@@ -85,8 +85,8 @@ class EBase {
 
         this._sheetArr = document.styleSheets;
         this._head = document.head;
-        if (this._sheetArr.length <= 0)//创建style节点
-            this.append(this._head, this.createDom('style'));
+        if (this._sheetArr.length <= 0)
+            this.append(this._head, this.createDom('style'));//创建style节点
         this._firstSheet = this._sheetArr[0];
         this._lastSheet = this._sheetArr[this._sheetArr.length - 1];
 
@@ -142,10 +142,10 @@ class EBase {
                 if (response.status === 200) return response;
             })
             .then(data => {
-                return data.text()
+                return data.json()
             })
-            .then(text => {
-                if (typeof success === 'function') success(text)
+            .then(json => {
+                if (typeof success === 'function') success(json)
             })
             .catch(err => {
                 if (typeof error === 'function') error(err)
@@ -253,6 +253,43 @@ class EBase {
         return str.charAt(0).toUpperCase() + str.substring(1);
     }
 
+    click(dom, callback, target = '', useCapture = true) {
+        dom.addEventListener('click', e => {
+
+            if (!target)
+                callback(e);
+            else {
+                let fn = domLen => {
+                    if (!target.indexOf('.')) //class
+                        [...e.path[domLen].classList].some(v => {
+                            if ('.' + v === target) {
+                                callback(e.path[domLen]);
+                                return true;
+                            }
+                        });
+                    else if (target.indexOf('#')) {//id
+                        if ('#' + e.path[domLen].id === target)
+                            callback(e.path[domLen]);
+                    } else {//标签名
+                        if (e.path[domLen].nodeName === target)
+                            callback(e.path[domLen]);
+                    }
+                };
+                let domLen = e.path.length - 4 - 1;//排除body,html,document,window
+
+                //冒泡
+                if (useCapture)
+                    for (; domLen + 1; --domLen)
+                        fn(domLen);
+                else //捕获
+                    e.path.some((v, i) => {
+                        fn(i);
+                        return i === domLen;
+                    })
+            }
+        })
+    }
+
     /**
      * TODO 不能局限于克隆数组
      * @param arr
@@ -298,8 +335,19 @@ class EBase {
     }
 
     //删除css
-    deleteStyle(selector) {
+    deleteSheet(selectorText) {
+        let flag = false;
+        [...this._lastSheet.cssRules].some((v, i) => {
+            flag = v.selectorText === selectorText;
+            if (flag)
+                this._lastSheet.deleteRule(i);
+            return flag;
+        });
+    }
 
+    //批量删除
+    batchDeleteSheet(selectorTextArr) {
+        selectorTextArr.forEach(v => this.deleteSheet(v))
     }
 
     // 差集
@@ -425,19 +473,18 @@ class EBase {
                 border-spacing: 0
             }
             ::-webkit-scrollbar{
-                width:8px;
-                height:8px
+                width:6px;
+                height:6px
             }
             ::-webkit-scrollbar-track-piece{
                 border-radius: 0;
-                background:#4e4e5a
             }
             ::-webkit-scrollbar-thumb{
-                border-radius:0;
-                background:#c0c9cd
+                border-radius:8px;
+                background:#d4d8da
             }
             ::-webkit-scrollbar-thumb:hover{
-                background:#d4d8da
+                background:#c0c9cd
             }`
         );
     }
@@ -510,7 +557,7 @@ class EBase {
      * @returns {*}
      */
     hasClass(dom, clazz) {
-        return Array.from(dom.classList).some(v => v === clazz)
+        return [...dom.classList].some(v => v === clazz)
     }
 
 
@@ -522,7 +569,7 @@ class EBase {
      */
     html(dom, str, plus = true) {
         let textNode = this.textNode(str);
-        plus ? dom.innerHTML = '' : '';
+        plus ? dom.innerHTML = '' : null;
         this.append(dom, textNode);
         return dom;
     }
@@ -551,9 +598,23 @@ class EBase {
         );
     }
 
+    keyframes(name, animation) {
+        this._lastSheet.insertRule('@keyframes ' + name + '{' + animation + '}', this._lastSheet.cssRules.length);
+        return name;
+    }
+
     // 交集
     intersect(arr1, arr2) {
         new [...Set([...arr1].filter(x => arr2.has(x)))];
+    }
+
+    /**
+     * 打开连接
+     * @param url
+     * @param target
+     */
+    link(url,target='self'){
+        window.location.href = url;
     }
 
     /**
@@ -639,6 +700,10 @@ class EBase {
         if (typeof key === "object") this._weakDate.set(key, value);
     }
 
+    getData(key) {
+        return this._weakDate.get(key);
+    }
+
 
     /**
      * 解除事件
@@ -657,19 +722,24 @@ class EBase {
      * @param evt
      * @param callback
      */
-    on(selecter, evt, callback) {
+    on(selecter, evt, callback, useCapture = true) {
         //新增事件
         if (!this._eventSet.has(evt)) {
             this._eventSet.add(evt);
             //注册事件
             this.body.addEventListener(evt, e => {
-                //id
-                if (e.target.id) this._onFunction('#' + e.target.id, e);
-                //class
-                e.target.classList.forEach(v => this._onFunction('.' + v, e));
-                //nodeName
-                this._onFunction(e.target.nodeName, e);
-            }, true)
+                //查找所有元素是否有事件
+                let domLen = e.path.length - 4 - 1;//排除body,html,document,window
+                //冒泡
+                if (useCapture)
+                    for (; domLen + 1; --domLen)
+                        this._onFunction(e.path[domLen], e.type);
+                else //捕获
+                    e.path.some((v, i) => {
+                        this._onFunction(e.path[i], e.type);
+                        return i === domLen;
+                    })
+            })
         }
         //增加事件响应函数
         this._eventMap.has(selecter)
@@ -679,14 +749,17 @@ class EBase {
 
     /**
      * 执行on方法
-     * @param key
-     * @param event
+     * @param node
      * @private
      */
-    _onFunction(key, event) {
-        this._eventMap.has(key) && this._eventMap.get(key).has(event.type)
-            ? this._eventMap.get(key).get(event.type)(event)
-            : null
+    _onFunction(node, event) {
+        let keyArr = [node.nodeName];
+        if (node.id) keyArr.push('#' + node.id);
+        node.classList.forEach(v => keyArr.push('.' + v));
+        //遍历方法树
+        keyArr.forEach(key => (this._eventMap.has(key) && this._eventMap.get(key).has(event))
+            ? this._eventMap.get(key).get(event)(node)
+            : null)
     }
 
     /**
@@ -732,14 +805,6 @@ class EBase {
             : document.addEventListener('DOMContentLoaded', () => {
                 this._isReady = true;
                 this.body = document.body;
-                //this._head = document.head;
-                //this._sheetArr = document.styleSheets;
-
-                //sheet
-                /*if (this._sheetArr.length <= 0)//创建style节点
-                    this.append(this._head, this.createDom('style'));*/
-                /*this._firstSheet = this._sheetArr[0];
-                this._lastSheet = this._sheetArr[this._sheetArr.length - 1];*/
                 rename ? callback(this) : callback();
             })
     }
@@ -788,8 +853,7 @@ class EBase {
      * @param callback
      * @private
      */
-    _require(path, option = {}, callback = () => {
-    }, className = path.split('/').pop()) {
+    _require(path, option = {}, callback = () => {}, className = path.split('/').pop()) {
         option.className = className;
         this.loadScript(path + '.class', () => callback(this._moduleStack.get(className)(option)))
     };
@@ -830,6 +894,7 @@ class EBase {
         for (let k in rules)
             rulesText += this.underscored(k) + ':' + rules[k] + ';';
         this._lastSheet.insertRule(rulesText + '}', this._lastSheet.cssRules.length);
+        return selector;
     }
 
     /**
@@ -1003,6 +1068,11 @@ class EBase {
         for (let i = 3; i < arr.length - 1; ++i)
             root += arr[i] + '/';
         return root;
+    }
+
+    verify(type, value) {
+        let res = false;
+        let reg = null;
     }
 
     /**

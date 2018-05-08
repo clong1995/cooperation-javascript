@@ -1,5 +1,9 @@
 'use strict';
-
+/**
+ * 窗口组件
+ * 作者：成龙哥哥 微信：clong QQ：2435965705 邮箱：2435965705@qq.com git：
+ * 更新时间：2018年4月26日22:18:38
+ */
 CLASS(
     'window.ui',
     ({
@@ -7,34 +11,37 @@ CLASS(
          height = 300,
          title = '弹窗标题',
          headHeight = 25,
-         headColor = '#ffffff',
-         headBackground = 'green',
-         headBorderBottomColor = 'red',
+         headColor = '#353535',
+         borderRadius = 3,
+         headBackground = 'linear-gradient(rgba(200, 200, 200,0.9),rgba(200, 200, 200, 0.8),rgba(215, 215, 215, 0.7),rgba(235, 235, 235, 0.7))',
+         headBorderBottomColor = '#ccc',
+         closeColor = 'red',
+         content = ejs.createDom(),
          contentColor = '#ffffff',
-         contentBackground = 'blue',
-         closeColor = '#cdcdcd',
-         content = $.createDom()
+         contentBackground = '#eeeeee',
+         contentPadding = 0,
+         scrolling = 'auto'//专门给content是连接的iframe用的
      } = {}) => {
-
-
-        let {ww, wh} = $.windowSize();
-
+        let {ww, wh} = ejs.windowSize();
         //容器
-        let wrapClass = $.simple(),
-            wrap = $.createDom('div', {class: wrapClass});
-        $.setStyle('.' + wrapClass, {
+        let wrapClass = ejs.simple(),
+            wrap = ejs.createDom('div', {class: wrapClass});
+
+        let wrapSelector = ejs.setSheet('.' + wrapClass, {
             width: width + 'px',
             height: height + 'px',
             position: 'absolute',
             left: (ww - width) / 2 + 'px',
             top: (wh - height) / 2 + 'px',
+            borderRadius:borderRadius+'px',
+            overflow:'hidden',
             boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.6)'
         });
 
         //头部
-        let headClass = $.simple(),
-            head = $.createDom('div', {class: headClass});
-        $.setStyle('.' + headClass, {
+        let headClass = ejs.simple(),
+            head = ejs.createDom('div', {class: headClass});
+        let headSelector = ejs.setSheet('.' + headClass, {
             width: '100%',
             height: headHeight + 'px',
             lineHeight: headHeight + 'px',
@@ -42,26 +49,25 @@ CLASS(
             padding: '0 10px',
             color: headColor,
             boxSizing: 'border-box',
-            borderBottom: '2px solid ' + headBorderBottomColor,
+            borderBottom: '1px solid ' + headBorderBottomColor,
             cursor: 'move',
             background: headBackground
         });
 
-        $.html(head, title);
-
+        ejs.html(head, title);
 
         //关闭
         let
-            closeBtnClass = $.simple(),
-            closeBtn = $.createDom('i', {
+            closeBtnClass = ejs.simple(),
+            closeBtn = ejs.createDom('i', {
                 class: 'iconfont ' + closeBtnClass
             });
-        $.setStyle('.' + closeBtnClass, {
+        let closeBtnSelector = ejs.setSheet('.' + closeBtnClass, {
             float: 'right',
             fontSize: '12px',
-            color:closeColor
+            color: closeColor
         });
-        $.setStyle('.' + closeBtnClass + ':hover', {
+        let closeHoverBtnSelector = ejs.setSheet('.' + closeBtnClass + ':hover', {
             cursor: 'pointer'
         });
         closeBtn.innerHTML = '&#xe606;';
@@ -70,29 +76,39 @@ CLASS(
         //鼠标按下
         head.onmousedown = h => {
             if (!h.button)
-                $.body.onmousemove = b => $.css(wrap, {
+                ejs.body.onmousemove = b => ejs.css(wrap, {
                     top: (b.clientY - h.layerY) + 'px',
                     left: (b.clientX - h.layerX) + 'px'
                 })
         };
         //鼠标抬起
-        head.onmouseup = e => $.body.onmousemove = null;
+        head.onmouseup = e => ejs.body.onmousemove = null;
 
         //内容
-        let contentClass = $.simple();
-        $.addClass(content,contentClass);
-        $.setStyle('.' + contentClass, {
+        let contentClass = ejs.simple();
+
+        if (typeof(content) === 'string') {
+            let src = content;
+            content = ejs.createDom('iframe', {
+                src: src,
+                frameborder: 0,
+                scrolling: scrolling
+            })
+        }
+
+        ejs.addClass(content, contentClass);
+        let contentSelector = ejs.setSheet('.' + contentClass, {
             width: '100%',
-            padding: '15px',
+            padding: contentPadding+'px',
             boxSizing: 'border-box',
-            color:contentColor,
+            color: contentColor,
             height: 'calc(100% - ' + headHeight + 'px)',
             background: contentBackground
         });
 
         //组装
-        $.append($.body, $.appendBatch(wrap, [
-            $.append(head, closeBtn),
+        ejs.append(ejs.body, ejs.appendBatch(wrap, [
+            ejs.append(head, closeBtn),
             content
         ]));
 
@@ -101,7 +117,8 @@ CLASS(
             head.onmousedown = null;
             head.onmouseup = null;
             closeBtn.onclick = null;
-            $.remove(wrap);
+            ejs.batchDeleteSheet([wrapSelector, headSelector, closeBtnSelector, closeHoverBtnSelector, contentSelector]);
+            ejs.remove(wrap);
         }
 
         return {
