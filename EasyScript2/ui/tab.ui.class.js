@@ -115,26 +115,38 @@ CLASS(
             ejs.addClass(e, selectedClass);
             let data = ejs.getData(e);
             let child = body.childNodes;
+            ejs.removeAll(child);
             if (typeof(data.content) === 'string') {
-                ejs.removeAll(child);
-                let content = ejs.createDom('iframe', {
-                    src: data.content,
-                    allowTransparency: 'true',
-                    class: iframeClass,
-                    frameborder: 0
-                });
-                content.onload = function () {
-                    let ifrDoc = content.contentWindow.document;
-                    ejs.css(ifrDoc.body, {
-                        background: 'transparent'
-                    });
-                    ejs.css(ifrDoc.getElementsByTagName('html')[0], {
-                        background: 'transparent'
-                    });
-                };
-                ejs.append(body, content);
+                ejs.append(body, ifrDom(data.content));
+            } else {
+
             }
         }, '.' + tepClass);
+
+        //打开第一个
+        if (typeof(data[0].content) === 'string') {
+            ejs.append(body, ifrDom(data[0].content));
+        }
+
+        function ifrDom(src) {
+            let content = ejs.createDom('iframe', {
+                src: src,
+                allowTransparency: 'true',
+                class: iframeClass,
+                frameborder: 0
+            });
+            content.onload = function () {
+                let ifrDoc = content.contentWindow.document;
+                ejs.css(ifrDoc.body, {
+                    background: 'transparent'
+                });
+                ejs.css(ifrDoc.getElementsByTagName('html')[0], {
+                    background: 'transparent'
+                });
+            };
+            return content;
+        }
+
 
         //组装
         ejs.appendBatch(head, tepArr);

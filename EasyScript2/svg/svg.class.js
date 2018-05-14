@@ -21,7 +21,7 @@ CLASS(
          */
         function create(tagName, attr = {}) {
             let elem = document.createElementNS(SVG_NS, tagName);
-            for (let key in attr) elem.setAttribute(zBase.underscored(key), attr[key]);
+            for (let key in attr) elem.setAttribute(ejs.underscored(key), attr[key]);
             return elem;
         }
 
@@ -47,7 +47,7 @@ CLASS(
                 'xmlns:xlink': xlink
             });
 
-            zBase.css(svg, {
+            ejs.css(svg, {
                 position: 'absolute',
                 userSelect: 'none',
                 display: 'none'
@@ -65,7 +65,7 @@ CLASS(
          */
         function g(iteratorNode, attr = {}) {
             let g = create('g', attr);
-            zBase.appendBatch(g, iteratorNode);
+            ejs.appendBatch(g, iteratorNode);
             return g;
         }
 
@@ -74,7 +74,7 @@ CLASS(
          * @param node
          */
         function defs(id, node) {
-            zBase.attr(node, {
+            ejs.attr(node, {
                 id: id
             });
             defsSet.add(node);
@@ -82,8 +82,8 @@ CLASS(
 
         function initDefs(svg) {
             let defs = create('defs');
-            defsSet.forEach(v => zBase.append(defs, v));
-            zBase.append(svg, defs)
+            defsSet.forEach(v => ejs.append(defs, v));
+            ejs.append(svg, defs)
         }
 
         function use(id, attr = {}) {
@@ -101,7 +101,7 @@ CLASS(
             let style = null;
             if (!svg.querySelector('style')) {
                 style = create('style');
-                zBase.append(svg, style);
+                ejs.append(svg, style);
             }
             return style.sheet;
         }
@@ -114,7 +114,7 @@ CLASS(
         function setSheet(sheetNS, selector, rules) {
             let rulesText = selector + '{';
             for (let k in rules) {
-                rulesText += zBase.underscored(k) + ':' + rules[k] + ';'
+                rulesText += ejs.underscored(k) + ':' + rules[k] + ';'
             }
             rulesText += '}';
             sheetNS.insertRule(rulesText, sheetNS.cssRules.length);
@@ -127,6 +127,7 @@ CLASS(
          */
         function html(obj, str) {
             obj.textContent = str;
+            return obj;
         }
 
 
@@ -139,12 +140,12 @@ CLASS(
         function styleStr2Obj(styleStr, type = 'camelize') {
             let ruleObj = {},
                 item = [];
-            zBase.trim(zBase.trim(styleStr.match(/\{([\s\S]*)\}/)[1]), {
+            ejs.trim(ejs.trim(styleStr.match(/\{([\s\S]*)\}/)[1]), {
                 char: ';',
                 position: 'right'
             }).split(';').forEach(v => {
                 item = v.split(':');
-                let k = zBase.trim(item[0]);
+                let k = ejs.trim(item[0]);
                 switch (k) {
                     case 'color':
                         k = 'fill';
@@ -153,8 +154,8 @@ CLASS(
                         k = 'stroke';
                         break;
                 }
-                if (type === 'camelize') k = zBase.camelize(k);
-                ruleObj[k] = zBase.trim(item[1]);
+                if (type === 'camelize') k = ejs.camelize(k);
+                ruleObj[k] = ejs.trim(item[1]);
             });
             return ruleObj;
         }
