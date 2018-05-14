@@ -1,0 +1,22 @@
+/*
+#box chart axis x line {
+    border-color: #132b51;
+    border-width: 1;
+}
+
+#box chart axis y line {
+    border-color: #132b51;
+    border-width: 1;
+}
+
+
+#box chart axis x tick {
+    height: 10;
+    border-width: 1;
+    border-color: green;
+}
+*/
+
+#box .box-title{
+    color:green
+}
