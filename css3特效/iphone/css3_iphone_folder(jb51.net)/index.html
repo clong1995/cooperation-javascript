@@ -1,0 +1,946 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>纯CSS3仿iPhone文件夹特效</title>
+
+<style>
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #222;
+  letter-spacing: 0.5px;
+}
+
+input[type="radio"] {
+  position: fixed;
+  top: -1.5em;
+  left: -1.5em;
+}
+input[type="radio"] ~ .pagination label span {
+  background-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 8px 4px;
+  opacity: 0.3;
+  height: 8px;
+  width: 8px;
+}
+input[type="radio"]:nth-of-type(1):checked ~ .pagination label:nth-child(1) span {
+  opacity: 1;
+}
+input[type="radio"]:nth-of-type(1):checked ~ .pages {
+  transform: translateX(0%);
+}
+input[type="radio"]:nth-of-type(1):checked ~ .pages .page .bg-blur, input[type="radio"]:nth-of-type(1):checked ~ .pages .bottom-bar {
+  transform: translateX(0%);
+}
+input[type="radio"]:nth-of-type(2):checked ~ .pagination label:nth-child(2) span {
+  opacity: 1;
+}
+input[type="radio"]:nth-of-type(2):checked ~ .pages {
+  transform: translateX(-100%);
+}
+input[type="radio"]:nth-of-type(2):checked ~ .pages .page .bg-blur, input[type="radio"]:nth-of-type(2):checked ~ .pages .bottom-bar {
+  transform: translateX(100%);
+}
+
+.screen {
+  background-color: #000;
+  background-image: url(1.jpg);
+  background-position: center;
+  background-size: auto 100%;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 20px;
+  margin: 1.5em auto 0 auto;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  width: 320px;
+  height: 568px;
+}
+
+.status, .pages, .pagination, .bg-blur, .bottom-bar {
+  position: absolute;
+}
+
+/** Status Bar **/
+.status {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  width: 100%;
+  height: 20px;
+}
+.status > div {
+  width: 33.33%;
+}
+
+/* Clock */
+.clock {
+  text-align: center;
+}
+
+/* Battery */
+.battery-meter {
+  margin: 0 0 0 auto;
+  height: 18px;
+  width: 29px;
+}
+.battery-meter > div {
+  display: inline-block;
+}
+
+.battery-meter-inner {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  border-radius: 3px;
+  margin-right: 1px;
+  position: relative;
+  height: 12px;
+  width: 25px;
+}
+.battery-meter-inner:before, .battery-meter-inner:after {
+  content: "";
+  display: block;
+}
+.battery-meter-inner:before {
+  background-color: #fff;
+  border-radius: 1px 0 0 1px;
+  margin: 2px;
+  height: 8px;
+  width: 19px;
+}
+.battery-meter-inner:after {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0 3px 3px 0;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin: 4px 0 0 1px;
+  height: 4px;
+  width: 2px;
+}
+
+/** Pages **/
+.pages, .bottom-bar {
+  transition: transform 0.25s ease-in-out;
+}
+
+.pages {
+  white-space: nowrap;
+  width: 100%;
+  height: calc(100% - 116px);
+  transform-style: preserve-3d;
+  z-index: 2;
+}
+
+.page {
+  display: inline-flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  padding: 27px 8px 7px 8px;
+  width: 320px;
+  height: 100%;
+}
+.page .folder:nth-child(1) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-8px, 106px, 1px);
+}
+.page .folder:nth-child(1) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-8px, -270px, 1px);
+}
+.page .folder:nth-child(2) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-84px, 106px, 1px);
+}
+.page .folder:nth-child(2) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-84px, -270px, 1px);
+}
+.page .folder:nth-child(3) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-160px, 106px, 1px);
+}
+.page .folder:nth-child(3) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-160px, -270px, 1px);
+}
+.page .folder:nth-child(4) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-236px, 106px, 1px);
+}
+.page .folder:nth-child(4) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-236px, -270px, 1px);
+}
+.page .folder:nth-child(5) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-8px, 19px, 1px);
+}
+.page .folder:nth-child(5) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-8px, -357px, 1px);
+}
+.page .folder:nth-child(6) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-84px, 19px, 1px);
+}
+.page .folder:nth-child(6) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-84px, -357px, 1px);
+}
+.page .folder:nth-child(7) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-160px, 19px, 1px);
+}
+.page .folder:nth-child(7) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-160px, -357px, 1px);
+}
+.page .folder:nth-child(8) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-236px, 19px, 1px);
+}
+.page .folder:nth-child(8) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-236px, -357px, 1px);
+}
+.page .folder:nth-child(9) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-8px, -68px, 1px);
+}
+.page .folder:nth-child(9) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-8px, -444px, 1px);
+}
+.page .folder:nth-child(10) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-84px, -68px, 1px);
+}
+.page .folder:nth-child(10) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-84px, -444px, 1px);
+}
+.page .folder:nth-child(11) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-160px, -68px, 1px);
+}
+.page .folder:nth-child(11) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-160px, -444px, 1px);
+}
+.page .folder:nth-child(12) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-236px, -68px, 1px);
+}
+.page .folder:nth-child(12) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-236px, -444px, 1px);
+}
+.page .folder:nth-child(13) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-8px, -155px, 1px);
+}
+.page .folder:nth-child(13) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-8px, -531px, 1px);
+}
+.page .folder:nth-child(14) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-84px, -155px, 1px);
+}
+.page .folder:nth-child(14) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-84px, -531px, 1px);
+}
+.page .folder:nth-child(15) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-160px, -155px, 1px);
+}
+.page .folder:nth-child(15) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-160px, -531px, 1px);
+}
+.page .folder:nth-child(16) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-236px, -155px, 1px);
+}
+.page .folder:nth-child(16) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-236px, -531px, 1px);
+}
+.page .folder:nth-child(17) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-8px, -242px, 1px);
+}
+.page .folder:nth-child(17) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-8px, -618px, 1px);
+}
+.page .folder:nth-child(18) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-84px, -242px, 1px);
+}
+.page .folder:nth-child(18) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-84px, -618px, 1px);
+}
+.page .folder:nth-child(19) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-160px, -242px, 1px);
+}
+.page .folder:nth-child(19) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-160px, -618px, 1px);
+}
+.page .folder:nth-child(20) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-236px, -242px, 1px);
+}
+.page .folder:nth-child(20) .folder-apps:focus ~ .folder-name {
+  transform: translate3d(-236px, -618px, 1px);
+}
+
+/** Apps **/
+.app, .folder {
+  margin: 0 8px 7px 8px;
+  max-width: 60px;
+  max-height: 80px;
+}
+
+.app-icon, .folder-apps {
+  margin: auto;
+}
+
+.app-icon {
+  background-image: linear-gradient(#dde, #aab);
+  border-radius: 9px;
+  width: 60px;
+  height: 60px;
+}
+
+.app:nth-child(6n + 2) .app-icon {
+  background-image: linear-gradient(#eddf44, #ecba45);
+}
+
+.app:nth-child(6n + 3) .app-icon {
+  background-image: linear-gradient(#82e8d1, #25ce93);
+}
+
+.app:nth-child(6n + 4) .app-icon {
+  background-image: linear-gradient(#ff9eed, #e06bfe);
+}
+
+.app:nth-child(6n + 5) .app-icon {
+  background-image: linear-gradient(#c5ca6c, #4ebf63);
+}
+
+.app:nth-child(6n + 6) .app-icon {
+  background-image: linear-gradient(#be75ff, #a43ffd);
+}
+
+.app:nth-child(6n + 7) .app-icon {
+  background-image: linear-gradient(#fa4, #ff8f44);
+}
+
+.app:nth-child(6n + 8) .app-icon {
+  background-image: linear-gradient(#ff7074, #fe5242);
+}
+
+.app:nth-child(6n + 9) .app-icon {
+  background-image: linear-gradient(#70e4ff, #0aa5ff);
+}
+
+.bg-blur {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 568px;
+  visibility: hidden;
+  transition: backdrop-filter 0.25s cubic-bezier(0.2, 0.7, 0.3, 0.8), visibility 0.25s cubic-bezier(0.2, 0.7, 0.3, 0.8);
+  z-index: 1;
+}
+
+.folder-apps {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 45px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 0.8);
+  padding: 44px 36px;
+  width: 304px;
+  height: 304px;
+  transform: scale(0.19737, 0.19737);
+  transform-origin: 0 0;
+}
+.folder-apps:focus {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  outline: 0;
+  padding: 26px 8px 26px 8px;
+}
+.folder-apps:focus ~ .folder-name {
+  animation: folderNameFadeIn 0.2s 0.2s forwards;
+  font-size: 3em;
+  opacity: 0;
+  width: 300px;
+}
+.folder-apps:focus ~ .bg-blur {
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  visibility: visible;
+}
+.folder-apps:focus .app {
+  margin: 0 18px 7px 18px;
+}
+.folder-apps:focus .app-icon {
+  border-radius: 9px;
+}
+.folder-apps:focus .app-name {
+  display: inherit;
+}
+.folder-apps .app {
+  margin: 0 8px 16px 8px;
+}
+.folder-apps .app-icon {
+  border-radius: 18px;
+}
+.folder-apps .app-name {
+  display: none;
+}
+
+.app-icon:active, .folder-apps:not(:focus):active {
+  filter: brightness(0.7);
+}
+
+.app-name, .folder-name {
+  text-align: center;
+}
+
+.folder-name {
+  transform: translateY(-244px);
+}
+
+/** Pagination **/
+.pagination {
+  display: flex;
+  justify-content: center;
+  top: calc(100% - 116px);
+  width: 100%;
+  height: 24px;
+}
+
+/** Bottom Bar **/
+.bottom-bar {
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  top: calc(100% + 24px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 6px;
+  width: 100%;
+  height: 92px;
+  transform-style: preserve-3d;
+}
+.bottom-bar .app, .bottom-bar .folder {
+  margin: 11px 8px;
+  max-height: 60px;
+}
+.bottom-bar .folder .app {
+  margin: 0 8px 16px 8px;
+}
+.bottom-bar .bg-blur {
+  top: -476px;
+}
+.bottom-bar .folder-name {
+  display: none;
+}
+.bottom-bar .folder-apps:focus .app {
+  margin: 0 18px 27px 18px;
+}
+.bottom-bar .folder:nth-child(1) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-8px, -359px, 1px);
+}
+.bottom-bar .folder:nth-child(1) .folder-apps:focus ~ .folder-name {
+  display: inherit;
+  transform: translate3d(-8px, -735px, 1px);
+}
+.bottom-bar .folder:nth-child(2) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-84px, -359px, 1px);
+}
+.bottom-bar .folder:nth-child(2) .folder-apps:focus ~ .folder-name {
+  display: inherit;
+  transform: translate3d(-84px, -735px, 1px);
+}
+.bottom-bar .folder:nth-child(3) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-160px, -359px, 1px);
+}
+.bottom-bar .folder:nth-child(3) .folder-apps:focus ~ .folder-name {
+  display: inherit;
+  transform: translate3d(-160px, -735px, 1px);
+}
+.bottom-bar .folder:nth-child(4) .folder-apps:focus {
+  transform: scale(1, 1) translate3d(-236px, -359px, 1px);
+}
+.bottom-bar .folder:nth-child(4) .folder-apps:focus ~ .folder-name {
+  display: inherit;
+  transform: translate3d(-236px, -735px, 1px);
+}
+
+@keyframes folderNameFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="screen">
+  <input type="radio" id="_p0" name="pg" checked="checked">
+  <input type="radio" id="_p1" name="pg">
+  <div class="status">
+    <div class="carrier">No Service</div>
+    <div class="clock">12:00 AM</div>
+    <div class="battery">
+      <div class="battery-meter">
+        <div class="battery-meter-inner"></div>
+      </div>
+    </div>
+  </div>
+  <div class="pages">
+    <div class="page">
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+    </div>
+    <div class="page">
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+        <div class="app-name">App</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="folder">
+        <div class="folder-apps" tabindex="0">
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+          <div class="app">
+            <div class="app-icon"></div>
+            <div class="app-name">App</div>
+          </div>
+        </div>
+        <div class="bg-blur"></div>
+        <div class="folder-name">Folder</div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+      </div>
+      <div class="app">
+        <div class="app-icon"></div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination">
+    <label for="_p0"><span></span></label>
+    <label for="_p1"><span></span></label>
+  </div>
+</div>
+
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';color:#ffffff">
+<p>适用浏览器：360、FireFox、Chrome、Opera、傲游、搜狗、世界之窗. 不支持Safari、IE8及以下浏览器。</p>
+</div>
+</body>
+</html>

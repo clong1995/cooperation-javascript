@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dock</title>
+    <style>
+        body{
+            background: url("./image/bg.jpg") no-repeat center center;
+            overflow: hidden;
+        }
+    </style>
+    <script src="../../../EasyScript2/EBase.class.js"></script>
+    <script>
+        ejs.ready(() => {
+            const dock = ejs.root + 'ui/dock.ui';
+            //dock
+            NEW(dock, {
+                data: [
+                    [
+                        {name: '应用', key: 'store', icon: './image/icon.gif', url: '/store', width: 400, height: 300},
+                        {name: '文件', key: 'file', icon: './image/icon.gif', url: '/file', width: 400, height: 300}
+                    ],
+                    [
+                        {name: '签到', key: 'check', icon: './image/icon.gif', url: '/check', width: 400, height: 300},
+                        {name: '任务', key: 'task', icon: './image/icon.gif', url: '/task', width: 400, height: 300},
+                        {name: '消息', key: 'message', icon: './image/icon.gif', url: '/message', width: 400, height: 300}
+                    ],
+                    [
+                        {name: '其他业务', key: 'nurse', icon: './image/icon.gif', url: '/nurse', width: 950, height: 587}
+                    ]
+                ]
+            }, fn => {
+
+            });
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>

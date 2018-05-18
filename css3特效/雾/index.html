@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>纯CSS3实现的神秘雾化背景</title>
+    <style>
+
+        body {
+            margin: 0;
+        }
+
+        body div {
+            background-size: 200%;
+            background-position: 0 50%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        body #picture {
+            background:url("s2.jpg") no-repeat 0 0;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        body #layer1 {
+            background: repeating-linear-gradient(90deg, rgba(236, 240, 241, 0), rgba(236, 240, 241, 0.6), rgba(236, 240, 241, 0));
+            animation: layer1 10s linear infinite alternate;
+        }
+
+        body #layer2 {
+            background: repeating-linear-gradient(90deg, rgba(236, 240, 241, 0), rgba(236, 240, 241, 0.6), rgba(236, 240, 241, 0));
+            animation: layer2 15s linear infinite alternate;
+        }
+
+        @keyframes layer1 {
+            0% {
+                background-position: 1000px 0;
+            }
+            50% {
+                background-position: 500px 0;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+
+        @keyframes layer2 {
+            0% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 500px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="picture"></div>
+<div id="layer2"></div>
+<div id="layer1"></div>
+</body>
+</html>

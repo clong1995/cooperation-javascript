@@ -229,7 +229,7 @@ class EBase {
      * @param cssText
      * @private
      */
-    _batchSetStyle(sheetItem, cssText) {
+    _batchSetSheet(sheetItem, cssText) {
         this.trim(cssText, {
             char: '}',
             position: 'right'
@@ -410,8 +410,7 @@ class EBase {
      * 格式化css
      */
     formatStyle() {
-        this._batchSetStyle(this._firstSheet,
-            `
+        this.trim(`
             blockquote, body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, th, ul {
                 margin: 0;
                 padding: 0
@@ -478,22 +477,10 @@ class EBase {
             table {
                 border-collapse: collapse;
                 border-spacing: 0
-            }
-            ::-webkit-scrollbar{
-                width:6px;
-                height:6px
-            }
-            ::-webkit-scrollbar-track-piece{
-                border-radius: 0;
-            }
-            ::-webkit-scrollbar-thumb{
-                border-radius:8px;
-                background:#d4d8da
-            }
-            ::-webkit-scrollbar-thumb:hover{
-                background:#c0c9cd
-            }`
-        );
+            `, {
+            char: '}',
+            position: 'right'
+        }).split('}').forEach((value,i) => this._firstSheet.insertRule(value + '}', i));
     }
 
     /**
@@ -590,7 +577,8 @@ class EBase {
                  ttfUrl = this.path() + 'iconfont/iconfont.ttf',
                  fontSize = 16
              } = {}) {
-        this._batchSetStyle(this._firstSheet,
+
+        this._batchSetSheet(this._firstSheet,
             `@font-face {
                 font-family: "iconfont";
                 src:url('${ttfUrl}') format('truetype')
@@ -900,6 +888,7 @@ class EBase {
         }
         return (WordToHex(a) + WordToHex(b) + WordToHex(c) + WordToHex(d)).toUpperCase();
     }
+
     /**
      * 绑定数据，引用消失会自动被垃圾回收清除
      * @param key 必须是obj
