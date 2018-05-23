@@ -212,7 +212,7 @@ CLASS(
         }
 
         //段值
-        for (let i= 0; i < spanCount; i++) {
+        for (let i = 0; i < spanCount; i++) {
             let num = spanValue * i + yAxisMin;
             yAxisData.push(num);
             if (!num && minData < 0) oIndex = i + 1;
@@ -293,7 +293,6 @@ CLASS(
             x: yAxisStart.x,
             //y位
             y: yAxisStart.y - oIndex * (axisLength.y / (spanCount + 1))
-            //y: yAxisStart.y - (axisLength.y / (spanCount + 1))
         };
 
 
@@ -683,16 +682,37 @@ CLASS(
          * 计算关键点
          */
         function figure() {
-            let figure = [];
+            //数据关键点
+            let datas = [];
             let unit = ySpan / spanValue;
             data.value.forEach((v, i) => {
-                figure.push({
+                datas.push({
                     value: v,
                     x: xAxisPoint[i],
                     y: Y(0) - v * unit
                 });
             });
-            return figure;
+
+            //坐标关键点
+            let xPoint = [],
+                yPoint = [];
+            xAxisPoint.forEach(v => xPoint.push({x: v, y: Y(0)}));
+            yAxisPoint.forEach(v => yPoint.push({x: X(0), y: v}));
+
+            return {
+                //数据关键点
+                dataPoints: datas,
+                //坐标轴关键点
+                axisPoints: {
+                    x: xPoint,
+                    y: yPoint
+                },
+                //坐标轴间隔
+                axisSpan:{
+                    x:xSpan,
+                    y:ySpan
+                }
+            };
         }
 
 

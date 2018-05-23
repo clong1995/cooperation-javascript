@@ -1,6 +1,9 @@
 'use strict';
 
-CLASS('bar', //类名
+CLASS(
+    //类名
+    'line001',
+    //构造器
     param => {
         //默认数据
         ejs.assignDeep({
@@ -18,13 +21,20 @@ CLASS('bar', //类名
             Y,          // 坐标转换器
             className,  // 类名生成器
             option,     // 配置项
-            figure     // 关键点
+            figure      // 关键点
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
 
-        //你的逻辑
+
+
+
+
+
+        //你的绘制逻辑
+
+        //根据数据关键点画点
         let point = [];
-        figure.forEach(v => {
+        figure.dataPoints.forEach(v => {
             point.push(svg.draw('circle', {
                 cx: v.x,
                 cy: v.y,
@@ -32,13 +42,20 @@ CLASS('bar', //类名
             }));
         });
 
+        console.log(figure);
+
+
+
+
 
         //执行渲染
         render([
             ...point,//折点
         ]);
 
-        //向外界抛出你的公共方法
-        return {}
+        //===向外界抛出你的公共方法 ===\\
+        return {
+
+        }
     }
 );
