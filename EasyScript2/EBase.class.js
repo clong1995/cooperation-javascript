@@ -91,6 +91,7 @@ class EBase {
         this._lastSheet = this._sheetArr[this._sheetArr.length - 1];
 
         this.formatStyle();
+        this._animation = new Map();
     }
 
 
@@ -218,7 +219,7 @@ class EBase {
             return obj.getAttribute(attr);
         }
         for (let k in attr) {
-            obj.setAttribute(this.underscored(k), attr[k]);
+            obj.setAttribute(k, attr[k]);
         }
         return obj;
     }
@@ -357,6 +358,50 @@ class EBase {
         selectorTextArr.forEach(v => this.deleteSheet(v))
     }
 
+    //时间日期
+    /**
+     * 将 Date 转化为指定格式的String * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q)
+     * 可以用 1-2 个占位符 * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+     * "yyyy-MM-dd hh:mm:ss.S" ==> 1995-09-19 08:09:04.423
+     * "yyyy-MM-dd E HH:mm:ss" ==> 1995-09-19 二 20:09:04
+     * "yyyy-MM-dd EE hh:mm:ss" ==> 1995-09-19 周二 08:09:04
+     * "yyyy-MM-dd EEE hh:mm:ss" ==> 1995-09-19 星期二 08:09:04
+     * "yyyy-M-d h:m:s.S" ==> 1995-9-19 8:9:4.18
+     */
+    date(fmt = 'yyyy-MM-dd HH:mm:ss', date = new Date()) {
+        let o = {
+            "M+": date.getMonth() + 1, //月份
+            "d+": date.getDate(), //日
+            "h+": date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, //小时
+            "H+": date.getHours(), //小时
+            "m+": date.getMinutes(), //分
+            "s+": date.getSeconds(), //秒
+            "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+            "S": date.getMilliseconds() //毫秒
+        };
+        let week = {
+            "0": "/u65e5",
+            "1": "/u4e00",
+            "2": "/u4e8c",
+            "3": "/u4e09",
+            "4": "/u56db",
+            "5": "/u4e94",
+            "6": "/u516d"
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        if (/(E+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[date.getDay() + ""]);
+        }
+        for (let k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+
     // 差集
     difference(arr1, arr2) {
         return [...new Set([...arr1].filter(x => !arr2.has(x)))];
@@ -480,8 +525,9 @@ class EBase {
             `, {
             char: '}',
             position: 'right'
-        }).split('}').forEach((value,i) => this._firstSheet.insertRule(value + '}', i));
+        }).split('}').forEach((value, i) => this._firstSheet.insertRule(value + '}', i));
     }
+
 
     /**
      * 傻瓜屏蔽脚本
@@ -593,9 +639,130 @@ class EBase {
         );
     }
 
-    keyframes(name, animation) {
-        this._lastSheet.insertRule('@keyframes ' + name + '{' + animation + '}', this._lastSheet.cssRules.length);
+    //动画
+    keyframes(rules) {
+        let name = this.simple();
+        let rulesText = '@keyframes ' + name + '{';
+        for (let r in rules) {
+            rulesText += r + '{';
+            for (let ir in rules[r]) {
+                rulesText += this.underscored(ir) + ':' + rules[r][ir] + ';';
+            }
+            rulesText += '}';
+        }
+        this._lastSheet.insertRule(rulesText + '}', this._lastSheet.cssRules.length);
         return name;
+    }
+
+    animationSheet(keyframes, {
+        duration = .5,
+        timing = 'ease',
+        iteration = 1,
+        fill = 'forwards',
+        delay = 0
+    } = {}) {
+        let name = keyframes + duration + timing + iteration + fill + delay;
+        name = name.replace(/\./g, "d");
+        if (!this.getStyleSheet('.' + name).size) //执行不存在
+            this.setSheet('.' + name, {
+                animationName: keyframes,
+                animationDuration: duration + 's',
+                animationTimingFunction: timing,
+                animationIterationCount: iteration,
+                animationFillMode: fill,
+                animationDelay: delay + 's'
+            });
+        return name;
+    }
+
+    hide(dom, {
+        duration = .5,
+        timing = 'ease',
+        iteration = 1,
+        fill = 'forwards',
+        delay = 0,
+        end = null
+    } = {}) {
+        let hide = this._animation.get('hide');
+        if (!hide) {//动画已不存在
+            this._animation.set('hide', this.keyframes({
+                from: {
+                    opacity: 1
+                },
+                to: {
+                    opacity: 0
+                }
+            }));
+            this._animation.set('none', this.setSheet('.' + this.simple(), {
+                display: 'none',
+                opacity: 0,
+                visibility: 'hidden'
+            }).substr(1));
+            hide = this._animation.get('hide');
+        }
+
+        let hideClass = this.animationSheet(hide, {
+            duration: duration,
+            timing: duration,
+            iteration: iteration,
+            fill: fill,
+            delay: delay
+        });
+        this.removeClass(dom, this._animation.get('block'));
+        this.addClass(dom, hideClass);
+        setTimeout(() => {
+            if (typeof(end) === 'function') {
+                end(hideClass);
+            }
+            this.addClass(dom, this._animation.get('none'));
+            this.removeClass(dom, hideClass);
+        }, duration * 1000);
+        return dom;
+    }
+
+    show(dom, {
+        duration = .5,
+        timing = 'ease',
+        iteration = 1,
+        fill = 'forwards',
+        delay = 0,
+        end = null
+    } = {}) {
+        let show = this._animation.get('show');
+        if (!show) {//动画已不存在
+            this._animation.set('show', this.keyframes({
+                from: {
+                    opacity: 0
+                },
+                to: {
+                    opacity: 1
+                }
+            }));
+            this._animation.set('block', this.setSheet('.' + this.simple(), {
+                display: 'block',
+                opacity: 1,
+                visibility: 'visible'
+            }).substr(1));
+            show = this._animation.get('show');
+        }
+
+        let showClass = this.animationSheet(show, {
+            duration: duration,
+            timing: duration,
+            iteration: iteration,
+            fill: fill,
+            delay: delay
+        });
+        this.removeClass(dom, this._animation.get('none'));
+        this.addClass(dom, showClass);
+        setTimeout(() => {
+            if (typeof(end) === 'function') {
+                end(showClass);
+            }
+            this.addClass(dom, this._animation.get('block'));
+            this.removeClass(dom, showClass);
+        }, duration * 1000);
+        return dom;
     }
 
     // 交集
@@ -664,15 +831,16 @@ class EBase {
      * @param logApi 接收前端日志的后台服务
      */
     log(str, type = 'log', logApi = '') {
+        let name = this.date() + ' EasyScript';
         switch (type) {
             case 'log':
-                console.log('[zoolonJS LOG] ' + str);
+                console.log('[' + name + ' LOG] ', str);
                 break;
             case 'warn':
-                console.warn('[zoolonJS WARN] ' + str);
+                console.warn('[' + name + ' WARN] ', str);
                 break;
             case 'error':
-                console.error('[zoolonJS ERROR] ' + str);
+                console.error('[' + name + ' ERROR]', str);
                 break;
         }
     }
@@ -902,6 +1070,18 @@ class EBase {
         return this._weakDate.get(key);
     }
 
+    //最大公约数
+    gcd(a, b) {
+        if (!b) {
+            return a;
+        }
+        return this.gcd(b, a % b);
+    }
+
+    //最小公倍数
+    scm(a, b) {
+        return (a * b) / this.gcd(a, b);
+    }
 
     /**
      * 解除事件
@@ -943,7 +1123,7 @@ class EBase {
         this._eventMap.has(selecter)
             ? this._eventMap.get(selecter).set(evt, callback)
             : this._eventMap.set(selecter, new Map([[evt, callback]]));
-    };
+    }
 
     /**
      * 执行on方法
@@ -968,6 +1148,15 @@ class EBase {
      */
     pushEnd(tagArr, endArr) {
         return tagArr.push(...endArr);
+    }
+
+
+    query(select, target = document, all = false) {
+        if (all) {
+            return target.querySelectorAll(select);
+        } else {
+            return target.querySelector(select);
+        }
     }
 
     /**
@@ -1056,7 +1245,7 @@ class EBase {
     }, className = path.split('/').pop()) {
         option.className = className;
         this.loadScript(path + '.class.js', () => callback(this._moduleStack.get(className)(option)))
-    };
+    }
 
     /**
      * 同步加载模块
@@ -1174,6 +1363,7 @@ class EBase {
             this.removeClass(dom, oldClass);
             this.addClass(dom, newClass)
         }
+        return dom;
     }
 
 

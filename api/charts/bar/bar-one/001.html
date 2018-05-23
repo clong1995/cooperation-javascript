@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../../../EasyScript2/EBase.class.js"></script>
+    <style>
+        #box1,#box2 {
+            width: 500px;
+            height: 450px;
+            float: left;
+            margin:0 50px;
+        }
+    </style>
+    <script>
+        ejs.ready(() => {
+            const bar = ejs.root + 'charts/bar/bar';//柱状图组件
+            //box1
+            NEW(bar, {
+                element: '#box1',
+                data: {
+                    value: [15, 125, 133, 19, -111, 191, -161],
+                    key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
+                }
+            }, fn => {
+            });
+
+            //box2
+            NEW(bar, {
+                element: '#box2',
+                data: {
+                    value: [413, 528, 357, 18, 1155, 160, 177],
+                    key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
+                }
+            }, fn => {
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="box1"></div>
+<div id="box2"></div>
+</body>
+</html>

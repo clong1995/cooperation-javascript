@@ -125,7 +125,7 @@ CLASS(
          * @param obj
          * @param str
          */
-        function html(obj, str) {
+        function addText(obj, str) {
             obj.textContent = str;
             return obj;
         }
@@ -171,7 +171,7 @@ CLASS(
          *   p4 下一个点
          * @return {Array}     2个点坐标数组
          */
-        function getControlPoints(arr, smooth_value = 1) {
+        /*function getControlPoints(arr, smooth_value = 1) {
             //坐标
             var x0 = arr[0].x,
                 y0 = arr[0].y;
@@ -225,7 +225,7 @@ CLASS(
             var ctrl2_y = ym2 + (yc2 - ym2) * smooth_value + y2 - ym2;
 
             return [{x: ctrl1_x, y: ctrl1_y}, {x: ctrl2_x, y: ctrl2_y}];
-        }
+        }*/
 
 
         /**
@@ -234,7 +234,8 @@ CLASS(
          * @param a
          * @param b
          */
-        function bezier(point, a = 0.2, b = 0.2) {
+
+        /*function bezier(point, a = 0.2, b = 0.2) {
 
 
             //起点
@@ -281,6 +282,35 @@ CLASS(
                 start: start,
                 crlAndEnd: crlAndEnd,
             };
+        }*/
+
+        //画线
+        function line(opt, style = null) {
+            let figure = create('line', opt);
+            if (style) ejs.css(figure, style);
+            return figure;
+        }
+
+        //画圆
+        function circle(opt, style = null) {
+            let figure = create('circle', opt);
+            if (style) ejs.css(figure, style);
+            return figure;
+        }
+
+        function draw(type, option, style) {
+            let figure = null;
+            switch (type) {
+                case 'line':
+                    figure = line(option, style);
+                    break;
+                case 'circle':
+                    figure = circle(option, style);
+                    break;
+                default:
+                    ejs.log('未能识别的图形类型！', 'error');
+            }
+            return figure;
         }
 
         return {
@@ -290,12 +320,13 @@ CLASS(
             defs: defs,
             sheet: sheet,
             setSheet: setSheet,
-            html: html,
+            addText: addText,
             use: use,
             styleStr2Obj: styleStr2Obj,
             initDefs: initDefs,
-            bezier: bezier,
-            getControlPoints:getControlPoints
+            draw:draw
+            /*bezier: bezier,
+            getControlPoints:getControlPoints*/
         }
     }
 );

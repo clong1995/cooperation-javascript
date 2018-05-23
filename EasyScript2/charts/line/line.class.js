@@ -3,18 +3,16 @@
 CLASS('line', //类名
     param => {
         param['chart'] = param.className;
-        const {svg, render, X, Y, className, option, figure} = NEW_ASYNC(zBase.root + 'chart/chartBase', param);
+        const {svg, render, X, Y, className, option, figure} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
         //=== 你的绘制逻辑 ===\\
         let opt_line = option.series;
 
         //贝塞尔关键点
-        //let bezier = svg.bezier(figure);
+        let bezier = svg.bezier(figure);
 
 
-        let bezier = svg.getControlPoints(figure);
-
-        console.log(bezier);
+        //let bezier = svg.getControlPoints(figure);
 
         //渐变范围开始 ============
         let gradient = null;
@@ -63,7 +61,7 @@ CLASS('line', //类名
         let line = svg.create('polyline', {
             points: points + figure[figure.length - 1].x + ',' + Y(0)
         });
-        zBase.css(line, {
+        ejs.css(line, {
             fill: opt_line.line.background,
             stroke: opt_line.line.borderColor,
             strokeWidth: opt_line.line.borderWidth

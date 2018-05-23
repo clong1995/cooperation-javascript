@@ -13,16 +13,19 @@ CLASS(
         //XML操作类
         const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
-        if (param.element && param.element[0] !== '#' && param.element !== 'body') {
-            ejs.log('容器必须是唯一id或者body，当前的容器是: ' + param.element, 'error');
-            return;
-        }
+        /*if (param.element[0] != '#') {
+            ejs.log('element mast be id,the current one is: ' + param.element, 'error');
+            return false;
+        }*/
 
         // 统一参数缺省补全机制
         let option = ejs.assignDeep(
             {
                 element: 'body',
-                //useStyleSheet: false,
+                useStyleSheet: false,
+                //data: /*根据type补全对应的数据*/,
+                //xAxisData: /*根据type补全对应的数据*/,
+
                 style: {
                     //标题
                     title: {
@@ -174,49 +177,32 @@ CLASS(
                         }
                     }
                 },
+                //series
                 series: {}
             },
             param
         );
+
+        let chartType = option.chart;
+        //删除多余数据
+        option.series = option.series[chartType];
 
 
         //内置样式表，开发使用的
         let sheet = null,
             sheetStyle = new Map();
 
-        //数据容器
         let data = option.data,
             yAxisData = [],
-            xAxisData = data.key;
+            xAxisData = option.xAxisData;
 
-        //y轴分段
-        let spanCount = 10;
+        let spanMax = 10;
+        if (spanMax > data.length) spanMax = data.length;
 
-        //逻辑最值，降级取整
-        let
-            maxData = ejs.arrMaxMin(data.value, 'max'),
-            minData = ejs.arrMaxMin(data.value, 'min'),
-            yAxisMaxRank = Math.pow(10, Math.abs(maxData) < 100 ? 1 : Math.abs(maxData).toString().length - 2),
-            yAxisMinRank = Math.pow(10, Math.abs(minData) < 100 ? 1 : Math.abs(minData).toString().length - 2),
-            yAxisMax = Math.ceil(maxData / yAxisMaxRank) * yAxisMaxRank,
-            yAxisMin = Math.ceil(minData / yAxisMinRank) * yAxisMinRank;
+        let maxData = ejs.arrMaxMin(data, 'max'),
+            spanValue = Math.ceil(maxData / spanMax);
 
-        let spanValue = 0,//每一段的单位长度
-            oIndex = 0;//寻找0位置的索引，用来确定存在负值时x轴的位置金和原点
-
-        if (minData > 0) {
-            spanValue = yAxisMax / spanCount;
-            yAxisMin = spanValue;
-        } else {
-            spanValue = ejs.gcd(yAxisMax, Math.abs(yAxisMin));
-        }
-
-        //段值
-        for (let i= 0; i < spanCount; i++) {
-            let num = spanValue * i + yAxisMin;
-            yAxisData.push(num);
-            if (!num && minData < 0) oIndex = i + 1;
-        }
+        for (let i = 0; i < spanMax; i++) yAxisData.push(spanValue * (i + 1));
 
         //简化链式查找
         let
@@ -250,28 +236,24 @@ CLASS(
             yGrid = style.axis.grid.y;
 
 
-        //容器
-        let elem = ejs.query(option.element);
-
+        let elem = document.querySelector(option.element);
         //去掉内衬
-        ejs.css(elem, {padding: 0, position: 'relative'});
+        ejs.css(elem, {
+            padding: 0,
+            position: 'relative'
+        });
 
-        //y轴最大文本宽度
-        let
-            yMinStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'min').toString()) * yLabel.fontSize,
-            yMaxStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'max').toString()) * yLabel.fontSize,
-            yStrWidth = yMinStrWidth > yMaxStrWidth ? yMinStrWidth : yMaxStrWidth;
+        //x轴文本
+        let yStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'max').toString()) * yLabel.fontSize;
 
-
-        //逻辑起点
-        let yAxisStart = {
-            //x位
+        //逻辑原点
+        let O = {
             x: yLine.borderWidth +
             yTick.width +
             yTick.marginRight +
             yTick.marginLeft +
             yStrWidth,
-            //y位
+
             y: elem.offsetHeight - (
                 xLine.borderWidth +
                 xTick.height +
@@ -283,19 +265,9 @@ CLASS(
 
         //坐标轴长度
         let axisLength = {
-            x: elem.offsetWidth - yAxisStart.x,
-            y: yAxisStart.y - opt_title.lineHeight
+            x: elem.offsetWidth - O.x,
+            y: O.y - opt_title.lineHeight
         };
-
-        //逻辑原点
-        let O = {
-            //x位
-            x: yAxisStart.x,
-            //y位
-            y: yAxisStart.y - oIndex * (axisLength.y / (spanCount + 1))
-            //y: yAxisStart.y - (axisLength.y / (spanCount + 1))
-        };
-
 
         /**
          * svg坐标转逻辑正向笛卡尔坐标
@@ -312,19 +284,18 @@ CLASS(
             let point = {
                 xAxisPoint: [],
                 yAxisPoint: [],
-                xSpan: axisLength.x / (xd.length + 1),
-                ySpan: axisLength.y / (yd.length + 1)
+                xSpan: Math.floor(axisLength.x / (xd.length + 1)),
+                ySpan: Math.floor(axisLength.y / (yd.length + 1))
             };
 
             for (let i = 1; i < xd.length + 1; ++i)
                 point.xAxisPoint.push(X(point.xSpan * i));
 
-            for (let i = 1; i < yd.length + 1; ++i) {
-                point.yAxisPoint.push(yAxisStart.y - point.ySpan * i);
-            }
+            for (let i = 1; i < yd.length + 1; ++i)
+                point.yAxisPoint.push(Y(point.ySpan * i));
+
             return point;
         })(xAxisData, yAxisData);
-
 
         //Y轴数据点
 
@@ -335,7 +306,6 @@ CLASS(
          */
         let elementName = ejs.replaceAll(option.element, {'#': ''});
         let className = clazz => elementName + '-' + clazz;
-
 
         /**
          * 标题
@@ -363,7 +333,7 @@ CLASS(
                 x: (O.x + axisLength.x - titleLen * opt_title.fontSize) / 2
             });
             //节点内容
-            svg.addText(text, opt_title.content);
+            svg.html(text, opt_title.content);
 
             let g = svg.g([text]);
             ejs.addClass(g, clazz);
@@ -380,7 +350,6 @@ CLASS(
             return g;
         }
 
-
         /**
          * 坐标轴端点
          * @returns {[null]}
@@ -389,7 +358,6 @@ CLASS(
 
             return [];
         }
-
 
         /**
          * 坐标轴生成器
@@ -403,7 +371,7 @@ CLASS(
             //x轴
             if (xLine.display !== 'none') {
                 let xAxisClazz = className('xAxis');
-                xAxis = svg.draw('line', {
+                xAxis = svg.create('line', {
                     x1: O.x,
                     y1: O.y,
                     x2: axisLength.x + O.x,
@@ -423,11 +391,11 @@ CLASS(
             //y轴
             if (yLine.display !== 'none') {
                 let yAxisClazz = className('yAxis');
-                yAxis = svg.draw('line', {
+                yAxis = svg.create('line', {
                     x1: O.x,
-                    y1: yAxisStart.y,
+                    y1: O.y - axisLength.y,
                     x2: O.x,
-                    y2: yAxisStart.y - axisLength.y
+                    y2: O.y
                 });
 
                 ejs.addClass(yAxis, yAxisClazz);
@@ -457,12 +425,13 @@ CLASS(
             //圆形
             if (originPoint.display !== 'none') {
                 let OClazz = className('O');
-                circle = svg.draw('circle', {
+                circle = svg.create('circle', {
                     cx: O.x,
                     cy: O.y,
                     r: originPoint.width
                 });
                 ejs.addClass(circle, OClazz);
+
                 sheetStyle.set('.' + OClazz, {
                     stroke: originPoint.borderColor,
                     strokeWidth: originPoint.borderWidth,
@@ -507,13 +476,16 @@ CLASS(
 
             //x轴刻度
             if (xTick.display !== 'none') {
+
                 let xTickClazz = className('xTick');
                 let xTickArr = [];
 
-                let xTickNode = svg.draw('line', {
+                let xTickNode = svg.create('line', {
                     y1: Y(0),
                     y2: Y(0) + xTick.height
                 });
+
+                //svg.defs('xTick',xTickNode);
 
                 sheetStyle.set('.' + xTickClazz, {
                     stroke: xTick.borderColor,
@@ -521,10 +493,15 @@ CLASS(
                 });
 
                 xAxisPoint.forEach(v =>
-                    xTickArr.push(ejs.attr(xTickNode.cloneNode(), {
+                        xTickArr.push(ejs.attr(xTickNode.cloneNode(), {
+                            x1: v,
+                            x2: v
+                        }))
+
+                    /*xTickArr.push(svg.use('xTick',{
                         x1: v,
                         x2: v
-                    }))
+                    }))*/
                 );
                 xTickG = svg.g(xTickArr);
                 ejs.addClass(xTickG, xTickClazz);
@@ -534,7 +511,7 @@ CLASS(
             if (yTick.display !== 'none') {
                 let yTickClazz = className('yTick');
                 let yTickArr = [];
-                let yTickNode = svg.draw('line', {
+                let yTickNode = svg.create('line', {
                     x1: X(0) - yTick.width,
                     x2: X(0)
                 });
@@ -561,6 +538,7 @@ CLASS(
          * @returns {*|number}
          */
         function axisLabel() {
+
             let xAxisLabelG = null,
                 yAxisLabelG = null;
 
@@ -609,7 +587,7 @@ CLASS(
                 yAxisPoint.forEach((v, i) => {
                         let cloneNode = yAxisLabelNode.cloneNode();
                         cloneNode.textContent = yAxisData[i];
-                        ejs.attr(cloneNode, {y: v + yLabel.lineHeight / 5});
+                        ejs.attr(cloneNode, {y: Math.ceil(v + yLabel.lineHeight / 5)});
                         yAxisLabelArr.push(cloneNode);
                     }
                 );
@@ -619,6 +597,7 @@ CLASS(
 
             return [xAxisLabelG, yAxisLabelG];
         }
+
 
         /**
          * 网格线
@@ -632,9 +611,9 @@ CLASS(
             if (xGrid.display !== 'none') {
                 let xGridClazz = className('xGrid');
                 let xGridArr = [];
-                let xGridNode = svg.draw('line', {
-                    y1: yAxisStart.y,
-                    y2: yAxisStart.y - axisLength.y
+                let xGridNode = svg.create('line', {
+                    y1: Y(0),
+                    y2: O.y - axisLength.y
                 });
                 sheetStyle.set('.' + xGridClazz, {
                     stroke: xGrid.borderColor,
@@ -655,7 +634,7 @@ CLASS(
             if (yGrid.display !== 'none') {
                 let yGridClazz = className('yGrid');
                 let yGridArr = [];
-                let yGridNode = svg.draw('line', {
+                let yGridNode = svg.create('line', {
                     x1: X(0),
                     x2: axisLength.x + O.x
                 });
@@ -678,20 +657,40 @@ CLASS(
             return [xGridG, yGridG];
         }
 
-
         /**
-         * 计算关键点
+         * 计算
          */
         function figure() {
             let figure = [];
-            let unit = ySpan / spanValue;
-            data.value.forEach((v, i) => {
-                figure.push({
-                    value: v,
-                    x: xAxisPoint[i],
-                    y: Y(0) - v * unit
-                });
-            });
+            switch (option.chart) {
+                case 'line': {
+                    let unit = ySpan / ejs.arrMaxMin(yAxisData, 'min');
+                    data.forEach((v, i) => {
+                        figure.push({
+                            value: v,
+                            x: xAxisPoint[i],
+                            y: Y(0) - v * unit
+                        });
+                    });
+                    break;
+                }
+
+                case 'barOne': {
+
+                    let unit = ySpan / ejs.arrMaxMin(yAxisData, 'min');
+                    data.forEach((v, i) => {
+                        figure.push({
+                            value: v,
+                            x: xAxisPoint[i],
+                            y: Y(0) - v * unit
+                        });
+                    });
+                    break;
+                }
+                case 'pie':
+
+                    break;
+            }
             return figure;
         }
 
@@ -705,8 +704,7 @@ CLASS(
             //创建容器元素
             let svgNode = svg.createSvg();
             ejs.attr(svgNode, {
-                viewBox: "0 0 " + elem.offsetWidth + " " + elem.offsetHeight,
-                //preserveAspectRatio:"none"//无比例填充
+                viewBox: "0 0 " + elem.offsetWidth + " " + elem.offsetHeight
             });
 
             //组装标题
@@ -736,7 +734,7 @@ CLASS(
             sheetStyle.forEach((v, k) => svg.setSheet(sheet, k, v));
 
             //使用外置css样式表，方便用户使用配置的
-            /*if (option.useStyleSheet) {
+            if (option.useStyleSheet) {
                 let sheetStyleUser = new Map();
                 let s, k, v;
                 ejs.getStyleSheet(option.element).forEach(v => {
@@ -747,7 +745,7 @@ CLASS(
                     }
                 );
                 sheetStyleUser.forEach((v, k) => svg.setSheet(sheet, k, v));
-            }*/
+            }
 
             //加载defs
             svg.initDefs(svgNode);
@@ -767,8 +765,8 @@ CLASS(
             X: X,
             Y: Y,
             className: className,
-            figure: figure(),
-            option: option
+            option: option,
+            figure: figure()
         }
     }
 );

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="../../../EasyScript2/EBase.class.js"></script>
+    <script>
+        ejs.ready(() => {
+            NEW(
+                //组件
+                ejs.root+'charts/line/line',
+                {
+                    element:'#box',
+                    //useStyleSheet:true
+                    data : [1, 10, 6, 2, 10, 13, 15],
+                    xAxisData : ['周444', '周二', '周三', '周四', '周五', '周六', '周日']
+                },
+                fn => {
+                    /*获取组件抛出的公共方法*/
+                })
+        });
+    </script>
+</head>
+<body>
+<div id="box" style="width:1024px;height: 768px;"></div>
+</body>
+</html>

@@ -22,8 +22,6 @@ CLASS(
      } = {}) => {
 
         // TODO background 判断是颜色还是图片地址
-
-
         //dock容器
         let dockClass = ejs.simple(),
             dock = ejs.createDom('div', {class: dockClass});
@@ -63,18 +61,18 @@ CLASS(
             position: 'relative',
             top: '-18px'
         });
+        let jump = ejs.keyframes({
+            '0%': {transform: 'translateY(0)'},
+            '25%': {transform: 'translateY(-10px)'},
+            '50%': {transform: 'translateY(-20px)'},
+            '75%': {transform: 'translateY(-10px)scale(1.2,0.9)'},
+            '100%': {transform: 'translateY(0)'}
+        });
         ejs.setSheet('.' + appClass + ':hover', {
             fontWeight: 'bold',
-            animation: appAnimation + ' .6s linear .1s infinite'
+            animation: jump + ' .6s linear .1s infinite'
         });
-        ejs.keyframes(
-            appAnimation,
-            '0%{transform:translateY(0);}' +
-            '25%{transform:translateY(-10px);}' +
-            '50%{transform:translateY(-20px);}' +
-            '75%{transform:translateY(-10px)scale(1.2,0.9);}' +
-            '100%{transform:translateY(0);}'
-        );
+
         //弹窗
         ejs.click(dock, e => {
             let data = ejs.getData(e);
@@ -85,6 +83,7 @@ CLASS(
                 scrolling: 'no',
                 content: data.url
             }, fn => {
+
             });
         }, '.' + appClass);
 

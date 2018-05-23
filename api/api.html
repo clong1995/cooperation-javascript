@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EasyScript使用手册</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+<p>
+<h1>EasyScript2</h1>
+<h4>更新时间 2018年5月23日15:54:43</h4>
+<h4>作者 成龙哥哥</h4>
+<!-- 简介 -->
+<div>
+    <b>本框架基于ES6实现，当前版本在Chrome x.x、Firefox x.x、IE x.x和electron x.x测试通过</b>
+    <ul>
+        本框架包含：
+        <li><a href="#ebase">EBase.class.js</a> ：框架的基础文件。包含初始化，基础函数，子库的定义和调度等基础设施建设</li>
+        <li><a href="#">svg库</a>：常用svg操作方法封装</li>
+        <li><a href="#">ui库</a>：常用UI组件</li>
+        <li><a href="#">electron库</a>：常用集成功能和通讯</li>
+        <li><a href="#">chart库</a>：常用报表组件（SVG+canvas实现）</li>
+        <li><a href="#">iconfont库</a>：常用字体图标</li>
+        <li><a href="#">monitor库</a>：常用行为监控库</li>
+    </ul>
+    <br>
+    <ol>
+        主要功能：
+        <li>常用函数</li>
+        <li>通信：ajax、webSocket、electron进程通信</li>
+        <li>模块化：类的定义、使用和调度</li>
+        <li>js文件的动态引用,修改和干预</li>
+        <li>内嵌式、外部式、行内式样式表,css,link文件的修改和干预</li>
+        <li>数据双向绑定（MVVM）<b>未实现</b></li>
+        <li>前端log的远程储存<b>未实现</b></li>
+        <li>用户的操作行为记录<b>未实现</b></li>
+        <li>单页应用（用于app开发）<b>未实现</b></li>
+        <li>svg操作</li>
+        <li>报表库</li>
+        <li>仿照微信小程序的开发方式，基于php实现（不包含在框架内）</li>
+        <li>浏览器本地增强，基于nodeJS实现（不包含在框架内）</li>
+    </ol>
+    本框架不依赖任何第三方框架或者函数库，不与其他框架冲突
+    <br>
+    本框架并非故意重复“造轮子”，意在借鉴现代优秀框架的思想，实现其常用功能，达到最小化，轻量级，完成自己项目的业务需求。
+    <br>
+    <br>
+    最后，本人能力有限，写本框架前期工作经验主要集中在后端（java，php，各种数据库等），某些地方设计不当，请不吝赐教。
+</div>
+<br>
+
+
+<div class="nav">
+    <a href="#ebase"><div>EasyBase基础库</div></a>
+    <div>chart组件</div>
+    <div>ui组件</div>
+    <div>electron组件</div>
+    <div>monitor组件</div>
+    <div>svg组件</div>
+    <div>icon组件</div>
+</div>
+
+
+<h2><a name="ebase"></a>一：EBase.class.js</h2>
+
+<!-- 引入框架 -->
+<div class="code">
+    <span class="title">引入框架文件</span><br>
+    通过普通的js引入方式引入
+    <br>
+    <textarea rows="1" readonly>
+        <script src="EBase.class.js"></script>;
+    </textarea>
+    <br>
+    会向自动window对象添加的全局方法
+    <ul>
+        <li>NEW</li>
+        <li>NEW_ASYNC</li>
+        <li>CLASS</li>
+    </ul>
+    详见<a href="#new-class">类的定义和使用</a>
+    <br>
+    会初自动始化本框架需要的公共或者私有变量、常量、方法等。
+    <br>
+    本API将不会提及框架内的私有变量、常量、私有方法，因为对某些私有属性的操作将是危险的。ES6未实现传统面向对象类及其属性的权限控制（public、private、protected、default）。
+    <br>
+    本框架模拟了私有属性和公共属相，并支持动态同步和异步引入类，远程引入类，类的缓存，回调使用等
+    <br>
+    详见<a href="#new-class">类的定义和使用</a>
+</div>
+
+<!-- ejs -->
+<div class="code">
+    <span class="title">ejs 实现类</span><br>
+    <br>
+    是所有函数的实现类
+    <textarea rows="1" readonly>
+        let box = ejs.query('.box');
+    </textarea>
+</div>
+
+<!-- 类的定义和使用 -->
+<div class="code">
+    <span class="title" id="new-class">类的定义和使用，模块化，动态引用等</span><br>
+    <br>
+    实现了动态引用js文件，支持静态引用，动态引用，远程引用，缓存类文件，中途劫持
+    <br>
+    <h3>异步引用box模块</h3>
+    <textarea rows="8" readonly>
+        count box = ejs.root + 'boxTest/box';
+        NEW(path,{
+            width:50
+        },fn=>{
+            let width = fn.getWidth(),//50px
+                height = fn.getHeight();//100px
+        });
+    </textarea>
+    <span class="simple">ejs.root</span>自动获取本库的相对地址，如输出 ../src/EasyScript2/
+    <br>
+    <span class="simple">NEW_ASYNC(path)</span>实例化一个类
+    <br>
+    <h3>同步引用box模块</h3>
+    <textarea rows="7" readonly>
+        count box = ejs.root + 'boxTest/box';
+        const {getWidth,getHeight} = NEW_ASYNC(box, {
+            width:50
+        });
+        let width = getWidth();//50px
+            height = getHeight();//100px
+    </textarea>
+    <h3>定义一个类</h3>
+    <textarea rows="24" readonly>
+        CLASS('box',
+            ({
+                 width = 100,
+                 height = 100
+             } = {}) => {
+                /*你的逻辑*/
+                let widthPX = width + 'px';
+                let heightPX = height + 'px';
+
+                function getWidth(){
+                    return widthPX;
+                }
+
+                function getHeight(){
+                    return heightPX;
+                }
+
+                return {
+                    getWidth: getWidth,
+                    getHeight: getHeight
+                }
+            }
+        );
+    </textarea>
+    box为类名<br>
+    width，height默认参数<br>
+    function getWidth(){}私有的外部无法访问的方法<br>
+    return向外界抛出方法<br>
+</div>
+
+<!-- ready -->
+<div class="code">
+    <span class="title">ejs.ready</span><br>
+    <br>
+    等待文档加载完成
+    <textarea rows="3" readonly>
+        ejs.ready(() => {
+            /*文档加载完成后执行*/
+        })
+    </textarea>
+    dom操作必须在浏览器加载完成DOM树之后才能使用
+</div>
+
+<!-- addClass -->
+<div class="code">
+    <span class="title">ejs.addClass(dom, clazz)</span><br>
+    dom：dom节点<br>
+    clazz: 样式名<br>
+    return：dom节点
+    <br>
+    增加类名
+    <textarea rows="2" readonly>
+        let div = ejs.query('div');//dom元素
+        ejs.addClass(box,'box');
+    </textarea>
+    返回值：返回增加class样式后的dom
+</div>
+
+<!-- ajax -->
+<div class="code">
+    <span class="title">ejs.ajax(url[,{}])</span><br>
+    ajax
+    <br>
+    只有url是必填参数，其他均可省略
+    <br>
+    url :必填参数
+    <br>
+    method :GET(默认),POST
+    <br>
+    headers :自己查http协议去
+    <br>
+    mode :same-origin,cors(默认),cors-with-forced-preflight,no-cors
+    <br>
+    cache :default,no-store,no-cache(默认),reload,force-cache,only-if-cached
+    <br>
+    data :{k,v} 发送的数据
+    <br>
+    <textarea rows="21" readonly>
+        ejs.ajax(
+            'http://127.0.0.1:8080/api/login',
+            {
+                method : 'GET',
+                headers : {
+                    "Content-type": "application/x-www-form-urlencoded"
+                },
+                mode : 'cros',
+                cache : 'no-cache',
+                data : {
+                    id:'19950919',
+                    name:'成龙哥哥'
+                },
+                success : suc=>{
+                    /*成功响应的逻辑*/
+                },
+                error : err=>{
+                    /*失败响应的逻辑*/
+                }
+            }
+        )
+    </textarea>
+</div>
+
+
+<!-- append -->
+<div class="code">
+    <span class="title">ejs.append(obj, child[, index])</span><br>
+    在元素的指定位置插入元素
+    <br>
+    obj：被插入元素 <br>
+    child：插入元素 <br>
+    index：【可选】插入位置，默认-1在尾部插入
+    return:obj被插入元素
+    <textarea rows="3" readonly>
+        let box = ejs.query('#box');
+        let item = ejs.createDom('div',{class:'item'});
+        ejs.append(box, item)
+    </textarea>
+</div>
+
+<!-- appendBatch -->
+<div class="code">
+    <span class="title">ejs.appendBatch(obj, children)</span><br>
+    向元素批量插入元素
+    <br>
+    obj：被插入元素
+    <br>
+    children：插入元素集合，需要iterator接口，如Array，Map，Set，String，TypedArray，函数的arguments对象，NodeList对象，styleSheets（低版本浏览器并未实现iterator接口）对象等
+</div>
+
+<!-- arrMaxMin -->
+<div class="code">
+    <span class="title">ejs.arrMaxMin(arr[, type])</span><br>
+    获取一维数组最大值最小值 <br>
+    arr：一维数组<br>
+    type：【可选】'max','min'。默认max<br>
+    return：最值
+    <textarea rows="2" readonly>
+        let arr = [1,2,3];
+        ejs.arrMaxMin(arr);//3
+    </textarea>
+</div>
+
+
+<!-- assignDeep -->
+<div class="code">
+    <span class="title">ejs.assignDeep(obj, obj2)</span><br>
+    深度合并对象，建议obj2为少的一方<br>
+    obj:对象<br>
+    obj2:对象<br>
+    return:第一个传入的obj对象
+    <textarea rows="3" readonly>
+        let obj = {a:1,b:2,d:{x:1}},
+            obj2 = {c:1,d:{y:2}}
+        ejs.assignDeep(obj, obj2);//{a:1,b:2,c:3,d:{x:1,y:2}}
+    </textarea>
+</div>
+
+<!-- attr-->
+<div class="code">
+    <span class="title">ejs.attr(dom[, attr])</span><br>
+    设置和获取属性<br>
+    dom:要设置和获取属性的dom节点<br>
+    attr：【可选】当是{class:'box',id:'box'}的时候是设置属性。当是'class'时候是获取属性。空的时候是返回所有存在的属性<br>
+    return: 属性对象或者bom
+    <textarea rows="7" readonly>
+        let box = ejs.query('#box');
+        ejs.attr(box,{
+            class:'box',
+            name:'box'
+        });
+        ejs.attr(box,'class');//box
+        ejs.attr(box);//{id:'box',class:'box', name:'box',}
+    </textarea>
+</div>
+
+<!-- camelize -->
+<div class="code">
+    <span class="title">ejs.camelize(str)</span><br>
+    转驼峰写法<br>
+    str:要转换的str<br>
+    return: 被转换的str
+    <textarea rows="2" readonly>
+        let str = 'font-size';
+        ejs.camelize(str);//fontSize'
+    </textarea>
+</div>
+
+<!-- capitalize -->
+<div class="code">
+    <span class="title">ejs.capitalize(str)</span><br>
+    首字母大写<br>
+    str:要转换的str<br>
+    return: 被转换的str
+    <textarea rows="2" readonly>
+        let str = 'abc';
+        ejs.capitalize(str);//Abc'
+    </textarea>
+</div>
+
+<!-- click -->
+<div class="code">
+    <span class="title">ejs.click(dom, callback[, target = '', useCapture = true])</span><br>
+    点击事件<br>
+    dom:点击的元素<br>
+    callback: 执行的方法，回调参数是点击的对象<br>
+    target: 【可选】被代理的class或者id或者标签名<br>
+    useCapture：【可选】冒泡或者捕获，true是冒泡
+    <textarea rows="18" readonly>
+        //直接点击
+        let box = query('.box');
+        ejs.click(box,e=>{
+            console.log(e);
+        });
+
+        //做代理item
+        let box = query('.box');
+        ejs.click(box,e=>{
+            console.log(e);
+        },'.item');
+
+        //做代理item,捕获
+        let box = query('.box');
+        ejs.click(box,e=>{
+            console.log(e);
+        },'.item',false);
+    </textarea>
+</div>
+
+<!-- cloneArr -->
+<div class="code">
+    <span class="title">ejs.cloneArr(arr)</span><br>
+    克隆数组，功能还比较简单，只能克隆数组，以后增强<br>
+</div>
+
+<!-- createDom -->
+<div class="code">
+    <span class="title">ejs.createDom([tagName , attr])</span><br>
+    创建dom<br>
+    tagName:【可选】要创建的dom标签名<br>
+    attr: 【可选】属性<br>
+    return：dom节点
+    <textarea rows="4" readonly>
+        ejs.createDom('div',{
+            class:'box',
+            id:'box'
+        });
+    </textarea>
+</div>
+
+<!-- css -->
+<div class="code">
+    <span class="title">ejs.css(dom,css)</span><br>
+    设置css，功能还比较弱，只能设置节点样式，以后增强。不过后面有个setSheet(),可以直接读写link标签或者style标签<br>
+    dom：要设置css的dom<br>
+    css: css<br>
+    return：dom节点
+    <textarea rows="5" readonly>
+        let box = ejs.query('.box');
+        ejs.css(box,{
+            fontSize:'16px',
+            color:'red'
+        });
+    </textarea>
+</div>
+
+<!-- deleteSheet -->
+<div class="code">
+    <span class="title">ejs.deleteSheet(selectorText)</span><br>
+    直接删除link标签或者style标签里面的样式 <span class="red">请留心使用！！</span><br>
+    selectorText：要删除的样式
+    <textarea rows="1" readonly>
+        ejs.deleteSheet('.box');
+    </textarea>
+</div>
+
+<!-- deleteSheetBatch -->
+<div class="code">
+    <span class="title">ejs.deleteSheetBatch(selectorTextArr)</span><br>
+    批量直接删除link标签引入的样式或者style标签里面的样式 <span class="red">请留心使用！！</span><br>
+    selectorTextArr：要删除的样式的数组
+    <textarea rows="1" readonly>
+        ejs.deleteSheet(['.box','#box','.item > div']);
+    </textarea>
+</div>
+
+<!-- difference -->
+<div class="code">
+    <span class="title">ejs.difference(arr1, arr2)</span><br>
+    两个数组取差集<br>
+    arr1：数组<br>
+    arr2：数组<br>
+    return:差集
+    <textarea rows="3" readonly>
+        let arr1 = [1,2,3],
+            arr2 = [1,2]
+        ejs.difference(arr1, arr2);//3
+    </textarea>
+</div>
+
+<!-- distinct -->
+<div class="code">
+    <span class="title">ejs.distinct(arr)</span><br>
+    数组去重<br>
+    arr<br>
+    return:去重后的数组
+    <textarea rows="2" readonly>
+        let arr = [1,2,3,3];
+        ejs.distinct(arr);//[1,2,3]
+    </textarea>
+</div>
+
+<!-- downLog -->
+<div class="code">
+    <span class="title">ejs.downLog(logApi) 未实现</span><br>
+    下载日志<br>
+    logApi：远端给的下载地址<br>
+    <textarea rows="1" readonly>
+        ejs.downLog(logApi);
+    </textarea>
+</div>
+
+<!-- empty -->
+<div class="code">
+    <span class="title">ejs.empty(dom[, rep])</span><br>
+    清空指定元素或从新赋值，以后增强<br>
+    dom：指定清空的元素<br>
+    rep：【可选】新替换的内容<br>
+    <textarea rows="2" readonly>
+        let box = query('.box');
+        ejs.empty(box);
+    </textarea>
+</div>
+
+<!-- empty -->
+<div class="code">
+    <span class="title">ejs.escapeHTML(str)</span><br>
+    html转实体<br>
+    str：html标记语言
+</div>
+
+</body>
+</html>

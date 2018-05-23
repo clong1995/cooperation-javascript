@@ -117,7 +117,7 @@ CLASS(
             head.onmousedown = null;
             head.onmouseup = null;
             closeBtn.onclick = null;
-            ejs.batchDeleteSheet([wrapSelector, headSelector, closeBtnSelector, closeHoverBtnSelector, contentSelector]);
+            ejs.deleteSheetBatch([wrapSelector, headSelector, closeBtnSelector, closeHoverBtnSelector, contentSelector]);
             ejs.remove(wrap);
         }
 
