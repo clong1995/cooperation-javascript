@@ -63,9 +63,10 @@ CLASS(
          * @param attr
          * @returns {HTMLElement|SVGAElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGDefsElement|*}
          */
-        function g(iteratorNode, attr = {}) {
+        function g(iteratorNode = null, attr = {}) {
             let g = create('g', attr);
-            ejs.appendBatch(g, iteratorNode);
+            if (iteratorNode)
+                ejs.appendBatch(g, iteratorNode);
             return g;
         }
 
@@ -285,15 +286,44 @@ CLASS(
         }*/
 
         //画线
-        function line(opt, style = null) {
+        function line(opt, attr = null) {
             let figure = create('line', opt);
+            if (attr) ejs.css(figure, attr);
+            return figure;
+        }
+
+
+        function lines({
+                           type = 'line',//arc（弧线）
+                           d = [{x: 10, y: 10}, {x: 20, y: 20}]
+                       } = {}, style = null) {
+            let dStr = '';
+            d.forEach((v, i) => {
+                !i ?
+                    dStr += 'M' + v.x + ',' + v.y :
+                    dStr += 'L' + v.x + ',' + v.y;
+            });
+            let figure = create('path', {
+                d: dStr,
+                fill: 'none'
+            });
             if (style) ejs.css(figure, style);
             return figure;
         }
 
         //画圆
-        function circle(opt, style = null) {
-            let figure = create('circle', opt);
+        function circle({
+                            cx = 10,
+                            cy = 10,
+                            r = 5
+                        } = {}, style = null) {
+
+            let figure = create('circle', {
+                cx: cx,
+                cy: cy,
+                r: r
+            });
+
             if (style) ejs.css(figure, style);
             return figure;
         }
@@ -303,6 +333,9 @@ CLASS(
             switch (type) {
                 case 'line':
                     figure = line(option, style);
+                    break;
+                case 'lines':
+                    figure = lines(option, style);
                     break;
                 case 'circle':
                     figure = circle(option, style);
@@ -324,7 +357,7 @@ CLASS(
             use: use,
             styleStr2Obj: styleStr2Obj,
             initDefs: initDefs,
-            draw:draw
+            draw: draw
             /*bezier: bezier,
             getControlPoints:getControlPoints*/
         }

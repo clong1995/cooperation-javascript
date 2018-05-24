@@ -219,6 +219,8 @@ class EBase {
             return obj.getAttribute(attr);
         }
         for (let k in attr) {
+            if((k === 'class' && !attr[k].indexOf('.')) || (k === 'id' && !attr[k].indexOf('#')))
+                attr[k] = attr[k].substr(1);
             obj.setAttribute(k, attr[k]);
         }
         return obj;

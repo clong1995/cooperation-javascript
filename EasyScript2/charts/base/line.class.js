@@ -21,12 +21,6 @@ CLASS('line', //类名
             figure     // 关键点
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
-
-
-
-
-
-
         //你的绘制逻辑
 
         //根据数据关键点画点

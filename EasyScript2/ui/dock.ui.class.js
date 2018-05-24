@@ -22,6 +22,8 @@ CLASS(
      } = {}) => {
 
         // TODO background 判断是颜色还是图片地址
+
+
         //dock容器
         let dockClass = ejs.simple(),
             dock = ejs.createDom('div', {class: dockClass});
@@ -83,7 +85,6 @@ CLASS(
                 scrolling: 'no',
                 content: data.url
             }, fn => {
-
             });
         }, '.' + appClass);
 
