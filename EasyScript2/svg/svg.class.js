@@ -21,7 +21,27 @@ CLASS(
          */
         function create(tagName, attr = {}) {
             let elem = document.createElementNS(SVG_NS, tagName);
-            for (let key in attr) elem.setAttribute(ejs.underscored(key), attr[key]);
+            //修复svg元素的历史bug
+            if (attr.strokeLocation && attr.strokeWidth) {
+                if (tagName === 'rect') {
+                    if (attr.strokeLocation === 'inside') {
+                        attr.x += attr.strokeWidth / 2;
+                        attr.y += attr.strokeWidth / 2;
+                        attr.width -= attr.strokeWidth;
+                        attr.height -= attr.strokeWidth;
+                    }
+                }
+                if (tagName === 'circle') {
+                    if (attr.strokeLocation === 'inside') {
+                        attr.r -= attr.strokeWidth / 2;
+                    }
+                }
+            }
+            delete attr.strokeLocation;
+            for (let key in attr) {
+                if (attr[key] !== null)
+                    elem.setAttribute(ejs.underscored(key), attr[key]);
+            }
             return elem;
         }
 
@@ -63,10 +83,9 @@ CLASS(
          * @param attr
          * @returns {HTMLElement|SVGAElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGDefsElement|*}
          */
-        function g(iteratorNode = null, attr = {}) {
+        function g(iteratorNode = [], attr = {}) {
             let g = create('g', attr);
-            if (iteratorNode)
-                ejs.appendBatch(g, iteratorNode);
+            ejs.appendBatch(g, iteratorNode);
             return g;
         }
 
@@ -74,21 +93,66 @@ CLASS(
          * 设置defs
          * @param node
          */
-        function defs(id, node) {
-            ejs.attr(node, {
-                id: id
-            });
-            defsSet.add(node);
+        function def(defs, def) {
+            /*ejs.attr(def, {
+                id: ejs.simple()
+            });*/
+            ejs.append(defs, def);
+            return def;
         }
 
-        function initDefs(svg) {
+
+        function linearGradient() {
+
+        }
+
+        function radialGradient(defs, {
+            cx = "50%",
+            cy = "50%",
+            r = "50%",
+            fx = "50%",
+            fy = "50%",
+            offset = {
+                "0%": {
+                    color: 'rgb(255,255,255)',
+                    opacity: 0
+                },
+                "100%": {
+                    color: 'rgb(14,171,212)',
+                    opacity: 1
+                }
+            }
+        } = {}) {
+            let id = ejs.simple();
+            let radial = create('radialGradient', {
+                id: id,
+                cx: cx,
+                cy: cy,
+                r: r,
+                fx: fx,
+                fy: fy
+            });
+
+            for (let o in offset) {
+                let stop = create('stop', {offset: o});
+                ejs.css(stop, {
+                    stopColor: offset[o].color,
+                    stopOpacity: offset[o].opacity
+                });
+                ejs.append(radial, stop);
+            }
+            ejs.append(defs, radial);
+            return "#" + id;
+        }
+
+        function initDefs(defArr = []) {
             let defs = create('defs');
-            defsSet.forEach(v => ejs.append(defs, v));
-            ejs.append(svg, defs)
+            defArr.forEach(v => ejs.append(defs, v));
+            return defs;
         }
 
         function use(id, attr = {}) {
-            attr['xlink:href'] = '#' + id;
+            attr['href'] = '#' + id;
             return create('use', attr);
         }
 
@@ -286,9 +350,19 @@ CLASS(
         }*/
 
         //画线
-        function line(opt, attr = null) {
-            let figure = create('line', opt);
-            if (attr) ejs.css(figure, attr);
+        function line({
+                          x1 = 0,
+                          y1 = 0,
+                          x2 = 10,
+                          y2 = 10
+                      } = {}, style = null) {
+            let figure = create('line', {
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2
+            });
+            if (style) ejs.css(figure, style);
             return figure;
         }
 
@@ -315,16 +389,45 @@ CLASS(
         function circle({
                             cx = 10,
                             cy = 10,
-                            r = 5
+                            r = 5,
+                            strokeLocation = null,
+                            strokeWidth = null
                         } = {}, style = null) {
 
             let figure = create('circle', {
                 cx: cx,
                 cy: cy,
-                r: r
+                r: r,
+                strokeLocation: strokeLocation,
+                strokeWidth: strokeWidth
             });
 
             if (style) ejs.css(figure, style);
+            return figure;
+        }
+
+        //多边形
+        function polygon({
+                             border = 4,
+                             borderWidth = 10,
+                             cx = borderWidth * 2,
+                             cy = borderWidth * 2
+                         } = {}, style = null) {
+
+            if (border < 3) {
+                ejs.log('二维多边形边数最少为3条', 'error');
+                return;
+            }
+            let figure = null;
+            if (border === 4) {
+                figure = create('rect', {
+                    x: "10",
+                    y: "10",
+                    height: borderWidth,
+                    width: borderWidth
+                });
+                ejs.css(figure, style);
+            }
             return figure;
         }
 
@@ -340,24 +443,35 @@ CLASS(
                 case 'circle':
                     figure = circle(option, style);
                     break;
+                case 'polygon':
+                    figure = polygon(option, style);
+                    break;
                 default:
                     ejs.log('未能识别的图形类型！', 'error');
             }
             return figure;
         }
 
+        function symbol(iteratorNode = []) {
+            let symbol = create('symbol');
+            ejs.appendBatch(symbol, iteratorNode);
+            return symbol;
+        }
+
         return {
             create: create,
             g: g,
+            symbol: symbol,
             createSvg: createSvg,
-            defs: defs,
+            def: def,
             sheet: sheet,
             setSheet: setSheet,
             addText: addText,
             use: use,
             styleStr2Obj: styleStr2Obj,
             initDefs: initDefs,
-            draw: draw
+            draw: draw,
+            radialGradient: radialGradient
             /*bezier: bezier,
             getControlPoints:getControlPoints*/
         }

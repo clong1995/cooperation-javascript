@@ -219,7 +219,7 @@ class EBase {
             return obj.getAttribute(attr);
         }
         for (let k in attr) {
-            if((k === 'class' && !attr[k].indexOf('.')) || (k === 'id' && !attr[k].indexOf('#')))
+            if ((k === 'class' && !attr[k].indexOf('.')) || (k === 'id' && !attr[k].indexOf('#')))
                 attr[k] = attr[k].substr(1);
             obj.setAttribute(k, attr[k]);
         }
@@ -263,9 +263,8 @@ class EBase {
         return str.charAt(0).toUpperCase() + str.substring(1);
     }
 
-    click(dom, callback, target = '', useCapture = true) {
+    click(dom, target = '', callback, useCapture = true) {
         dom.addEventListener('click', e => {
-
             if (!target)
                 callback(e);
             else {

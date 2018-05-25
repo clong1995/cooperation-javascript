@@ -182,7 +182,8 @@ CLASS(
 
         //内置样式表，开发使用的
         let sheet = null,
-            sheetStyle = new Map();
+            sheetMap = new Map(),
+            eventMap = new Map();
 
         //数据容器
         let data = option.data,
@@ -368,7 +369,7 @@ CLASS(
             ejs.addClass(g, clazz);
 
             //设置默认样式
-            sheetStyle.set('.' + clazz, {
+            sheetMap.set('.' + clazz, {
                 fontSize: opt_title.fontSize,
                 lineHeight: opt_title.lineHeight,
                 fill: opt_title.color,
@@ -412,7 +413,7 @@ CLASS(
                 ejs.addClass(xAxis, xAxisClazz);
 
                 //设置默认样式
-                sheetStyle.set('.' + xAxisClazz, {
+                sheetMap.set('.' + xAxisClazz, {
                     stroke: xLine.borderColor,
                     strokeWidth: xLine.borderWidth,
                 });
@@ -432,7 +433,7 @@ CLASS(
                 ejs.addClass(yAxis, yAxisClazz);
 
                 //设置默认样式
-                sheetStyle.set('.' + yAxisClazz, {
+                sheetMap.set('.' + yAxisClazz, {
                     stroke: yLine.borderColor,
                     strokeWidth: yLine.borderWidth,
                 });
@@ -462,7 +463,7 @@ CLASS(
                     r: originPoint.width
                 });
                 ejs.addClass(circle, OClazz);
-                sheetStyle.set('.' + OClazz, {
+                sheetMap.set('.' + OClazz, {
                     stroke: originPoint.borderColor,
                     strokeWidth: originPoint.borderWidth,
                     fill: originPoint.background
@@ -479,7 +480,7 @@ CLASS(
                 });
                 ejs.addClass(text, OTextClazz);
 
-                sheetStyle.set('.' + OTextClazz, {
+                sheetMap.set('.' + OTextClazz, {
                     fill: originLabel.color,
                     fontSize: originLabel.fontSize,
                     lineHeight: originLabel.lineHeight,
@@ -514,7 +515,7 @@ CLASS(
                     y2: Y(0) + xTick.height
                 });
 
-                sheetStyle.set('.' + xTickClazz, {
+                sheetMap.set('.' + xTickClazz, {
                     stroke: xTick.borderColor,
                     strokeWidth: xTick.borderWidth,
                 });
@@ -537,7 +538,7 @@ CLASS(
                     x1: X(0) - yTick.width,
                     x2: X(0)
                 });
-                sheetStyle.set('.' + yTickClazz, {
+                sheetMap.set('.' + yTickClazz, {
                     stroke: yTick.borderColor,
                     strokeWidth: yTick.borderWidth
                 });
@@ -570,7 +571,7 @@ CLASS(
                 let xAxisLabelNode = svg.create('text', {
                     y: Y(0) + xTick.height + xLabel.lineHeight
                 });
-                sheetStyle.set('.' + xAxisLabelClazz, {
+                sheetMap.set('.' + xAxisLabelClazz, {
                     fill: xLabel.color,
                     fontSize: xLabel.fontSize,
                     lineHeight: xLabel.lineHeight,
@@ -596,7 +597,7 @@ CLASS(
                 let yAxisLabelNode = svg.create('text', {
                     x: X(0) - yTick.width - yStrWidth / 2
                 });
-                sheetStyle.set('.' + yAxisLabelClazz, {
+                sheetMap.set('.' + yAxisLabelClazz, {
                     fill: yLabel.color,
                     fontSize: yLabel.fontSize,
                     //lineHeight: yLabel.lineHeight,
@@ -635,7 +636,7 @@ CLASS(
                     y1: yAxisStart.y,
                     y2: yAxisStart.y - axisLength.y
                 });
-                sheetStyle.set('.' + xGridClazz, {
+                sheetMap.set('.' + xGridClazz, {
                     stroke: xGrid.borderColor,
                     strokeWidth: xGrid.borderWidth,
                 });
@@ -658,7 +659,7 @@ CLASS(
                     x1: X(0),
                     x2: axisLength.x + O.x
                 });
-                sheetStyle.set('.' + yGridClazz, {
+                sheetMap.set('.' + yGridClazz, {
                     stroke: yGrid.borderColor,
                     strokeWidth: yGrid.borderWidth,
                 });
@@ -702,16 +703,40 @@ CLASS(
             return {
                 //数据关键点
                 dataPoints: datas,
+                maxMinData: {
+                    max: maxData,
+                    min: minData
+                },
+                axisStartEnd: {
+                    xAxis: {
+                        start: O,
+                        end: {
+                            x: axisLength.x + O.x,
+                            y: O.y
+                        }
+                    },
+                    yAxis: {
+                        start: {
+                            x: O.x,
+                            y: yAxisStart.y
+                        },
+                        end: {
+                            x: O.x,
+                            y: yAxisStart.y - axisLength.y
+                        }
+                    },
+                },
                 //坐标轴关键点
                 axisPoints: {
                     x: xPoint,
                     y: yPoint
                 },
                 //坐标轴间隔
-                axisSpan:{
-                    x:xSpan,
-                    y:ySpan
-                }
+                axisSpan: {
+                    x: xSpan,
+                    y: ySpan
+                },
+                size:axisLength
             };
         }
 
@@ -753,31 +778,46 @@ CLASS(
             sheet = svg.sheet(svgNode);
 
             //生成样式表
-            sheetStyle.forEach((v, k) => svg.setSheet(sheet, k, v));
+            sheetMap.forEach((v, k) => svg.setSheet(sheet, k, v));
 
-            //使用外置css样式表，方便用户使用配置的
-            /*if (option.useStyleSheet) {
-                let sheetStyleUser = new Map();
-                let s, k, v;
-                ejs.getStyleSheet(option.element).forEach(v => {
-                        s = v.rule.split('{');
-                        k = ejs.trim(s[0], {position: 'left', char: param.element + ' '});
-                        v = svg.styleStr2Obj('{' + s[1]);
-                        sheetStyleUser.set(k, v);
-                    }
-                );
-                sheetStyleUser.forEach((v, k) => svg.setSheet(sheet, k, v));
-            }*/
 
-            //加载defs
-            svg.initDefs(svgNode);
+            //注册事件
+            eventMap.forEach((v, i) => {
+                if (v.click)
+                    ejs.click(svgNode, i, v.click)
+            });
+
 
             //显示svg
             ejs.css(svgNode, {
                 display: 'block'
             });
 
+
+            //释放样式存储
+            sheetMap = null;
+            //释放事件
+            eventMap = null;
             return svgNode;
+        }
+
+        function setSheet(select, rule) {
+            sheetMap.set(select, rule);
+        }
+
+        function addEvent(type, target, callback) {
+            let event = {
+                click: null,
+                hover: null
+            };
+            if (event[type] === undefined) {
+                ejs.log('不允许的事件:' + type, 'error');
+                return;
+            }
+            if (!eventMap.has(target)) {
+                eventMap.set(target, event)
+            }
+            eventMap.get(target)[type] = callback;
         }
 
 
@@ -786,6 +826,8 @@ CLASS(
             render: render,
             X: X,
             Y: Y,
+            addEvent: addEvent,
+            setSheet: setSheet,
             className: className,
             figure: figure(),
             option: option

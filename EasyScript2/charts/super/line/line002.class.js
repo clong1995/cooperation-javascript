@@ -4,7 +4,7 @@
  */
 CLASS(
     //类名
-    'line001',
+    'line002',
     //构造器
     param => {
         //默认数据
@@ -24,16 +24,15 @@ CLASS(
             className,  // 类名生成器
             option,     // 配置项
             figure,     // 关键点
-            setSheet,   // 样式表
-            addEvent    // 注册事件
+            setSheet, //样式表
+            addEvent
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
         //你的绘制逻辑
+        console.log(figure);
 
         //defs
         let defs = svg.initDefs();
-        //渐变
-        let pointRadial = svg.radialGradient(defs);
 
         let
             pointsG = svg.g(),//折点组
@@ -52,33 +51,78 @@ CLASS(
             animation: pointsShow + ' 1s linear forwards'
         });
 
+        //柱状背景
+        let itemBgG = svg.g(),
+            itemDataBg = ejs.attr(svg.symbol(), {id: ejs.simple(), y: figure.axisStartEnd.yAxis.end.y}),
+            itemDataBgStart = X(0) + figure.axisSpan.x / 2,
+            itemDataBgWidth = .8;
+
+        svg.def(defs, ejs.appendBatch(itemDataBg, [
+            svg.create('rect', {
+                x: 0,
+                y: 0,
+                width: figure.axisSpan.x * itemDataBgWidth,
+                height: figure.size.y,
+                strokeWidth: 2,
+                strokeLocation: 'inside',
+                stroke: '#06495a',
+                fill: 'none'
+            }),
+            svg.draw('line', {
+                x1: figure.axisSpan.x * itemDataBgWidth/2,
+                y1: 0,
+                x2: figure.axisSpan.x * itemDataBgWidth/2,
+                y2: figure.size.y
+            },{
+                strokeWidth: 2,
+                stroke: '#06495a',
+                strokeDasharray:"5,5"
+            }),
+        ]));
+
 
         let dataPointDelayStep = lineAnim / figure.dataPoints.length;
         figure.dataPoints.forEach((v, i) => {
             //组装点
             let pointItem = ejs.appendBatch(svg.g(), [
-                //根据数据关键点画点
-                svg.draw('circle', {
-                    cx: v.x,
-                    cy: v.y,
-                    strokeWidth: 0,
-                    r: 4
-                }),
-                //环
-                svg.draw('circle', {
-                    cx: v.x,
-                    cy: v.y,
-                    r: 25
-                }, {
-                    strokeWidth: 3,
-                    fill: 'url(' + pointRadial + ')',
-                })]
+                    //根据数据关键点画点
+                    svg.draw('circle', {
+                        cx: v.x,
+                        cy: v.y,
+                        r: 4,
+                    }, {
+                        strokeWidth: 0,
+                    }),
+                    //环
+                    svg.draw('circle', {
+                        cx: v.x,
+                        cy: v.y,
+                        r: 25
+                    }, {
+                        strokeWidth: 2,
+                        fill: 'none',
+                    })]
+                //中线
+
             );
+
             ejs.addClass(pointItem, pointItemClass);
+            //点动画
             ejs.css(pointItem, {
                 animationDelay: i * dataPointDelayStep + 'ms'
             });
 
+            //柱子背景
+            let useItemBg = svg.use(itemDataBg.id, {
+                x: itemDataBgStart + figure.axisSpan.x * (1 - itemDataBgWidth) / 2,
+                y: 0
+            });
+
+            itemDataBgStart += figure.axisSpan.x;
+
+            //组装背景
+            ejs.append(itemBgG, useItemBg);
+            //组装点
             ejs.append(pointsG, pointItem);
         });
         //设置颜色
@@ -101,7 +145,7 @@ CLASS(
             to: {strokeDashoffset: 0}
         });
 
-        //
+        //线动画
         let linerGClass = ejs.simple();
         setSheet('.' + linerGClass, {
             strokeWidth: 2,
@@ -112,6 +156,8 @@ CLASS(
         });
         ejs.addClass(linesG, linerGClass);
 
+        //背景
+
 
         addEvent('click', '.' + pointItemClass, e => {
             console.log(e);
@@ -121,8 +167,9 @@ CLASS(
         //执行渲染
         render([
             defs,
-            pointsG,//折点
-            linesG//折线
+            itemBgG,//背景
+            linesG,//折线
+            pointsG//折点
         ]);
 
         //===向外界抛出你的公共方法 ===\\

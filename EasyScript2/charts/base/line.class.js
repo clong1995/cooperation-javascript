@@ -8,7 +8,7 @@ CLASS('line', //类名
                 value: [3, 25, 33, 49, 51, 91, -61],
                 key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
             }
-        },param);
+        }, param);
 
         //基类提供的必要函数
         const {
@@ -18,35 +18,29 @@ CLASS('line', //类名
             Y,          // 坐标转换器
             className,  // 类名生成器
             option,     // 配置项
-            figure     // 关键点
+            figure,     // 关键点
+            sheetStyle
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
         //你的绘制逻辑
+        console.log('用于二次开发的关键数据', figure);
 
-        //根据数据关键点画点
-        let point = [];
-        figure.dataPoints.forEach(v => {
-            point.push(svg.draw('circle', {
-                cx: v.x,
-                cy: v.y,
-                r: 5
-            }));
+
+        //根据数据关键点画线
+        let line = svg.draw('lines', {
+            d: figure.dataPoints
+        }, {
+            strokeWidth: 2,
+            stroke: '#000'
         });
-
-        console.log(figure);
-
-
-
 
 
         //执行渲染
         render([
-            ...point,//折点
+            line,//折线
         ]);
 
         //===向外界抛出你的公共方法 ===\\
-        return {
-
-        }
+        return {}
     }
 );
