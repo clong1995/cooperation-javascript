@@ -7,7 +7,9 @@
         #box{
             width:1000px;
             height: 500px;
-            background: #000;
+            /*border:1px solid #ccc;*/
+            margin: 0 auto;
+            /*background: #000;*/
             /*transform: scale(1000,1000);*/
         }
     </style>
@@ -16,7 +18,7 @@
         ejs.ready(() => {
             NEW(
                 //组件
-                ejs.root+'charts/super/line/line002',
+                ejs.root+'charts/line/line002',
                 {
                     element:'#box',
                     data: {
@@ -25,7 +27,6 @@
                     }
                 },
                 fn => {
-                    /*获取组件抛出的公共方法*/
 
                 })
         });

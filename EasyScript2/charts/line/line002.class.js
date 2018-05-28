@@ -7,6 +7,12 @@ CLASS(
     'line002',
     //构造器
     param => {
+
+
+
+
+        //图纸类型
+        param.type = 'line';
         //默认数据
         ejs.assignDeep({
             data: {
@@ -21,15 +27,11 @@ CLASS(
             render,     // 渲染器
             X,          // 坐标转换器
             Y,          // 坐标转换器
-            className,  // 类名生成器
             option,     // 配置项
             figure,     // 关键点
-            setSheet, //样式表
+            setSheet,   //样式表
             addEvent
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
-
-        //你的绘制逻辑
-        console.log(figure);
 
         //defs
         let defs = svg.initDefs();
@@ -173,6 +175,9 @@ CLASS(
         ]);
 
         //===向外界抛出你的公共方法 ===\\
-        return {}
+        return {
+
+
+        }
     }
 );
