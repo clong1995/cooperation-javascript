@@ -11,6 +11,13 @@ CLASS(
         //【参数补全机制】
         let option = ejs.assignDeep({
                 style: {
+                    //位置
+                    position: {
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0
+                    },
                     //标题
                     title: {
                         content: '这是一个标题',
@@ -24,113 +31,90 @@ CLASS(
                         marginLeft: 0,
                         marginRight: 0
                     },
-                    //原点
-                    origin: {
-                        point: {
-                            borderColor: 'rgba(0,0,0,1)',
-                            borderWidth: 2,
-                            width: 5,
-                            background: 'rgba(255,255,255,1)',
-                            marginTop: 20,
-                            marginRight: 20,
-                            display: param.theme.display
-                        },
-                        //文本
-                        label: {
-                            content: 'O',
-                            fontSize: 14,
-                            lineHeight: 20,
-                            color: 'rgba(0,0,0,1)',
-                            fontWeight: 'normal',
-                            fontFamily: '\'Microsoft YaHei\',sans-serif',
-                            align: 'center',
-                            display: param.theme.display
-                        }
-                    },
+
                     //坐标轴
                     axis: {
-                        //y轴
+                        //x轴
                         x: {
-                            //标题
-                            title: {
-                                /*css rule*/
-                                display: param.theme.display
-                            },
+                            display: param.theme.display,
                             //轴线
                             line: {
+                                display: param.theme.display,
                                 borderColor: 'rgba(0,0,0,1)',
                                 borderWidth: 2,
-                                display: param.theme.display
                             },
                             //坐标刻度线
                             tick: {
+                                display: param.theme.display,
                                 height: 10,
                                 borderWidth: 2,
-                                borderColor: 'rgba(0,0,0,1)',
-                                marginTop: 0,
-                                marginBottom: 0,
-                                display: param.theme.display
+                                borderColor: 'rgba(0,0,0,1)'
                             },
                             //文本
                             label: {
+                                display: param.theme.display,
                                 fontSize: 14,
                                 lineHeight: 20,
                                 color: 'rgba(0,0,0,1)',
                                 fontWeight: 'normal',
                                 fontFamily: '\'Microsoft YaHei\',sans-serif',
-                                align: 'center',
-                                display: param.theme.display
-                            },
-                            endpoint: {
-                                borderColor: 'rgba(0,0,0,1)',
-                                borderWidth: 2,
-                                width: 5,
-                                background: 'rgba(255,255,255,1)',
-                                display: param.theme.display
+                                align: 'center'
                             }
                         },
-                        //x轴
+                        //y轴
                         y: {
-                            //标题
-                            title: {
-                                /*css rule*/
-                                display: param.theme.display
-                            },
+                            display: param.theme.display,
                             //轴线
                             line: {
+                                display: param.theme.display,
                                 borderColor: 'rgba(0,0,0,1)',
-                                borderWidth: 2,
-                                display: param.theme.display
+                                borderWidth: 2
                             },
                             //坐标刻度线
                             tick: {
+                                display: param.theme.display,
                                 width: 10,
                                 borderWidth: 2,
-                                borderColor: 'rgba(0,0,0,1)',
-                                marginRight: 0,
-                                marginLeft: 0,
-                                display: param.theme.display
+                                borderColor: 'rgba(0,0,0,1)'
                             },
                             //文本
                             label: {
+                                display: param.theme.display,
                                 fontSize: 14,
                                 lineHeight: 20,
                                 color: 'rgba(0,0,0,1)',
                                 fontWeight: 'normal',
                                 fontFamily: '\'Microsoft YaHei\',sans-serif',
-                                align: 'center',
-                                display: param.theme.display
-                            },
-                            endpoint: {
+                                align: 'center'
+                            }
+                        },
+                        //原点
+                        origin: {
+                            display: param.theme.display,
+                            point: {
+                                display: param.theme.display,
                                 borderColor: 'rgba(0,0,0,1)',
                                 borderWidth: 2,
                                 width: 5,
                                 background: 'rgba(255,255,255,1)',
-                                display: param.theme.display
+                                marginTop: 20,
+                                marginRight: 20
+                            },
+                            //文本
+                            label: {
+                                display: param.theme.display,
+                                content: 'O',
+                                fontSize: 14,
+                                lineHeight: 20,
+                                color: 'rgba(0,0,0,1)',
+                                fontWeight: 'normal',
+                                fontFamily: '\'Microsoft YaHei\',sans-serif',
+                                align: 'center'
                             }
                         },
                         //网格线
                         grid: {
+                            display: param.theme.display,
                             x: {
                                 borderWidth: 1,
                                 borderColor: 'rgba(0,0,0,0.2)',
@@ -186,34 +170,33 @@ CLASS(
         let
             svg = option.svg,
             offsetSize = option.offsetSize,
-            style = option.style,
 
-            //标题
-            opt_title = style.title,
 
-            //坐标原点
-            originPoint = style.origin.point,
-            originLabel = style.origin.label,
 
             //x轴系列
-            axisX = style.axis.x,
+            axisX = option.style.axis.x,
             xTitle = axisX.title,
             xLine = axisX.line,
             xTick = axisX.tick,
             xLabel = axisX.label,
-            opt_xEndpoint = axisX.endpoint,
 
             //y轴系列
-            axisY = style.axis.y,
+            axisY = option.style.axis.y,
             yTitle = axisY.title,
             yLine = axisY.line,
             yTick = axisY.tick,
             yLabel = axisY.label,
-            opt_yEndpoint = axisY.endpoint,
+
+
+            //坐标原点
+            origin = option.style.axis.origin,
+            originPoint = origin.point,
+            originLabel = origin.label,
 
             //网格线
-            xGrid = style.axis.grid.x,
-            yGrid = style.axis.grid.y;
+            grid = option.style.axis.grid,
+            xGrid = grid.x,
+            yGrid = grid.y;
 
 
         //【数据容器】
@@ -223,7 +206,8 @@ CLASS(
 
         //【y轴分段】
         let spanCount = 10;
-        //逻辑最值，降级取整
+
+        // 【最值】
         let
             maxData = ejs.arrMaxMin(data.value, 'max'),
             minData = ejs.arrMaxMin(data.value, 'min'),
@@ -242,43 +226,58 @@ CLASS(
             spanValue = ejs.gcd(yAxisMax, Math.abs(yAxisMin));
         }
 
-        //段值
+        //【段值】
         for (let i = 0; i < spanCount; i++) {
             let num = spanValue * i + yAxisMin;
             yAxisData.push(num);
             if (!num && minData < 0) oIndex = i + 1;
         }
 
-        //y轴最大文本宽度
-        let
-            yMinStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'min').toString()) * yLabel.fontSize,
-            yMaxStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'max').toString()) * yLabel.fontSize,
-            yStrWidth = yMinStrWidth > yMaxStrWidth ? yMinStrWidth : yMaxStrWidth;
+        //【y轴配置display变化引发的影响合计】
+        //y轴轴线宽度
+        let yLineWidth = yLine.display !== 'none' ? yLine.borderWidth : 0;
+        //y轴文本
+        let yStrWidth = 0;
+        if (yLabel.display !== 'none') {
+            let //y轴最大文本宽度
+                yMinStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'min').toString()) * yLabel.fontSize,
+                yMaxStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'max').toString()) * yLabel.fontSize;
+            yStrWidth = yMinStrWidth > yMaxStrWidth ? yMinStrWidth : yMaxStrWidth
+        }
+        //坐标刻度线
+        let yTickWidth = yTick.display !== 'none' ? yTick.width : 0;
+        if (axisY.display === 'none') {
+            yLineWidth = yStrWidth = yTickWidth = 0;
+        }
+        let yAxisSpace = yLineWidth + yStrWidth + yTickWidth;
 
 
-        //逻辑起点
+        //【x轴配置display变化引发的影响合计】
+        //x轴轴线宽度
+        let xLineWidth = xLine.display !== 'none' ? xLine.borderWidth : 0;
+        //x轴文本
+        let xStrHeight = xLabel.display !== 'none' ? xLabel.lineHeight : 0;
+        //坐标刻度线
+        let xTickWidth = xTick.display !== 'none' ? xTick.height : 0;
+        if (axisX.display === 'none') {
+            xLineWidth = xStrHeight = xTickWidth = 0;
+        }
+        let xAxisSpace = xLineWidth + xStrHeight + xTickWidth;
+
+
+        //【逻辑起点】
         let yAxisStart = {
             //x位
-            x: yLine.borderWidth +
-            yTick.width +
-            yTick.marginRight +
-            yTick.marginLeft +
-            yStrWidth,
+            x: yAxisSpace,
             //y位
-            y: offsetSize.height - (
-                xLine.borderWidth +
-                xTick.height +
-                xTick.marginTop +
-                xTick.marginBottom +
-                xLabel.lineHeight
-            )
+            y: offsetSize.height - xAxisSpace
         };
 
 
         //【坐标轴长度】
         let axisLength = {
             x: offsetSize.width - yAxisStart.x,
-            y: yAxisStart.y - opt_title.lineHeight
+            y: yAxisStart.y
         };
 
         //【逻辑原点】
@@ -295,7 +294,7 @@ CLASS(
             Y = y => O.y - y;
 
 
-        //刻度点
+        //【刻度点】
         let {xAxisPoint, yAxisPoint, xSpan, ySpan} = ((xd, yd) => {
             let point = {
                 xAxisPoint: [],
@@ -313,70 +312,18 @@ CLASS(
             return point;
         })(xAxisData, yAxisData);
 
-
+        //【样式】
         let sheetMap = new Map();
 
-        //【事件管理】
+        //【事件】
         let eventMap = new Map();
 
-        /**
-         * 标题
-         * @returns {[null]}
-         */
-        function title() {
-            if (opt_title.display === 'none') {
-                return false;
-            }
-            let clazz = ejs.simple();
-
-            //x轴文本
-            let text = svg.create('text', {
-                y: opt_title.lineHeight / 2,
-            });
-
-            let titleLen = ejs.strLength(opt_title.content);
-
-            //属性
-            opt_title.align === 'left' ? ejs.attr(text, {
-                x: opt_title.marginLeft
-            }) : opt_title.align === 'right' ? ejs.attr(text, {
-                x: O.x + axisLength.x - titleLen * opt_title.fontSize - opt_title.marginRight
-            }) : ejs.attr(text, {
-                x: (O.x + axisLength.x - titleLen * opt_title.fontSize) / 2
-            });
-            //节点内容
-            svg.addText(text, opt_title.content);
-
-            let g = svg.g([text]);
-            ejs.addClass(g, clazz);
-
-            //设置默认样式
-            sheetMap.set('.' + clazz, {
-                fontSize: opt_title.fontSize,
-                lineHeight: opt_title.lineHeight,
-                fill: opt_title.color,
-                fontWeight: opt_title.fontWeight,
-                fontFamily: opt_title.fontFamily
-            });
-
-            return g;
-        }
-
-        /**
-         * 坐标轴端点
-         * @returns {[null]}
-         */
-        function endpoint() {
-
-            return [];
-        }
 
         /**
          * 坐标轴生成器
-         * @param option
-         * @returns {{xAxis: *}}
+         * @returns {*}
          */
-        let axis = () => {
+        function drawAxis() {
             let xAxis = null,
                 yAxis = null;
 
@@ -395,7 +342,7 @@ CLASS(
                 //设置默认样式
                 sheetMap.set('.' + xAxisClazz, {
                     stroke: xLine.borderColor,
-                    strokeWidth: xLine.borderWidth,
+                    strokeWidth: xLineWidth,
                 });
             }
 
@@ -415,7 +362,7 @@ CLASS(
                 //设置默认样式
                 sheetMap.set('.' + yAxisClazz, {
                     stroke: yLine.borderColor,
-                    strokeWidth: yLine.borderWidth,
+                    strokeWidth: yLineWidth,
                 });
             }
 
@@ -423,62 +370,65 @@ CLASS(
             //目前将x轴和y轴混合到一块
             let g = svg.g([xAxis, yAxis]);
             return g;
-        };
+        }
 
         /**
          * 坐标原点
          * @returns {[null,null]}
          */
-        let origin = () => {
+        function drawOrigin() {
             let circle = null,
                 text = null;
 
-            //圆形
-            if (originPoint.display !== 'none') {
-                let OClazz = ejs.simple();
-                circle = svg.draw('circle', {
-                    cx: O.x,
-                    cy: O.y,
-                    r: originPoint.width
-                });
-                ejs.addClass(circle, OClazz);
-                sheetMap.set('.' + OClazz, {
-                    stroke: originPoint.borderColor,
-                    strokeWidth: originPoint.borderWidth,
-                    fill: originPoint.background
-                });
+            if (origin.display !== 'none') {
+                //圆形
+                if (originPoint.display !== 'none') {
+                    let OClazz = ejs.simple();
+                    circle = svg.draw('circle', {
+                        cx: O.x,
+                        cy: O.y,
+                        r: originPoint.width
+                    });
+                    ejs.addClass(circle, OClazz);
+                    sheetMap.set('.' + OClazz, {
+                        stroke: originPoint.borderColor,
+                        strokeWidth: originPoint.borderWidth,
+                        fill: originPoint.background
+                    });
+                }
+
+
+                //文本 originLabel.content
+                if (originLabel.display !== 'none') {
+                    let OTextClazz = ejs.simple();
+                    text = svg.create('text', {
+                        x: O.x - originPoint.marginTop,
+                        y: O.y + originPoint.marginRight,
+                    });
+                    ejs.addClass(text, OTextClazz);
+
+                    sheetMap.set('.' + OTextClazz, {
+                        fill: originLabel.color,
+                        fontSize: originLabel.fontSize,
+                        lineHeight: originLabel.lineHeight,
+                        fontWeight: originLabel.fontWeight,
+                        fontFamily: originLabel.fontFamily,
+                        textAnchor: originLabel.align === 'left' ? 'end' : originLabel.align === 'right' ? 'start' : 'middle'
+                    });
+
+                    text.textContent = originLabel.content;
+                }
             }
 
-
-            //文本 originLabel.content
-            if (originLabel.display !== 'none') {
-                let OTextClazz = ejs.simple();
-                text = svg.create('text', {
-                    x: O.x - originPoint.marginTop,
-                    y: O.y + originPoint.marginRight,
-                });
-                ejs.addClass(text, OTextClazz);
-
-                sheetMap.set('.' + OTextClazz, {
-                    fill: originLabel.color,
-                    fontSize: originLabel.fontSize,
-                    lineHeight: originLabel.lineHeight,
-                    fontWeight: originLabel.fontWeight,
-                    fontFamily: originLabel.fontFamily,
-                    textAnchor: originLabel.align === 'left' ? 'end' : originLabel.align === 'right' ? 'start' : 'middle'
-                });
-
-                text.textContent = originLabel.content;
-            }
 
             return svg.g([circle, text]);
-        };
+        }
 
         /**
          * 刻度线
          * @returns {*|number}
          */
-        let tick = () => {
+        function drawTick() {
 
             let xTickG = null,
                 yTickG = null;
@@ -490,7 +440,7 @@ CLASS(
 
                 let xTickNode = svg.draw('line', {
                     y1: Y(0),
-                    y2: Y(0) + xTick.height
+                    y2: Y(0) + xTickWidth
                 });
 
                 sheetMap.set('.' + xTickClazz, {
@@ -513,7 +463,7 @@ CLASS(
                 let yTickClazz = ejs.simple();
                 let yTickArr = [];
                 let yTickNode = svg.draw('line', {
-                    x1: X(0) - yTick.width,
+                    x1: X(0) - yTickWidth,
                     x2: X(0)
                 });
                 sheetMap.set('.' + yTickClazz, {
@@ -531,29 +481,29 @@ CLASS(
             }
 
             //x刻度和y刻度,目前混合到一块处理
-            return [xTickG, yTickG];
-        };
+            return svg.g([xTickG, yTickG]);
+        }
 
 
         /**
          * 坐标文本
          * @returns {*|number}
          */
-        let axisLabel = () => {
+        function drawAxisLabel() {
             let xAxisLabelG = null,
                 yAxisLabelG = null;
 
-            if (xLabel.display !== 'none') {
+            if (xLabel.display !== 'none' && xAxisSpace) {
                 let xAxisLabelArr = [];
                 let xAxisLabelClazz = ejs.simple();
                 //x轴文本
                 let xAxisLabelNode = svg.create('text', {
-                    y: Y(0) + xTick.height + xLabel.lineHeight
+                    y: Y(0) + xTickWidth + xStrHeight
                 });
                 sheetMap.set('.' + xAxisLabelClazz, {
                     fill: xLabel.color,
                     fontSize: xLabel.fontSize,
-                    lineHeight: xLabel.lineHeight,
+                    lineHeight: xStrHeight,
                     fontWeight: xLabel.fontWeight,
                     fontFamily: xLabel.fontFamily,
                     textAnchor: xLabel.align === 'left' ? 'end' : xLabel.align === 'right' ? 'start' : 'middle'
@@ -570,11 +520,11 @@ CLASS(
                 ejs.addClass(xAxisLabelG, xAxisLabelClazz);
             }
 
-            if (yLabel.display !== 'none') {
+            if (yLabel.display !== 'none' && yAxisSpace) {
                 let yAxisLabelArr = [];
                 let yAxisLabelClazz = ejs.simple();
                 let yAxisLabelNode = svg.create('text', {
-                    x: X(0) - yTick.width - yStrWidth / 2
+                    x: X(0) - yTickWidth - yStrWidth / 2
                 });
                 sheetMap.set('.' + yAxisLabelClazz, {
                     fill: yLabel.color,
@@ -596,72 +546,74 @@ CLASS(
                 ejs.addClass(yAxisLabelG, yAxisLabelClazz);
             }
 
-            return [xAxisLabelG, yAxisLabelG];
-        };
+            return svg.g([xAxisLabelG, yAxisLabelG]);
+        }
 
         /**
          * 网格线
          * @returns {*|number}
          */
-        let grid = () => {
-
+        function drawGrid() {
             let xGridG = null, yGridG = null;
 
-            //纵向
-            if (xGrid.display !== 'none') {
-                let xGridClazz = ejs.simple();
-                let xGridArr = [];
-                let xGridNode = svg.draw('line', {
-                    y1: yAxisStart.y,
-                    y2: yAxisStart.y - axisLength.y
-                });
-                sheetMap.set('.' + xGridClazz, {
-                    stroke: xGrid.borderColor,
-                    strokeWidth: xGrid.borderWidth,
-                });
+            if(grid.display !== 'none'){
+                //纵向
+                if (xGrid.display !== 'none') {
+                    let xGridClazz = ejs.simple();
+                    let xGridArr = [];
+                    let xGridNode = svg.draw('line', {
+                        y1: yAxisStart.y,
+                        y2: yAxisStart.y - axisLength.y
+                    });
+                    sheetMap.set('.' + xGridClazz, {
+                        stroke: xGrid.borderColor,
+                        strokeWidth: xGrid.borderWidth,
+                    });
 
-                xAxisPoint.forEach(v =>
-                    xGridArr.push(ejs.attr(xGridNode.cloneNode(), {
-                        x1: v,
-                        x2: v
-                    }))
-                );
-                xGridG = svg.g(xGridArr);
-                ejs.addClass(xGridG, xGridClazz);
+                    xAxisPoint.forEach(v =>
+                        xGridArr.push(ejs.attr(xGridNode.cloneNode(), {
+                            x1: v,
+                            x2: v
+                        }))
+                    );
+                    xGridG = svg.g(xGridArr);
+                    ejs.addClass(xGridG, xGridClazz);
+                }
+
+                //横向
+                if (yGrid.display !== 'none') {
+                    let yGridClazz = ejs.simple();
+                    let yGridArr = [];
+                    let yGridNode = svg.draw('line', {
+                        x1: X(0),
+                        x2: axisLength.x + O.x
+                    });
+                    sheetMap.set('.' + yGridClazz, {
+                        stroke: yGrid.borderColor,
+                        strokeWidth: yGrid.borderWidth,
+                    });
+
+                    yAxisPoint.forEach(v =>
+                        yGridArr.push(ejs.attr(yGridNode.cloneNode(), {
+                            y1: v,
+                            y2: v
+                        }))
+                    );
+                    yGridG = svg.g(yGridArr);
+                    ejs.addClass(yGridG, yGridClazz);
+                }
             }
 
-            //横向
-            if (yGrid.display !== 'none') {
-                let yGridClazz = ejs.simple();
-                let yGridArr = [];
-                let yGridNode = svg.draw('line', {
-                    x1: X(0),
-                    x2: axisLength.x + O.x
-                });
-                sheetMap.set('.' + yGridClazz, {
-                    stroke: yGrid.borderColor,
-                    strokeWidth: yGrid.borderWidth,
-                });
-
-                yAxisPoint.forEach(v =>
-                    yGridArr.push(ejs.attr(yGridNode.cloneNode(), {
-                        y1: v,
-                        y2: v
-                    }))
-                );
-                yGridG = svg.g(yGridArr);
-                ejs.addClass(yGridG, yGridClazz);
-            }
 
             //x刻度和y刻度,目前混合到一块处理
-            return [xGridG, yGridG];
-        };
+            return svg.g([xGridG, yGridG]);
+        }
 
 
         /**
          * 计算关键点
-         */
-        let figure = () => {
+         * */
+        function figure() {
             //数据关键点
             let datas = [];
             let unit = ySpan / spanValue;
@@ -718,64 +670,16 @@ CLASS(
                 },
                 size: axisLength
             };
-        };
+        }
 
 
         let chartParts = [
-            //title(),
-            //endpoint(),
-            axis(),
-            origin(),
-            ...tick(),
-            ...axisLabel(),
-            ...grid()
+            drawAxis(),
+            drawOrigin(),
+            drawTick(),
+            drawAxisLabel(),
+            drawGrid()
         ];
-
-
-        /*/!**
-         * 渲染方法
-         * @param IteratorNode 部署了Iterator接口的结构
-         * @returns {*}
-         *!/
-        let render = (IteratorNode) => {
-
-
-
-            /!*!//组装标题
-            ejs.append(svgNode, title());
-            //组装坐标轴上的端点
-            ejs.appendBatch(svgNode, endpoint());
-            //轴
-            ejs.append(svgNode, axis());
-            //组装原点
-            ejs.append(svgNode, origin());
-            //组装刻度线
-            ejs.appendBatch(svgNode, tick());
-            //组装刻度文本
-            ejs.appendBatch(svgNode, axisLabel());
-            //组装网格线
-            ejs.appendBatch(svgNode, grid());*!/
-
-
-
-            //创建样式表
-
-
-
-
-
-
-
-
-
-
-            //释放样式存储
-            //sheetMap = null;
-            //释放事件
-            //eventMap = null;
-            //return svgNode;
-        };*/
-
 
 
         let publicFn = {
@@ -796,7 +700,6 @@ CLASS(
         return publicFn;
     }
 );
-
 
 
 // { b: 'c' }

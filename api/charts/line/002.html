@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        #box{
-            width:1000px;
+        #box {
+            width: 1000px;
             height: 500px;
-            /*border:1px solid #ccc;*/
-            margin: 0 auto;
-            /*background: #000;*/
-            /*transform: scale(1000,1000);*/
+            background: #fff;
         }
     </style>
     <script src="../../../EasyScript2/EBase.class.js"></script>
@@ -18,9 +15,25 @@
         ejs.ready(() => {
             NEW(
                 //组件
-                ejs.root+'charts/line/line002',
+                ejs.root + 'charts/line/line002',
                 {
-                    element:'#box',
+                    element: '#box',
+                    style: {
+                        axis: {
+                            x: {
+                                display: 'none'
+                            },
+                            y: {
+                                display: 'none'
+                            },
+                            origin: {
+                                display: 'none'
+                            },
+                            grid:{
+                                display: 'none'
+                            }
+                        }
+                    },
                     data: {
                         value: [253, 128, 380, 158, 275, 190, 177],
                         key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']

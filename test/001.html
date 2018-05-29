@@ -3,10 +3,51 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>SVG viewBox</title>
     <script>
-        let a = -20;
+        /*let a = -20;
         console.log(!a);
         let k = 'xxx';
-        console.log(k.indexOf('.'))
+        console.log(k.indexOf('.'));
+
+        let type = 1;
+
+        switch(type){
+            case '1':{
+                function title111() {
+
+                }
+                break;
+            }
+        }*/
+
+
+        /*let arrFn = [];
+
+        function fn3(cb) {
+
+            arrFn.push(cb);
+        }*/
+
+
+        function fn() {
+            let a = [];
+
+            function fn2(b) {
+                a.push(b);
+            }
+
+            return {
+                a: a,
+                fn2: fn2
+            }
+        }
+
+        let {a,fn2} = fn();
+
+        fn2(2);
+        fn2(3);
+
+        console.log(a);
+
     </script>
 </head>
 

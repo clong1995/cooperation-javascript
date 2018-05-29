@@ -7,13 +7,9 @@ CLASS(
     'line002',
     //构造器
     param => {
-
-
-
-
-        //图纸类型
+        //【图表类型】
         param.type = 'line';
-        //默认数据
+        //【默认数据】
         ejs.assignDeep({
             data: {
                 value: [3, 25, 33, 49, 51, 91, -61],
@@ -21,7 +17,7 @@ CLASS(
             }
         }, param);
 
-        //基类提供的必要函数
+        //【基类提供的必要函数】
         const {
             svg,        // svg工具类
             render,     // 渲染器
@@ -29,11 +25,11 @@ CLASS(
             Y,          // 坐标转换器
             option,     // 配置项
             figure,     // 关键点
-            setSheet,   //样式表
-            addEvent
+            setSheet,   // 样式表
+            addEvent    // 事件
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
-        //defs
+        // 【defs】
         let defs = svg.initDefs();
 
         let

@@ -161,8 +161,10 @@ class EBase {
      * @param index -1则在最后插入
      */
     append(obj, child, index = -1) {
-        let children = obj.children;
-        (index < 0 || index > children.length) ? obj.appendChild(child) : obj.insertBefore(child, children[index]);
+        if(child){
+            let children = obj.children;
+            (index < 0 || index > children.length) ? obj.appendChild(child) : obj.insertBefore(child, children[index]);
+        }
         return obj;
     }
 
