@@ -3,32 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        #box{
-            width:1000px;
-            height: 500px;
-        }
-    </style>
     <script src="../../../EasyScript2/EBase.class.js"></script>
     <script>
         ejs.ready(() => {
-            NEW(
-                //组件
-                ejs.root+'charts/base/line',
-                {
-                    element:'#box',
-                    data: {
-                        value: [253, 128, 380, 158, 275, 190, 177],
-                        key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
-                    }
-                },
-                fn => {
-                    /*获取组件抛出的公共方法*/
-                })
-        });
+            //最简单的调用一个组件
+            NEW(ejs.root + 'charts/line/line')
+        })
     </script>
 </head>
 <body>
-<div id="box"></div>
 </body>
 </html>

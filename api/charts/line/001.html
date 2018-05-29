@@ -7,6 +7,7 @@
         #box{
             width:1000px;
             height: 500px;
+            background: #fff;
         }
     </style>
     <script src="../../../EasyScript2/EBase.class.js"></script>
@@ -14,9 +15,15 @@
         ejs.ready(() => {
             NEW(
                 //组件
-                ejs.root+'charts/super/line/line001',
+                ejs.root+'charts/line/line001',
                 {
                     element:'#box',
+                    position:{
+                        top: 20,
+                        right: 20,
+                        bottom: 20,
+                        left: 20
+                    },
                     data: {
                         value: [253, 128, 380, 158, 275, 190, 177],
                         key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']

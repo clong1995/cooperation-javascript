@@ -7,7 +7,10 @@ CLASS(
     'line001',
     //构造器
     param => {
-        //默认数据
+        //【图表类型】
+        param.type = 'line';
+
+        //【默认数据】
         ejs.assignDeep({
             data: {
                 value: [3, 25, 33, 49, 51, 91, -61],
@@ -15,7 +18,7 @@ CLASS(
             }
         }, param);
 
-        //基类提供的必要函数
+        //【基类提供的必要函数】
         const {
             svg,        // svg工具类
             render,     // 渲染器
@@ -28,9 +31,9 @@ CLASS(
             addEvent    // 注册事件
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
-        //你的绘制逻辑
+        //【你的绘制逻辑】
 
-        //defs
+        //【defs】
         let defs = svg.initDefs();
         //渐变
         let pointRadial = svg.radialGradient(defs);

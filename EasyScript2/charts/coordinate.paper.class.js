@@ -8,170 +8,171 @@
 CLASS(
     'coordinate.paper',
     param => {
+
+
+
         //【参数补全机制】
         let option = ejs.assignDeep({
-                style: {
-                    //位置
-                    position: {
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0
-                    },
-                    //标题
-                    title: {
-                        content: '这是一个标题',
-                        fontSize: 14,
-                        lineHeight: 64,
-                        color: 'rgba(0,0,0,1)',
-                        fontWeight: 'normal',
-                        fontFamily: '\'Microsoft YaHei\',sans-serif',
-                        align: 'center',
-                        display: param.theme.display,
-                        marginLeft: 0,
-                        marginRight: 0
-                    },
+            style: {
+                //位置
+                position: {
+                    top: param.theme.fontSize,
+                    right: param.theme.fontSize,
+                    bottom: param.theme.fontSize,
+                    left: param.theme.fontSize
+                },
+                //标题
+                title: {
+                    content: '这是一个标题',
+                    fontSize: 14,
+                    lineHeight: 64,
+                    color: 'rgba(0,0,0,1)',
+                    fontWeight: 'normal',
+                    fontFamily: '\'Microsoft YaHei\',sans-serif',
+                    align: 'center',
+                    display: param.theme.display,
+                    marginLeft: 0,
+                    marginRight: 0
+                },
 
-                    //坐标轴
-                    axis: {
-                        //x轴
-                        x: {
+                //坐标轴
+                axis: {
+                    //x轴
+                    x: {
+                        display: param.theme.display,
+                        //轴线
+                        line: {
                             display: param.theme.display,
-                            //轴线
-                            line: {
-                                display: param.theme.display,
-                                borderColor: 'rgba(0,0,0,1)',
-                                borderWidth: 2,
-                            },
-                            //坐标刻度线
-                            tick: {
-                                display: param.theme.display,
-                                height: 10,
-                                borderWidth: 2,
-                                borderColor: 'rgba(0,0,0,1)'
-                            },
-                            //文本
-                            label: {
-                                display: param.theme.display,
-                                fontSize: 14,
-                                lineHeight: 20,
-                                color: 'rgba(0,0,0,1)',
-                                fontWeight: 'normal',
-                                fontFamily: '\'Microsoft YaHei\',sans-serif',
-                                align: 'center'
-                            }
+                            borderColor: 'rgba(0,0,0,1)',
+                            borderWidth: 2,
                         },
-                        //y轴
-                        y: {
+                        //坐标刻度线
+                        tick: {
                             display: param.theme.display,
-                            //轴线
-                            line: {
-                                display: param.theme.display,
-                                borderColor: 'rgba(0,0,0,1)',
-                                borderWidth: 2
-                            },
-                            //坐标刻度线
-                            tick: {
-                                display: param.theme.display,
-                                width: 10,
-                                borderWidth: 2,
-                                borderColor: 'rgba(0,0,0,1)'
-                            },
-                            //文本
-                            label: {
-                                display: param.theme.display,
-                                fontSize: 14,
-                                lineHeight: 20,
-                                color: 'rgba(0,0,0,1)',
-                                fontWeight: 'normal',
-                                fontFamily: '\'Microsoft YaHei\',sans-serif',
-                                align: 'center'
-                            }
+                            height: 10,
+                            borderWidth: 2,
+                            borderColor: 'rgba(0,0,0,1)'
                         },
-                        //原点
-                        origin: {
+                        //文本
+                        label: {
                             display: param.theme.display,
-                            point: {
-                                display: param.theme.display,
-                                borderColor: 'rgba(0,0,0,1)',
-                                borderWidth: 2,
-                                width: 5,
-                                background: 'rgba(255,255,255,1)',
-                                marginTop: 20,
-                                marginRight: 20
-                            },
-                            //文本
-                            label: {
-                                display: param.theme.display,
-                                content: 'O',
-                                fontSize: 14,
-                                lineHeight: 20,
-                                color: 'rgba(0,0,0,1)',
-                                fontWeight: 'normal',
-                                fontFamily: '\'Microsoft YaHei\',sans-serif',
-                                align: 'center'
-                            }
-                        },
-                        //网格线
-                        grid: {
-                            display: param.theme.display,
-                            x: {
-                                borderWidth: 1,
-                                borderColor: 'rgba(0,0,0,0.2)',
-                                display: param.theme.display
-                            },
-                            y: {
-                                borderWidth: 1,
-                                borderColor: 'rgba(0,0,0,0.1)',
-                                display: param.theme.display
-                            }
-                        },
-                        //辅助
-                        guild: {
-                            //指示器
-                            pointer: {},
-                            //悬浮窗
-                            tooltip: {
-                                //线
-                                line: {
-                                    /*css rule*/
-                                },
-                                //
-                                box: {}
-                            },
+                            fontSize: 14,
+                            lineHeight: 20,
+                            color: 'rgba(0,0,0,1)',
+                            fontWeight: 'normal',
+                            fontFamily: '\'Microsoft YaHei\',sans-serif',
+                            align: 'center'
                         }
                     },
-                    //图例
-                    legend: {
-                        //标题
-                        title: {
-                            /*css rule*/
+                    //y轴
+                    y: {
+                        display: param.theme.display,
+                        //轴线
+                        line: {
+                            display: param.theme.display,
+                            borderColor: 'rgba(0,0,0,1)',
+                            borderWidth: 2
                         },
-                        //图例项
-                        item: {
-                            //标志
-                            marker: {
+                        //坐标刻度线
+                        tick: {
+                            display: param.theme.display,
+                            width: 10,
+                            borderWidth: 2,
+                            borderColor: 'rgba(0,0,0,1)'
+                        },
+                        //文本
+                        label: {
+                            display: param.theme.display,
+                            fontSize: 14,
+                            lineHeight: 20,
+                            color: 'rgba(0,0,0,1)',
+                            fontWeight: 'normal',
+                            fontFamily: '\'Microsoft YaHei\',sans-serif',
+                            align: 'center'
+                        }
+                    },
+                    //原点
+                    origin: {
+                        display: param.theme.display,
+                        point: {
+                            display: param.theme.display,
+                            borderColor: 'rgba(0,0,0,1)',
+                            borderWidth: 2,
+                            width: 5,
+                            background: 'rgba(255,255,255,1)',
+                            marginTop: 20,
+                            marginRight: 20
+                        },
+                        //文本
+                        label: {
+                            display: param.theme.display,
+                            content: 'O',
+                            fontSize: 14,
+                            lineHeight: 20,
+                            color: 'rgba(0,0,0,1)',
+                            fontWeight: 'normal',
+                            fontFamily: '\'Microsoft YaHei\',sans-serif',
+                            align: 'center'
+                        }
+                    },
+                    //网格线
+                    grid: {
+                        display: param.theme.display,
+                        x: {
+                            borderWidth: 1,
+                            borderColor: 'rgba(0,0,0,0.2)',
+                            display: param.theme.display
+                        },
+                        y: {
+                            borderWidth: 1,
+                            borderColor: 'rgba(0,0,0,0.1)',
+                            display: param.theme.display
+                        }
+                    },
+                    //辅助
+                    guild: {
+                        //指示器
+                        pointer: {},
+                        //悬浮窗
+                        tooltip: {
+                            //线
+                            line: {
                                 /*css rule*/
                             },
-                            //文本
-                            label: {
-                                /*css rule*/
-                            }
-                        }
+                            //
+                            box: {}
+                        },
                     }
                 },
-                series: {}
+                //图例
+                legend: {
+                    //标题
+                    title: {
+                        /*css rule*/
+                    },
+                    //图例项
+                    item: {
+                        //标志
+                        marker: {
+                            /*css rule*/
+                        },
+                        //文本
+                        label: {
+                            /*css rule*/
+                        }
+                    }
+                }
             },
-            param
-        );
-
+            series: {}
+        }, param);
 
         //【简化链式查找】
         let
             svg = option.svg,
             offsetSize = option.offsetSize,
 
-
+            //定位
+            position = option.style.position,
 
             //x轴系列
             axisX = option.style.axis.x,
@@ -268,16 +269,16 @@ CLASS(
         //【逻辑起点】
         let yAxisStart = {
             //x位
-            x: yAxisSpace,
+            x: yAxisSpace + position.left,
             //y位
-            y: offsetSize.height - xAxisSpace
+            y: offsetSize.height - xAxisSpace - position.bottom
         };
 
 
         //【坐标轴长度】
         let axisLength = {
-            x: offsetSize.width - yAxisStart.x,
-            y: yAxisStart.y
+            x: offsetSize.width - yAxisStart.x - position.right,
+            y: yAxisStart.y - position.top
         };
 
         //【逻辑原点】
@@ -556,7 +557,7 @@ CLASS(
         function drawGrid() {
             let xGridG = null, yGridG = null;
 
-            if(grid.display !== 'none'){
+            if (grid.display !== 'none') {
                 //纵向
                 if (xGrid.display !== 'none') {
                     let xGridClazz = ejs.simple();

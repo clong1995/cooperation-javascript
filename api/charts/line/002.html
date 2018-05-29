@@ -18,8 +18,15 @@
                 ejs.root + 'charts/line/line002',
                 {
                     element: '#box',
+
                     style: {
-                        axis: {
+                        position: {
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 20
+                        },
+                        /*axis: {
                             x: {
                                 display: 'none'
                             },
@@ -29,10 +36,10 @@
                             origin: {
                                 display: 'none'
                             },
-                            grid:{
+                            grid: {
                                 display: 'none'
                             }
-                        }
+                        }*/
                     },
                     data: {
                         value: [253, 128, 380, 158, 275, 190, 177],
