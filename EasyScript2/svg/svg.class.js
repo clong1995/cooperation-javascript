@@ -102,8 +102,45 @@ CLASS(
         }
 
 
-        function linearGradient() {
+        function linearGradient(defs, {
+            x1 = 0,
+            y1 = 0,
+            x2 = "100%",
+            y2 = 0,
+            offset = {
+                "0%": {
+                    color: 'rgb(14,171,212)',
+                    opacity: .1
+                },
+                "50%": {
+                    color: 'rgb(14,171,212)',
+                    opacity: .3
+                },
+                "100%": {
+                    color: 'rgb(14,171,212)',
+                    opacity: .1
+                }
+            }
+        } = {}) {
+            let id = ejs.simple();
+            let radial = create('linearGradient', {
+                id: id,
+                x1 : x1,
+                y1 : y1,
+                x2 : x2,
+                y2 : y2
+            });
 
+            for (let o in offset) {
+                let stop = create('stop', {offset: o});
+                ejs.css(stop, {
+                    stopColor: offset[o].color,
+                    stopOpacity: offset[o].opacity
+                });
+                ejs.append(radial, stop);
+            }
+            ejs.append(defs, radial);
+            return "#" + id;
         }
 
         function radialGradient(defs, {
@@ -471,7 +508,8 @@ CLASS(
             styleStr2Obj: styleStr2Obj,
             initDefs: initDefs,
             draw: draw,
-            radialGradient: radialGradient
+            radialGradient: radialGradient,
+            linearGradient:linearGradient
             /*bezier: bezier,
             getControlPoints:getControlPoints*/
         }

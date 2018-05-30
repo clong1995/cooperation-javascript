@@ -80,6 +80,13 @@ CLASS(
             }
             paper.eventMap.get(target)[type] = callback;
         }
+        
+        //【获取图纸组件】
+        function getPaper(p=null) {
+            let part = paper.chartPartMap;
+            if(p) part = part.get(p);
+            return part;
+        }
 
         //【渲染】
         function render(IteratorNode) {
@@ -95,10 +102,14 @@ CLASS(
             let sheet = svg.sheet(svgNode);
 
             //【生成样式表】
-            paper.sheetMap.forEach((v, k) => svg.setSheet(sheet, k, v));
+            paper.sheetMap.forEach((v, k) => {
+                svg.setSheet(sheet, k, v)
+            });
 
             //【组装节点】
-            ejs.appendBatch(svgNode, [...IteratorNode, ...paper.chartParts]);
+            paper.chartPartMap.forEach(v=> IteratorNode.unshift(v));
+
+            ejs.appendBatch(svgNode, [...IteratorNode]);
 
             //【注册事件】
             paper.eventMap.forEach((v, i) => {
@@ -122,7 +133,8 @@ CLASS(
             svg: svg,
             render: render,
             addEvent: addEvent,
-            setSheet: setSheet
+            setSheet: setSheet,
+            getPaper:getPaper
         }, paper);
     }
 );

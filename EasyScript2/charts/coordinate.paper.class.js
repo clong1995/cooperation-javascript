@@ -8,9 +8,6 @@
 CLASS(
     'coordinate.paper',
     param => {
-
-
-
         //【参数补全机制】
         let option = ejs.assignDeep({
             style: {
@@ -24,8 +21,8 @@ CLASS(
                 //标题
                 title: {
                     content: '这是一个标题',
-                    fontSize: 14,
-                    lineHeight: 64,
+                    fontSize: param.theme.fontSize,
+                    lineHeight: param.theme.fontSize,
                     color: 'rgba(0,0,0,1)',
                     fontWeight: 'normal',
                     fontFamily: '\'Microsoft YaHei\',sans-serif',
@@ -45,6 +42,7 @@ CLASS(
                             display: param.theme.display,
                             borderColor: 'rgba(0,0,0,1)',
                             borderWidth: 2,
+                            borderStyle: 'solid',//dashed
                         },
                         //坐标刻度线
                         tick: {
@@ -56,8 +54,8 @@ CLASS(
                         //文本
                         label: {
                             display: param.theme.display,
-                            fontSize: 14,
-                            lineHeight: 20,
+                            fontSize: param.theme.fontSize,
+                            lineHeight: param.theme.fontSize,
                             color: 'rgba(0,0,0,1)',
                             fontWeight: 'normal',
                             fontFamily: '\'Microsoft YaHei\',sans-serif',
@@ -71,7 +69,8 @@ CLASS(
                         line: {
                             display: param.theme.display,
                             borderColor: 'rgba(0,0,0,1)',
-                            borderWidth: 2
+                            borderWidth: 2,
+                            borderSyle: 'solid',//dashed
                         },
                         //坐标刻度线
                         tick: {
@@ -83,8 +82,8 @@ CLASS(
                         //文本
                         label: {
                             display: param.theme.display,
-                            fontSize: 14,
-                            lineHeight: 20,
+                            fontSize: param.theme.fontSize,
+                            lineHeight: param.theme.fontSize,
                             color: 'rgba(0,0,0,1)',
                             fontWeight: 'normal',
                             fontFamily: '\'Microsoft YaHei\',sans-serif',
@@ -107,7 +106,7 @@ CLASS(
                         label: {
                             display: param.theme.display,
                             content: 'O',
-                            fontSize: 14,
+                            fontSize: param.theme.fontSize,
                             lineHeight: 20,
                             color: 'rgba(0,0,0,1)',
                             fontWeight: 'normal',
@@ -259,11 +258,11 @@ CLASS(
         //x轴文本
         let xStrHeight = xLabel.display !== 'none' ? xLabel.lineHeight : 0;
         //坐标刻度线
-        let xTickWidth = xTick.display !== 'none' ? xTick.height : 0;
+        let xTickHeight = xTick.display !== 'none' ? xTick.height : 0;
         if (axisX.display === 'none') {
-            xLineWidth = xStrHeight = xTickWidth = 0;
+            xLineWidth = xStrHeight = xTickHeight = 0;
         }
-        let xAxisSpace = xLineWidth + xStrHeight + xTickWidth;
+        let xAxisSpace = xLineWidth + xStrHeight + xTickHeight;
 
 
         //【逻辑起点】
@@ -329,7 +328,7 @@ CLASS(
                 yAxis = null;
 
             //x轴
-            if (xLine.display !== 'none') {
+            if (xLine.display !== 'none' && axisX.display !== 'none') {
                 let xAxisClazz = ejs.simple();
                 xAxis = svg.draw('line', {
                     x1: O.x,
@@ -343,13 +342,21 @@ CLASS(
                 //设置默认样式
                 sheetMap.set('.' + xAxisClazz, {
                     stroke: xLine.borderColor,
-                    strokeWidth: xLineWidth,
+                    strokeWidth: xLineWidth
                 });
+
+                if (xLine.borderStyle === 'solid') {
+
+                } else if (xLine.borderStyle === 'dashed') {
+                    sheetMap.get('.' + xAxisClazz).strokeDasharray = xLine.borderWidth * 4 + "," + xLine.borderWidth * 4
+                } else {
+                    sheetMap.get('.' + xAxisClazz).strokeDasharray = xLine.borderStyle
+                }
             }
 
 
             //y轴
-            if (yLine.display !== 'none') {
+            if (yLine.display !== 'none' && axisY.display !== 'none') {
                 let yAxisClazz = ejs.simple();
                 yAxis = svg.draw('line', {
                     x1: O.x,
@@ -435,13 +442,15 @@ CLASS(
                 yTickG = null;
 
             //x轴刻度
-            if (xTick.display !== 'none') {
+            if (xTick.display !== 'none' && axisX.display !== 'none') {
                 let xTickClazz = ejs.simple();
                 let xTickArr = [];
 
                 let xTickNode = svg.draw('line', {
-                    y1: Y(0),
-                    y2: Y(0) + xTickWidth
+                    /*y1: Y(0),
+                    y2: Y(0) + xTickHeight*/
+                    y1: yAxisStart.y,
+                    y2: yAxisStart.y + xTickHeight
                 });
 
                 sheetMap.set('.' + xTickClazz, {
@@ -460,7 +469,7 @@ CLASS(
             }
 
             //y轴刻度
-            if (yTick.display !== 'none') {
+            if (yTick.display !== 'none' && axisY.display !== 'none') {
                 let yTickClazz = ejs.simple();
                 let yTickArr = [];
                 let yTickNode = svg.draw('line', {
@@ -499,16 +508,19 @@ CLASS(
                 let xAxisLabelClazz = ejs.simple();
                 //x轴文本
                 let xAxisLabelNode = svg.create('text', {
-                    y: Y(0) + xTickWidth + xStrHeight
+                    //y: Y(0) + xTickHeight + xStrHeight,
+                    y: yAxisStart.y + xTickHeight + xStrHeight,
+                    fontSize: xLabel.fontSize
                 });
+
                 sheetMap.set('.' + xAxisLabelClazz, {
                     fill: xLabel.color,
-                    fontSize: xLabel.fontSize,
                     lineHeight: xStrHeight,
                     fontWeight: xLabel.fontWeight,
                     fontFamily: xLabel.fontFamily,
                     textAnchor: xLabel.align === 'left' ? 'end' : xLabel.align === 'right' ? 'start' : 'middle'
                 });
+
 
                 xAxisPoint.forEach((v, i) => {
                         let cloneNode = xAxisLabelNode.cloneNode();
@@ -525,12 +537,11 @@ CLASS(
                 let yAxisLabelArr = [];
                 let yAxisLabelClazz = ejs.simple();
                 let yAxisLabelNode = svg.create('text', {
-                    x: X(0) - yTickWidth - yStrWidth / 2
+                    x: X(0) - yTickWidth - yStrWidth / 2,
+                    fontSize: yLabel.fontSize
                 });
                 sheetMap.set('.' + yAxisLabelClazz, {
                     fill: yLabel.color,
-                    fontSize: yLabel.fontSize,
-                    //lineHeight: yLabel.lineHeight,
                     fontWeight: yLabel.fontWeight,
                     fontFamily: yLabel.fontFamily,
                     textAnchor: yLabel.align === 'left' ? 'end' : yLabel.align === 'right' ? 'start' : 'middle'
@@ -659,6 +670,7 @@ CLASS(
                         }
                     },
                 },
+                O: O,
                 //坐标轴关键点
                 axisPoints: {
                     x: xPoint,
@@ -674,18 +686,18 @@ CLASS(
         }
 
 
-        let chartParts = [
-            drawAxis(),
-            drawOrigin(),
-            drawTick(),
-            drawAxisLabel(),
-            drawGrid()
-        ];
+        let chartPartMap = new Map([
+            ['axis', drawAxis()],
+            ['origin', drawOrigin()],
+            ['tick', drawTick()],
+            ['axisLabel', drawAxisLabel()],
+            ['grid', drawGrid()]
+        ]);
 
 
         let publicFn = {
             option: option,
-            chartParts: chartParts,
+            chartPartMap: chartPartMap,
             sheetMap: sheetMap,
             eventMap: eventMap,
             figure: figure(),
@@ -694,7 +706,7 @@ CLASS(
         };
 
         //危险属性屏蔽
-        Object.defineProperty(publicFn, 'chartParts', {enumerable: false});
+        Object.defineProperty(publicFn, 'chartPartMap', {enumerable: false});
         Object.defineProperty(publicFn, 'sheetMap', {enumerable: false});
         Object.defineProperty(publicFn, 'eventMap', {enumerable: false});
 
