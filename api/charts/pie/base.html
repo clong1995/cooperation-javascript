@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基础饼图</title>
+    <style>
+        #box {
+            width: 500px;
+            height: 500px;
+            background: #fff;
+        }
+    </style>
+    <script src="../../../EasyScript2/EBase.class.js"></script>
+    <script>
+        ejs.ready(() => {
+            //最简单的调用一个组件
+            NEW(ejs.root + 'charts/pie/pie',{
+                element: '#box'
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="box"></div>
+</body>
+</html>
