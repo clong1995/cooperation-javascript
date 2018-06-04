@@ -18,20 +18,6 @@ CLASS(
                     bottom: param.theme.fontSize,
                     left: param.theme.fontSize
                 },
-                //标题
-                title: {
-                    content: '这是一个标题',
-                    fontSize: param.theme.fontSize,
-                    lineHeight: param.theme.fontSize,
-                    color: 'rgba(0,0,0,1)',
-                    fontWeight: 'normal',
-                    fontFamily: '\'Microsoft YaHei\',sans-serif',
-                    align: 'center',
-                    display: param.theme.display,
-                    marginLeft: 0,
-                    marginRight: 0
-                },
-
                 //坐标轴
                 axis: {
                     //x轴
@@ -161,13 +147,14 @@ CLASS(
                         }
                     }
                 }
-            },
-            series: {}
+            }
         }, param);
+
+        //【svg操作类】
+        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
         //【简化链式查找】
         let
-            svg = option.svg,
             offsetSize = option.offsetSize,
 
             //定位
@@ -175,14 +162,12 @@ CLASS(
 
             //x轴系列
             axisX = option.style.axis.x,
-            xTitle = axisX.title,
             xLine = axisX.line,
             xTick = axisX.tick,
             xLabel = axisX.label,
 
             //y轴系列
             axisY = option.style.axis.y,
-            yTitle = axisY.title,
             yLine = axisY.line,
             yTick = axisY.tick,
             yLabel = axisY.label,

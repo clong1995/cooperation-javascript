@@ -125,10 +125,10 @@ CLASS(
             let id = ejs.simple();
             let radial = create('linearGradient', {
                 id: id,
-                x1 : x1,
-                y1 : y1,
-                x2 : x2,
-                y2 : y2
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2
             });
 
             for (let o in offset) {
@@ -468,6 +468,60 @@ CLASS(
             return figure;
         }
 
+        /**
+         * 扇形
+         * 简化复杂的绘图指令并转为更加体验友好的直观图形和角度弧度制，减轻开发压力
+         * @param cx 圆心x
+         * @param cy 圆心y
+         * @param r 半径
+         * @param angle 圆弧角度
+         * @param rotate 圆弧相对于y轴的偏转
+         * @param style 样式
+         * @returns {*}
+         */
+        function sector({
+                            cx = 30,//圆心x
+                            cy = 30,//圆心y
+                            r = 30,//半径
+                            angle = 45,//角度
+                            rotate = 0//旋转
+                        } = {}, style = null) {
+            let figure = null;
+
+            if (angle >= 360) {
+                figure = circle({
+                    cx: cx,
+                    cy: cy,
+                    r: r,
+                });
+            } else {
+                //转成直观角度
+                angle -= (90 - rotate);
+                rotate -= 90;
+                //弧度
+                let radian = Math.PI / 180,
+                    rr = rotate * radian,
+                    ar = angle * radian;
+                //圆上对应的点
+                let xs = cx + r * Math.cos(rr),
+                    ys = cy + r * Math.sin(rr),
+                    xe = cx + r * Math.cos(ar),
+                    ye = cy + r * Math.sin(ar);
+                //转成直观图形
+                let largeArcFlag = 0,
+                    sweepFlag = 1;
+                if (angle < -90) sweepFlag = 0;
+                if (angle >= 90) largeArcFlag = 1;
+                if (rotate >= 0 && angle >= 90) largeArcFlag = 0;
+
+                //生成指令
+                let d = 'M' + cx + ',' + cy + 'L' + xs + ',' + ys + 'A' + r + ' ' + r + ' 0 ' + largeArcFlag + ' ' + sweepFlag + ' ' + xe + ',' + ye + 'Z';
+                figure = create('path', {d: d});
+            }
+            if (style) ejs.css(figure, style);
+            return figure;
+        }
+
         function draw(type, option, style) {
             let figure = null;
             switch (type) {
@@ -482,6 +536,9 @@ CLASS(
                     break;
                 case 'polygon':
                     figure = polygon(option, style);
+                    break;
+                case 'sector':
+                    figure = sector(option, style);
                     break;
                 default:
                     ejs.log('未能识别的图形类型！', 'error');
@@ -509,7 +566,7 @@ CLASS(
             initDefs: initDefs,
             draw: draw,
             radialGradient: radialGradient,
-            linearGradient:linearGradient
+            linearGradient: linearGradient
             /*bezier: bezier,
             getControlPoints:getControlPoints*/
         }

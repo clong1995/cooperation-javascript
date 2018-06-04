@@ -27,7 +27,8 @@ CLASS(
         //【图纸支持判断】
         let currPaper = {
             'line': 'coordinate.paper',
-            'bar': 'coordinate.paper'
+            'bar': 'coordinate.paper',
+            'pie': 'center.paper'
         }[param.type];
         if (!currPaper) {
             ejs.log('当前的图标表类型为[' + param.type + ']，此类型暂不支持，详情参阅www.xxxxxx.com/api/xxx', 'error');
@@ -43,13 +44,12 @@ CLASS(
 
         //【追加信息】
         ejs.assignDeep(param, {
-            svg: svg,
             // 【大小】
             offsetSize: offsetSize,
             //【默认样式】
             theme: {
                 display: 'block',
-                color: ['#000000', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
+                color: ['#333', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
                 fontSize: 14,
                 fontWeight: 'normal',
                 fontFamily: '\'Microsoft YaHei\',sans-serif',
@@ -80,16 +80,16 @@ CLASS(
             }
             paper.eventMap.get(target)[type] = callback;
         }
-        
+
         //【获取图纸组件】
-        function getPaper(p=null) {
+        function getPaper(p = null) {
             let part = paper.chartPartMap;
-            if(p) part = part.get(p);
+            if (p) part = part.get(p);
             return part;
         }
 
         //【渲染】
-        function render(IteratorNode) {
+        function render(IteratorNode = []) {
             //【创建svg元素】
             let svgNode = svg.createSvg();
             ejs.attr(svgNode, {
@@ -107,9 +107,9 @@ CLASS(
             });
 
             //【组装节点】
-            paper.chartPartMap.forEach(v=> IteratorNode.unshift(v));
+            paper.chartPartMap.forEach(v => IteratorNode.unshift(v));
 
-            ejs.appendBatch(svgNode, [...IteratorNode]);
+            ejs.appendBatch(svgNode, IteratorNode);
 
             //【注册事件】
             paper.eventMap.forEach((v, i) => {
@@ -125,6 +125,7 @@ CLASS(
             //清理
             paper.sheetMap = null;
             paper.eventMap = null;
+            paper.chartPartMap = null;
             return svgNode;
         }
 
@@ -134,7 +135,7 @@ CLASS(
             render: render,
             addEvent: addEvent,
             setSheet: setSheet,
-            getPaper:getPaper
+            getPaper: getPaper
         }, paper);
     }
 );
