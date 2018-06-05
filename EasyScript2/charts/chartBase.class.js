@@ -28,7 +28,8 @@ CLASS(
         let currPaper = {
             'line': 'coordinate.paper',
             'bar': 'coordinate.paper',
-            'pie': 'center.paper'
+            'pie': 'center.paper',
+            'map':'map.paper'
         }[param.type];
         if (!currPaper) {
             ejs.log('当前的图标表类型为[' + param.type + ']，此类型暂不支持，详情参阅www.xxxxxx.com/api/xxx', 'error');

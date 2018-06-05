@@ -1,0 +1,3074 @@
+{
+  "北京市": {
+    "code": "110000",
+    "areaCode": "010",
+    "geometricCenter": [
+      116.398,
+      39.9082
+    ]
+  },
+  "天津市": {
+    "code": "120000",
+    "areaCode": "022",
+    "geometricCenter": [
+      117.252,
+      39.1039
+    ]
+  },
+  "河北省": {
+    "code": "13",
+    "areaCode": "",
+    "geometricCenter": [
+      115.202404,
+      39.556198
+    ]
+  },
+  "山西省": {
+    "code": "14",
+    "areaCode": "",
+    "geometricCenter": [
+      112.549248,
+      37.857014
+    ]
+  },
+  "内蒙古自治区": {
+    "code": "15",
+    "areaCode": "",
+    "geometricCenter": [
+      111.670801,
+      40.818311
+    ]
+  },
+  "辽宁省": {
+    "code": "21",
+    "areaCode": "",
+    "geometricCenter": [
+      123.240127,
+      41.281402
+    ]
+  },
+  "吉林省": {
+    "code": "22",
+    "areaCode": "",
+    "geometricCenter": [
+      125.3245,
+      43.886841
+    ]
+  },
+  "黑龙江省": {
+    "code": "23",
+    "areaCode": "",
+    "geometricCenter": [
+      128.138562,
+      47.182777
+    ]
+  },
+  "上海市": {
+    "code": "310000",
+    "areaCode": "021",
+    "geometricCenter": [
+      121.476,
+      31.2244
+    ]
+  },
+  "江苏省": {
+    "code": "32",
+    "areaCode": "",
+    "geometricCenter": [
+      119.605277,
+      33.201047
+    ]
+  },
+  "浙江省": {
+    "code": "33",
+    "areaCode": "",
+    "geometricCenter": [
+      120.251297,
+      29.294853
+    ]
+  },
+  "安徽省": {
+    "code": "34",
+    "areaCode": "",
+    "geometricCenter": [
+      117.283042,
+      31.86119
+    ]
+  },
+  "福建省": {
+    "code": "35",
+    "areaCode": "",
+    "geometricCenter": [
+      118.419825,
+      26.194081
+    ]
+  },
+  "江西省": {
+    "code": "36",
+    "areaCode": "",
+    "geometricCenter": [
+      115.642179,
+      27.877748
+    ]
+  },
+  "山东省": {
+    "code": "37",
+    "areaCode": "",
+    "geometricCenter": [
+      118.236619,
+      36.20596
+    ]
+  },
+  "河南省": {
+    "code": "41",
+    "areaCode": "",
+    "geometricCenter": [
+      113.859051,
+      34.041911
+    ]
+  },
+  "湖北省": {
+    "code": "42",
+    "areaCode": "",
+    "geometricCenter": [
+      112.207543,
+      31.041238
+    ]
+  },
+  "湖南省": {
+    "code": "43",
+    "areaCode": "",
+    "geometricCenter": [
+      112.001082,
+      27.703196
+    ]
+  },
+  "广东省": {
+    "code": "44",
+    "areaCode": "",
+    "geometricCenter": [
+      113.280637,
+      23.125178
+    ]
+  },
+  "广西壮族自治区": {
+    "code": "45",
+    "areaCode": "",
+    "geometricCenter": [
+      109.226688,
+      23.752272
+    ]
+  },
+  "海南省": {
+    "code": "46",
+    "areaCode": "",
+    "geometricCenter": [
+      109.979221,
+      19.218706
+    ]
+  },
+  "重庆市": {
+    "code": "500000",
+    "areaCode": "023",
+    "geometricCenter": [
+      106.548,
+      29.5549
+    ]
+  },
+  "四川省": {
+    "code": "51",
+    "areaCode": "",
+    "geometricCenter": [
+      102.412536,
+      30.726171
+    ]
+  },
+  "贵州省": {
+    "code": "52",
+    "areaCode": "",
+    "geometricCenter": [
+      106.713478,
+      26.578343
+    ]
+  },
+  "云南省": {
+    "code": "53",
+    "areaCode": "",
+    "geometricCenter": [
+      101.492693,
+      24.453335
+    ]
+  },
+  "西藏自治区": {
+    "code": "54",
+    "areaCode": "",
+    "geometricCenter": [
+      91.132212,
+      29.660361
+    ]
+  },
+  "陕西省": {
+    "code": "61",
+    "areaCode": "",
+    "geometricCenter": [
+      109.561256,
+      35.090311
+    ]
+  },
+  "甘肃省": {
+    "code": "62",
+    "areaCode": "",
+    "geometricCenter": [
+      101.723341,
+      38.214821
+    ]
+  },
+  "青海省": {
+    "code": "63",
+    "areaCode": "",
+    "geometricCenter": [
+      96.759401,
+      36.115705
+    ]
+  },
+  "宁夏回族自治区": {
+    "code": "64",
+    "areaCode": "",
+    "geometricCenter": [
+      106.101376,
+      37.304293
+    ]
+  },
+  "新疆维吾尔自治区": {
+    "code": "65",
+    "areaCode": "",
+    "geometricCenter": [
+      86.175479,
+      41.744673
+    ]
+  },
+  "石家庄市": {
+    "code": "130100",
+    "areaCode": "0311",
+    "geometricCenter": [
+      114.476,
+      38.0483
+    ]
+  },
+  "唐山市": {
+    "code": "130200",
+    "areaCode": "0315",
+    "geometricCenter": [
+      118.167,
+      39.6353
+    ]
+  },
+  "秦皇岛市": {
+    "code": "130300",
+    "areaCode": "0335",
+    "geometricCenter": [
+      119.59,
+      39.9479
+    ]
+  },
+  "邯郸市": {
+    "code": "130400",
+    "areaCode": "0310",
+    "geometricCenter": [
+      114.489,
+      36.5994
+    ]
+  },
+  "邢台市": {
+    "code": "130500",
+    "areaCode": "0319",
+    "geometricCenter": [
+      114.504,
+      37.0717
+    ]
+  },
+  "保定市": {
+    "code": "130600",
+    "areaCode": "0312",
+    "geometricCenter": [
+      115.466,
+      38.8799
+    ]
+  },
+  "张家口市": {
+    "code": "130700",
+    "areaCode": "0313",
+    "geometricCenter": [
+      114.89,
+      40.8262
+    ]
+  },
+  "承德市": {
+    "code": "130800",
+    "areaCode": "0314",
+    "geometricCenter": [
+      117.935,
+      40.9955
+    ]
+  },
+  "沧州市": {
+    "code": "130900",
+    "areaCode": "0317",
+    "geometricCenter": [
+      116.866,
+      38.3124
+    ]
+  },
+  "廊坊市": {
+    "code": "131000",
+    "areaCode": "0316",
+    "geometricCenter": [
+      116.706,
+      39.5193
+    ]
+  },
+  "衡水市": {
+    "code": "131100",
+    "areaCode": "0318",
+    "geometricCenter": [
+      115.698,
+      37.7354
+    ]
+  },
+  "太原市": {
+    "code": "140100",
+    "areaCode": "0351",
+    "geometricCenter": [
+      112.531,
+      37.8551
+    ]
+  },
+  "大同市": {
+    "code": "140200",
+    "areaCode": "0352",
+    "geometricCenter": [
+      113.3,
+      40.0784
+    ]
+  },
+  "阳泉市": {
+    "code": "140300",
+    "areaCode": "0353",
+    "geometricCenter": [
+      113.58,
+      37.8567
+    ]
+  },
+  "长治市": {
+    "code": "140400",
+    "areaCode": "0355",
+    "geometricCenter": [
+      113.117,
+      36.1922
+    ]
+  },
+  "晋城市": {
+    "code": "140500",
+    "areaCode": "0356",
+    "geometricCenter": [
+      112.853,
+      35.4906
+    ]
+  },
+  "朔州市": {
+    "code": "140600",
+    "areaCode": "0349",
+    "geometricCenter": [
+      112.429,
+      39.3186
+    ]
+  },
+  "晋中市": {
+    "code": "140700",
+    "areaCode": "0354",
+    "geometricCenter": [
+      112.752,
+      37.6883
+    ]
+  },
+  "运城市": {
+    "code": "140800",
+    "areaCode": "0359",
+    "geometricCenter": [
+      110.998,
+      35.0315
+    ]
+  },
+  "忻州市": {
+    "code": "140900",
+    "areaCode": "0350",
+    "geometricCenter": [
+      112.735,
+      38.4158
+    ]
+  },
+  "临汾市": {
+    "code": "141000",
+    "areaCode": "0357",
+    "geometricCenter": [
+      111.527,
+      36.1021
+    ]
+  },
+  "吕梁市": {
+    "code": "141100",
+    "areaCode": "0358",
+    "geometricCenter": [
+      111.13,
+      37.5203
+    ]
+  },
+  "呼和浩特市": {
+    "code": "150100",
+    "areaCode": "0471",
+    "geometricCenter": [
+      111.667,
+      40.8083
+    ]
+  },
+  "包头市": {
+    "code": "150200",
+    "areaCode": "0472",
+    "geometricCenter": [
+      109.871,
+      40.6617
+    ]
+  },
+  "乌海市": {
+    "code": "150300",
+    "areaCode": "0473",
+    "geometricCenter": [
+      106.814,
+      39.6692
+    ]
+  },
+  "赤峰市": {
+    "code": "150400",
+    "areaCode": "0476",
+    "geometricCenter": [
+      118.957,
+      42.2673
+    ]
+  },
+  "通辽市": {
+    "code": "150500",
+    "areaCode": "0475",
+    "geometricCenter": [
+      122.261,
+      43.6059
+    ]
+  },
+  "鄂尔多斯市": {
+    "code": "150600",
+    "areaCode": "0477",
+    "geometricCenter": [
+      110.003,
+      39.8223
+    ]
+  },
+  "呼伦贝尔市": {
+    "code": "150700",
+    "areaCode": "0470",
+    "geometricCenter": [
+      119.756,
+      49.2458
+    ]
+  },
+  "巴彦淖尔市": {
+    "code": "150800",
+    "areaCode": "0478",
+    "geometricCenter": [
+      107.376,
+      40.7801
+    ]
+  },
+  "乌兰察布市": {
+    "code": "150900",
+    "areaCode": "0474",
+    "geometricCenter": [
+      113.121,
+      41.0317
+    ]
+  },
+  "兴安盟": {
+    "code": "152200",
+    "areaCode": "0482",
+    "geometricCenter": [
+      122.135,
+      46.0872
+    ]
+  },
+  "锡林郭勒盟": {
+    "code": "152500",
+    "areaCode": "0479",
+    "geometricCenter": [
+      116.099,
+      43.9455
+    ]
+  },
+  "阿拉善盟": {
+    "code": "152900",
+    "areaCode": "0483",
+    "geometricCenter": [
+      105.686,
+      38.8464
+    ]
+  },
+  "沈阳市": {
+    "code": "210100",
+    "areaCode": "024",
+    "geometricCenter": [
+      123.434,
+      41.8057
+    ]
+  },
+  "大连市": {
+    "code": "210200",
+    "areaCode": "0411",
+    "geometricCenter": [
+      121.617,
+      38.9143
+    ]
+  },
+  "鞍山市": {
+    "code": "210300",
+    "areaCode": "0412",
+    "geometricCenter": [
+      123.002,
+      41.1158
+    ]
+  },
+  "抚顺市": {
+    "code": "210400",
+    "areaCode": "0413",
+    "geometricCenter": [
+      123.924,
+      41.8678
+    ]
+  },
+  "本溪市": {
+    "code": "210500",
+    "areaCode": "0414",
+    "geometricCenter": [
+      123.786,
+      41.2984
+    ]
+  },
+  "丹东市": {
+    "code": "210600",
+    "areaCode": "0415",
+    "geometricCenter": [
+      124.398,
+      40.1325
+    ]
+  },
+  "锦州市": {
+    "code": "210700",
+    "areaCode": "0416",
+    "geometricCenter": [
+      121.148,
+      41.1261
+    ]
+  },
+  "营口市": {
+    "code": "210800",
+    "areaCode": "0417",
+    "geometricCenter": [
+      122.25,
+      40.6716
+    ]
+  },
+  "阜新市": {
+    "code": "210900",
+    "areaCode": "0418",
+    "geometricCenter": [
+      121.654,
+      42.0143
+    ]
+  },
+  "辽阳市": {
+    "code": "211000",
+    "areaCode": "0419",
+    "geometricCenter": [
+      123.179,
+      41.2778
+    ]
+  },
+  "盘锦市": {
+    "code": "211100",
+    "areaCode": "0427",
+    "geometricCenter": [
+      122.071,
+      41.1188
+    ]
+  },
+  "铁岭市": {
+    "code": "211200",
+    "areaCode": "0410",
+    "geometricCenter": [
+      123.843,
+      42.2867
+    ]
+  },
+  "朝阳市": {
+    "code": "211300",
+    "areaCode": "0421",
+    "geometricCenter": [
+      120.45,
+      41.5735
+    ]
+  },
+  "葫芦岛市": {
+    "code": "211400",
+    "areaCode": "0429",
+    "geometricCenter": [
+      120.856,
+      40.7481
+    ]
+  },
+  "长春市": {
+    "code": "220100",
+    "areaCode": "0431",
+    "geometricCenter": [
+      125.325,
+      43.8869
+    ]
+  },
+  "吉林市": {
+    "code": "220200",
+    "areaCode": "0432",
+    "geometricCenter": [
+      126.571,
+      43.8458
+    ]
+  },
+  "四平市": {
+    "code": "220300",
+    "areaCode": "0434",
+    "geometricCenter": [
+      124.398,
+      43.1725
+    ]
+  },
+  "辽源市": {
+    "code": "220400",
+    "areaCode": "0437",
+    "geometricCenter": [
+      125.145,
+      42.9058
+    ]
+  },
+  "通化市": {
+    "code": "220500",
+    "areaCode": "0435",
+    "geometricCenter": [
+      125.94,
+      41.7292
+    ]
+  },
+  "白山市": {
+    "code": "220600",
+    "areaCode": "0439",
+    "geometricCenter": [
+      126.424,
+      41.9401
+    ]
+  },
+  "松原市": {
+    "code": "220700",
+    "areaCode": "0438",
+    "geometricCenter": [
+      124.824,
+      45.1409
+    ]
+  },
+  "白城市": {
+    "code": "220800",
+    "areaCode": "0436",
+    "geometricCenter": [
+      122.838,
+      45.6204
+    ]
+  },
+  "延边朝鲜族自治州": {
+    "code": "222400",
+    "areaCode": "0433",
+    "geometricCenter": [
+      129.498,
+      42.8942
+    ]
+  },
+  "哈尔滨市": {
+    "code": "230100",
+    "areaCode": "0451",
+    "geometricCenter": [
+      126.652,
+      45.7613
+    ]
+  },
+  "齐齐哈尔市": {
+    "code": "230200",
+    "areaCode": "0452",
+    "geometricCenter": [
+      123.937,
+      47.3416
+    ]
+  },
+  "鸡西市": {
+    "code": "230300",
+    "areaCode": "0453",
+    "geometricCenter": [
+      130.97,
+      45.2952
+    ]
+  },
+  "鹤岗市": {
+    "code": "230400",
+    "areaCode": "0454",
+    "geometricCenter": [
+      130.279,
+      47.3311
+    ]
+  },
+  "双鸭山市": {
+    "code": "230500",
+    "areaCode": "0454",
+    "geometricCenter": [
+      131.16,
+      46.6469
+    ]
+  },
+  "大庆市": {
+    "code": "230600",
+    "areaCode": "0459",
+    "geometricCenter": [
+      125.094,
+      46.5883
+    ]
+  },
+  "伊春市": {
+    "code": "230700",
+    "areaCode": "0458",
+    "geometricCenter": [
+      128.901,
+      47.7247
+    ]
+  },
+  "佳木斯市": {
+    "code": "230800",
+    "areaCode": "0454",
+    "geometricCenter": [
+      130.37,
+      46.8075
+    ]
+  },
+  "七台河市": {
+    "code": "230900",
+    "areaCode": "0453",
+    "geometricCenter": [
+      131.008,
+      45.7719
+    ]
+  },
+  "牡丹江市": {
+    "code": "231000",
+    "areaCode": "0453",
+    "geometricCenter": [
+      129.623,
+      44.5848
+    ]
+  },
+  "黑河市": {
+    "code": "231100",
+    "areaCode": "0456",
+    "geometricCenter": [
+      127.501,
+      50.2479
+    ]
+  },
+  "绥化市": {
+    "code": "231200",
+    "areaCode": "0458",
+    "geometricCenter": [
+      126.99,
+      46.637
+    ]
+  },
+  "大兴安岭地区": {
+    "code": "232700",
+    "areaCode": "0457",
+    "geometricCenter": [
+      124.397,
+      51.6737
+    ]
+  },
+  "南京市": {
+    "code": "320100",
+    "areaCode": "025",
+    "geometricCenter": [
+      118.792,
+      32.0562
+    ]
+  },
+  "无锡市": {
+    "code": "320200",
+    "areaCode": "0510",
+    "geometricCenter": [
+      120.359,
+      31.5611
+    ]
+  },
+  "徐州市": {
+    "code": "320300",
+    "areaCode": "0516",
+    "geometricCenter": [
+      117.174,
+      34.2586
+    ]
+  },
+  "常州市": {
+    "code": "320400",
+    "areaCode": "0519",
+    "geometricCenter": [
+      119.975,
+      31.7698
+    ]
+  },
+  "苏州市": {
+    "code": "320500",
+    "areaCode": "0512",
+    "geometricCenter": [
+      120.639,
+      31.3205
+    ]
+  },
+  "南通市": {
+    "code": "320600",
+    "areaCode": "0513",
+    "geometricCenter": [
+      120.871,
+      32.0093
+    ]
+  },
+  "连云港市": {
+    "code": "320700",
+    "areaCode": "0518",
+    "geometricCenter": [
+      119.173,
+      34.5959
+    ]
+  },
+  "淮安市": {
+    "code": "320800",
+    "areaCode": "0517",
+    "geometricCenter": [
+      119.015,
+      33.612
+    ]
+  },
+  "盐城市": {
+    "code": "320900",
+    "areaCode": "0515",
+    "geometricCenter": [
+      120.139,
+      33.3794
+    ]
+  },
+  "扬州市": {
+    "code": "321000",
+    "areaCode": "0514",
+    "geometricCenter": [
+      119.413,
+      32.4195
+    ]
+  },
+  "镇江市": {
+    "code": "321100",
+    "areaCode": "0511",
+    "geometricCenter": [
+      119.442,
+      32.211
+    ]
+  },
+  "泰州市": {
+    "code": "321200",
+    "areaCode": "0523",
+    "geometricCenter": [
+      119.921,
+      32.4617
+    ]
+  },
+  "宿迁市": {
+    "code": "321300",
+    "areaCode": "0527",
+    "geometricCenter": [
+      118.297,
+      33.9539
+    ]
+  },
+  "杭州市": {
+    "code": "330100",
+    "areaCode": "0571",
+    "geometricCenter": [
+      120.173,
+      30.274
+    ]
+  },
+  "宁波市": {
+    "code": "330200",
+    "areaCode": "0574",
+    "geometricCenter": [
+      121.544,
+      29.8683
+    ]
+  },
+  "温州市": {
+    "code": "330300",
+    "areaCode": "0577",
+    "geometricCenter": [
+      120.638,
+      28.027
+    ]
+  },
+  "嘉兴市": {
+    "code": "330400",
+    "areaCode": "0573",
+    "geometricCenter": [
+      120.759,
+      30.7539
+    ]
+  },
+  "湖州市": {
+    "code": "330500",
+    "areaCode": "0572",
+    "geometricCenter": [
+      120.097,
+      30.8706
+    ]
+  },
+  "绍兴市": {
+    "code": "330600",
+    "areaCode": "0575",
+    "geometricCenter": [
+      120.586,
+      29.9958
+    ]
+  },
+  "金华市": {
+    "code": "330700",
+    "areaCode": "0579",
+    "geometricCenter": [
+      119.652,
+      29.0896
+    ]
+  },
+  "衢州市": {
+    "code": "330800",
+    "areaCode": "0570",
+    "geometricCenter": [
+      118.874,
+      28.9359
+    ]
+  },
+  "舟山市": {
+    "code": "330900",
+    "areaCode": "0580",
+    "geometricCenter": [
+      122.106,
+      30.0132
+    ]
+  },
+  "台州市": {
+    "code": "331000",
+    "areaCode": "0576",
+    "geometricCenter": [
+      121.456,
+      28.6708
+    ]
+  },
+  "丽水市": {
+    "code": "331100",
+    "areaCode": "0578",
+    "geometricCenter": [
+      119.917,
+      28.4522
+    ]
+  },
+  "合肥市": {
+    "code": "340100",
+    "areaCode": "0551",
+    "geometricCenter": [
+      117.296,
+      31.8693
+    ]
+  },
+  "芜湖市": {
+    "code": "340200",
+    "areaCode": "0553",
+    "geometricCenter": [
+      118.376,
+      31.3273
+    ]
+  },
+  "蚌埠市": {
+    "code": "340300",
+    "areaCode": "0552",
+    "geometricCenter": [
+      117.402,
+      32.9302
+    ]
+  },
+  "淮南市": {
+    "code": "340400",
+    "areaCode": "0554",
+    "geometricCenter": [
+      117,
+      32.6383
+    ]
+  },
+  "马鞍山市": {
+    "code": "340500",
+    "areaCode": "0555",
+    "geometricCenter": [
+      118.502,
+      31.693
+    ]
+  },
+  "淮北市": {
+    "code": "340600",
+    "areaCode": "0561",
+    "geometricCenter": [
+      116.793,
+      33.969
+    ]
+  },
+  "铜陵市": {
+    "code": "340700",
+    "areaCode": "0562",
+    "geometricCenter": [
+      117.811,
+      30.9446
+    ]
+  },
+  "安庆市": {
+    "code": "340800",
+    "areaCode": "0556",
+    "geometricCenter": [
+      117.051,
+      30.527
+    ]
+  },
+  "黄山市": {
+    "code": "341000",
+    "areaCode": "0559",
+    "geometricCenter": [
+      118.317,
+      29.7099
+    ]
+  },
+  "滁州市": {
+    "code": "341100",
+    "areaCode": "0550",
+    "geometricCenter": [
+      118.318,
+      32.3011
+    ]
+  },
+  "阜阳市": {
+    "code": "341200",
+    "areaCode": "0558",
+    "geometricCenter": [
+      115.82,
+      32.8971
+    ]
+  },
+  "宿州市": {
+    "code": "341300",
+    "areaCode": "0557",
+    "geometricCenter": [
+      116.984,
+      33.6381
+    ]
+  },
+  "巢湖市": {
+    "code": "341400",
+    "areaCode": "0565",
+    "geometricCenter": [
+      117.87,
+      31.6009
+    ]
+  },
+  "六安市": {
+    "code": "341500",
+    "areaCode": "0564",
+    "geometricCenter": [
+      116.491,
+      31.7426
+    ]
+  },
+  "亳州市": {
+    "code": "341600",
+    "areaCode": "0558",
+    "geometricCenter": [
+      115.783,
+      33.8696
+    ]
+  },
+  "池州市": {
+    "code": "341700",
+    "areaCode": "0566",
+    "geometricCenter": [
+      117.489,
+      30.6557
+    ]
+  },
+  "宣城市": {
+    "code": "341800",
+    "areaCode": "0563",
+    "geometricCenter": [
+      118.755,
+      30.9469
+    ]
+  },
+  "福州市": {
+    "code": "350100",
+    "areaCode": "0591",
+    "geometricCenter": [
+      119.306,
+      26.0761
+    ]
+  },
+  "厦门市": {
+    "code": "350200",
+    "areaCode": "0592",
+    "geometricCenter": [
+      118.117,
+      24.4838
+    ]
+  },
+  "莆田市": {
+    "code": "350300",
+    "areaCode": "0594",
+    "geometricCenter": [
+      119.005,
+      25.434
+    ]
+  },
+  "三明市": {
+    "code": "350400",
+    "areaCode": "0598",
+    "geometricCenter": [
+      117.64,
+      26.2681
+    ]
+  },
+  "泉州市": {
+    "code": "350500",
+    "areaCode": "0595",
+    "geometricCenter": [
+      118.585,
+      24.9295
+    ]
+  },
+  "漳州市": {
+    "code": "350600",
+    "areaCode": "0596",
+    "geometricCenter": [
+      117.666,
+      24.5124
+    ]
+  },
+  "南平市": {
+    "code": "350700",
+    "areaCode": "0599",
+    "geometricCenter": [
+      118.179,
+      26.6399
+    ]
+  },
+  "龙岩市": {
+    "code": "350800",
+    "areaCode": "0597",
+    "geometricCenter": [
+      117.033,
+      25.0946
+    ]
+  },
+  "宁德市": {
+    "code": "350900",
+    "areaCode": "0593",
+    "geometricCenter": [
+      119.537,
+      26.6528
+    ]
+  },
+  "南昌市": {
+    "code": "360100",
+    "areaCode": "0791",
+    "geometricCenter": [
+      115.897,
+      28.6788
+    ]
+  },
+  "景德镇市": {
+    "code": "360200",
+    "areaCode": "0798",
+    "geometricCenter": [
+      117.193,
+      29.298
+    ]
+  },
+  "萍乡市": {
+    "code": "360300",
+    "areaCode": "0799",
+    "geometricCenter": [
+      113.852,
+      27.6227
+    ]
+  },
+  "九江市": {
+    "code": "360400",
+    "areaCode": "0792",
+    "geometricCenter": [
+      115.99,
+      29.7156
+    ]
+  },
+  "新余市": {
+    "code": "360500",
+    "areaCode": "0790",
+    "geometricCenter": [
+      114.918,
+      27.8163
+    ]
+  },
+  "鹰潭市": {
+    "code": "360600",
+    "areaCode": "0701",
+    "geometricCenter": [
+      117.034,
+      28.2394
+    ]
+  },
+  "赣州市": {
+    "code": "360700",
+    "areaCode": "0797",
+    "geometricCenter": [
+      114.942,
+      25.8553
+    ]
+  },
+  "吉安市": {
+    "code": "360800",
+    "areaCode": "0796",
+    "geometricCenter": [
+      114.987,
+      27.1136
+    ]
+  },
+  "宜春市": {
+    "code": "360900",
+    "areaCode": "0795",
+    "geometricCenter": [
+      114.399,
+      27.8068
+    ]
+  },
+  "抚州市": {
+    "code": "361000",
+    "areaCode": "0794",
+    "geometricCenter": [
+      116.363,
+      27.9793
+    ]
+  },
+  "上饶市": {
+    "code": "361100",
+    "areaCode": "0793",
+    "geometricCenter": [
+      117.969,
+      28.4456
+    ]
+  },
+  "济南市": {
+    "code": "370100",
+    "areaCode": "0531",
+    "geometricCenter": [
+      117.021,
+      36.6594
+    ]
+  },
+  "青岛市": {
+    "code": "370200",
+    "areaCode": "0532",
+    "geometricCenter": [
+      120.357,
+      36.084
+    ]
+  },
+  "淄博市": {
+    "code": "370300",
+    "areaCode": "0533",
+    "geometricCenter": [
+      118.05,
+      36.8063
+    ]
+  },
+  "枣庄市": {
+    "code": "370400",
+    "areaCode": "0632",
+    "geometricCenter": [
+      117.309,
+      34.8127
+    ]
+  },
+  "东营市": {
+    "code": "370500",
+    "areaCode": "0546",
+    "geometricCenter": [
+      118.675,
+      37.4321
+    ]
+  },
+  "烟台市": {
+    "code": "370600",
+    "areaCode": "0535",
+    "geometricCenter": [
+      121.392,
+      37.5379
+    ]
+  },
+  "潍坊市": {
+    "code": "370700",
+    "areaCode": "0536",
+    "geometricCenter": [
+      119.122,
+      36.7159
+    ]
+  },
+  "济宁市": {
+    "code": "370800",
+    "areaCode": "0537",
+    "geometricCenter": [
+      116.588,
+      35.4133
+    ]
+  },
+  "泰安市": {
+    "code": "370900",
+    "areaCode": "0538",
+    "geometricCenter": [
+      117.121,
+      36.1813
+    ]
+  },
+  "威海市": {
+    "code": "371000",
+    "areaCode": "0631",
+    "geometricCenter": [
+      122.122,
+      37.5043
+    ]
+  },
+  "日照市": {
+    "code": "371100",
+    "areaCode": "0633",
+    "geometricCenter": [
+      119.526,
+      35.4188
+    ]
+  },
+  "莱芜市": {
+    "code": "371200",
+    "areaCode": "0634",
+    "geometricCenter": [
+      117.679,
+      36.2136
+    ]
+  },
+  "临沂市": {
+    "code": "371300",
+    "areaCode": "0539",
+    "geometricCenter": [
+      118.346,
+      35.0538
+    ]
+  },
+  "德州市": {
+    "code": "371400",
+    "areaCode": "0534",
+    "geometricCenter": [
+      116.302,
+      37.4545
+    ]
+  },
+  "聊城市": {
+    "code": "371500",
+    "areaCode": "0635",
+    "geometricCenter": [
+      115.986,
+      36.4561
+    ]
+  },
+  "滨州市": {
+    "code": "371600",
+    "areaCode": "0543",
+    "geometricCenter": [
+      118.016,
+      37.3832
+    ]
+  },
+  "郑州市": {
+    "code": "410100",
+    "areaCode": "0371",
+    "geometricCenter": [
+      113.663,
+      34.7619
+    ]
+  },
+  "开封市": {
+    "code": "410200",
+    "areaCode": "0378",
+    "geometricCenter": [
+      114.34,
+      34.7893
+    ]
+  },
+  "洛阳市": {
+    "code": "410300",
+    "areaCode": "0379",
+    "geometricCenter": [
+      112.401,
+      34.6567
+    ]
+  },
+  "平顶山市": {
+    "code": "410400",
+    "areaCode": "0375",
+    "geometricCenter": [
+      113.304,
+      33.7274
+    ]
+  },
+  "安阳市": {
+    "code": "410500",
+    "areaCode": "0372",
+    "geometricCenter": [
+      114.346,
+      36.1112
+    ]
+  },
+  "鹤壁市": {
+    "code": "410600",
+    "areaCode": "0392",
+    "geometricCenter": [
+      114.297,
+      35.7481
+    ]
+  },
+  "新乡市": {
+    "code": "410700",
+    "areaCode": "0373",
+    "geometricCenter": [
+      113.89,
+      35.3015
+    ]
+  },
+  "焦作市": {
+    "code": "410800",
+    "areaCode": "0391",
+    "geometricCenter": [
+      113.228,
+      35.2338
+    ]
+  },
+  "濮阳市": {
+    "code": "410900",
+    "areaCode": "0393",
+    "geometricCenter": [
+      115.029,
+      35.7632
+    ]
+  },
+  "许昌市": {
+    "code": "411000",
+    "areaCode": "0374",
+    "geometricCenter": [
+      113.832,
+      34.0222
+    ]
+  },
+  "漯河市": {
+    "code": "411100",
+    "areaCode": "0395",
+    "geometricCenter": [
+      114.036,
+      33.5673
+    ]
+  },
+  "三门峡市": {
+    "code": "411200",
+    "areaCode": "0398",
+    "geometricCenter": [
+      111.192,
+      34.7758
+    ]
+  },
+  "南阳市": {
+    "code": "411300",
+    "areaCode": "0377",
+    "geometricCenter": [
+      112.534,
+      32.9993
+    ]
+  },
+  "商丘市": {
+    "code": "411400",
+    "areaCode": "0370",
+    "geometricCenter": [
+      115.651,
+      34.4389
+    ]
+  },
+  "信阳市": {
+    "code": "411500",
+    "areaCode": "0376",
+    "geometricCenter": [
+      114.075,
+      32.124
+    ]
+  },
+  "周口市": {
+    "code": "411600",
+    "areaCode": "0394",
+    "geometricCenter": [
+      114.653,
+      33.6166
+    ]
+  },
+  "驻马店市": {
+    "code": "411700",
+    "areaCode": "0396",
+    "geometricCenter": [
+      114.028,
+      32.9832
+    ]
+  },
+  "武汉市": {
+    "code": "420100",
+    "areaCode": "027",
+    "geometricCenter": [
+      114.281,
+      30.5781
+    ]
+  },
+  "黄石市": {
+    "code": "420200",
+    "areaCode": "0714",
+    "geometricCenter": [
+      115.06,
+      30.2063
+    ]
+  },
+  "十堰市": {
+    "code": "420300",
+    "areaCode": "0719",
+    "geometricCenter": [
+      110.782,
+      32.6553
+    ]
+  },
+  "宜昌市": {
+    "code": "420500",
+    "areaCode": "0717",
+    "geometricCenter": [
+      111.295,
+      30.7012
+    ]
+  },
+  "襄樊市": {
+    "code": "420600",
+    "areaCode": "0710",
+    "geometricCenter": [
+      112.135,
+      32.062
+    ]
+  },
+  "鄂州市": {
+    "code": "420700",
+    "areaCode": "0711",
+    "geometricCenter": [
+      114.904,
+      30.3898
+    ]
+  },
+  "荆门市": {
+    "code": "420800",
+    "areaCode": "0724",
+    "geometricCenter": [
+      112.196,
+      31.0277
+    ]
+  },
+  "孝感市": {
+    "code": "420900",
+    "areaCode": "0712",
+    "geometricCenter": [
+      113.919,
+      30.9246
+    ]
+  },
+  "荆州市": {
+    "code": "421000",
+    "areaCode": "0716",
+    "geometricCenter": [
+      112.245,
+      30.3252
+    ]
+  },
+  "黄冈市": {
+    "code": "421100",
+    "areaCode": "0713",
+    "geometricCenter": [
+      114.875,
+      30.4465
+    ]
+  },
+  "咸宁市": {
+    "code": "421200",
+    "areaCode": "0715",
+    "geometricCenter": [
+      114.336,
+      29.8337
+    ]
+  },
+  "随州市": {
+    "code": "421300",
+    "areaCode": "0722",
+    "geometricCenter": [
+      113.375,
+      31.7167
+    ]
+  },
+  "恩施土家族苗族自治州": {
+    "code": "422800",
+    "areaCode": "0718",
+    "geometricCenter": [
+      109.482,
+      30.2899
+    ]
+  },
+  "仙桃市": {
+    "code": "429004",
+    "areaCode": "0728",
+    "geometricCenter": [
+      113.453,
+      30.3646
+    ]
+  },
+  "潜江市": {
+    "code": "429005",
+    "areaCode": "0728",
+    "geometricCenter": [
+      112.894,
+      30.4198
+    ]
+  },
+  "天门市": {
+    "code": "429006",
+    "areaCode": "0728",
+    "geometricCenter": [
+      113.164,
+      30.6513
+    ]
+  },
+  "神农架林区": {
+    "code": "429021",
+    "areaCode": "0719",
+    "geometricCenter": [
+      110.676,
+      31.7448
+    ]
+  },
+  "长沙市": {
+    "code": "430100",
+    "areaCode": "0731",
+    "geometricCenter": [
+      113.009,
+      28.2085
+    ]
+  },
+  "株洲市": {
+    "code": "430200",
+    "areaCode": "0733",
+    "geometricCenter": [
+      113.149,
+      27.8406
+    ]
+  },
+  "湘潭市": {
+    "code": "430300",
+    "areaCode": "0732",
+    "geometricCenter": [
+      112.907,
+      27.8612
+    ]
+  },
+  "衡阳市": {
+    "code": "430400",
+    "areaCode": "0734",
+    "geometricCenter": [
+      112.612,
+      26.8962
+    ]
+  },
+  "邵阳市": {
+    "code": "430500",
+    "areaCode": "0739",
+    "geometricCenter": [
+      111.467,
+      27.2371
+    ]
+  },
+  "岳阳市": {
+    "code": "430600",
+    "areaCode": "0730",
+    "geometricCenter": [
+      113.108,
+      29.3663
+    ]
+  },
+  "常德市": {
+    "code": "430700",
+    "areaCode": "0736",
+    "geometricCenter": [
+      111.703,
+      29.0366
+    ]
+  },
+  "张家界市": {
+    "code": "430800",
+    "areaCode": "0744",
+    "geometricCenter": [
+      110.477,
+      29.1197
+    ]
+  },
+  "益阳市": {
+    "code": "430900",
+    "areaCode": "0737",
+    "geometricCenter": [
+      112.356,
+      28.58
+    ]
+  },
+  "郴州市": {
+    "code": "431000",
+    "areaCode": "0735",
+    "geometricCenter": [
+      113.032,
+      25.7968
+    ]
+  },
+  "永州市": {
+    "code": "431100",
+    "areaCode": "0746",
+    "geometricCenter": [
+      111.608,
+      26.438
+    ]
+  },
+  "怀化市": {
+    "code": "431200",
+    "areaCode": "0745",
+    "geometricCenter": [
+      109.977,
+      27.5484
+    ]
+  },
+  "娄底市": {
+    "code": "431300",
+    "areaCode": "0738",
+    "geometricCenter": [
+      111.998,
+      27.7259
+    ]
+  },
+  "湘西土家族苗族自治州": {
+    "code": "433100",
+    "areaCode": "0743",
+    "geometricCenter": [
+      109.601,
+      27.9472
+    ]
+  },
+  "广州市": {
+    "code": "440100",
+    "areaCode": "020",
+    "geometricCenter": [
+      113.322,
+      23.1341
+    ]
+  },
+  "韶关市": {
+    "code": "440200",
+    "areaCode": "0751",
+    "geometricCenter": [
+      113.598,
+      24.8024
+    ]
+  },
+  "深圳市": {
+    "code": "440300",
+    "areaCode": "0755",
+    "geometricCenter": [
+      114.056,
+      22.5421
+    ]
+  },
+  "珠海市": {
+    "code": "440400",
+    "areaCode": "0756",
+    "geometricCenter": [
+      113.547,
+      22.2532
+    ]
+  },
+  "汕头市": {
+    "code": "440500",
+    "areaCode": "0754",
+    "geometricCenter": [
+      116.724,
+      23.3601
+    ]
+  },
+  "佛山市": {
+    "code": "440600",
+    "areaCode": "0757",
+    "geometricCenter": [
+      113.121,
+      23.0305
+    ]
+  },
+  "江门市": {
+    "code": "440700",
+    "areaCode": "0750",
+    "geometricCenter": [
+      113.085,
+      22.583
+    ]
+  },
+  "湛江市": {
+    "code": "440800",
+    "areaCode": "0759",
+    "geometricCenter": [
+      110.421,
+      21.1989
+    ]
+  },
+  "茂名市": {
+    "code": "440900",
+    "areaCode": "0668",
+    "geometricCenter": [
+      110.927,
+      21.6616
+    ]
+  },
+  "肇庆市": {
+    "code": "441200",
+    "areaCode": "0758",
+    "geometricCenter": [
+      112.476,
+      23.0734
+    ]
+  },
+  "惠州市": {
+    "code": "441300",
+    "areaCode": "0752",
+    "geometricCenter": [
+      114.417,
+      23.0896
+    ]
+  },
+  "梅州市": {
+    "code": "441400",
+    "areaCode": "0753",
+    "geometricCenter": [
+      116.118,
+      24.2988
+    ]
+  },
+  "汕尾市": {
+    "code": "441500",
+    "areaCode": "0660",
+    "geometricCenter": [
+      115.368,
+      22.7782
+    ]
+  },
+  "河源市": {
+    "code": "441600",
+    "areaCode": "0762",
+    "geometricCenter": [
+      114.697,
+      23.7503
+    ]
+  },
+  "阳江市": {
+    "code": "441700",
+    "areaCode": "0662",
+    "geometricCenter": [
+      111.984,
+      21.872
+    ]
+  },
+  "清远市": {
+    "code": "441800",
+    "areaCode": "0763",
+    "geometricCenter": [
+      113.045,
+      23.6882
+    ]
+  },
+  "东莞市": {
+    "code": "441900",
+    "areaCode": "0769",
+    "geometricCenter": [
+      113.759,
+      23.0384
+    ]
+  },
+  "中山市": {
+    "code": "442000",
+    "areaCode": "0760",
+    "geometricCenter": [
+      113.372,
+      22.525
+    ]
+  },
+  "潮州市": {
+    "code": "445100",
+    "areaCode": "0768",
+    "geometricCenter": [
+      116.642,
+      23.6713
+    ]
+  },
+  "揭阳市": {
+    "code": "445200",
+    "areaCode": "0663",
+    "geometricCenter": [
+      116.37,
+      23.5276
+    ]
+  },
+  "云浮市": {
+    "code": "445300",
+    "areaCode": "0766",
+    "geometricCenter": [
+      112.044,
+      22.9294
+    ]
+  },
+  "南宁市": {
+    "code": "450100",
+    "areaCode": "0771",
+    "geometricCenter": [
+      108.311,
+      22.8178
+    ]
+  },
+  "柳州市": {
+    "code": "450200",
+    "areaCode": "0772",
+    "geometricCenter": [
+      109.413,
+      24.3068
+    ]
+  },
+  "桂林市": {
+    "code": "450300",
+    "areaCode": "0773",
+    "geometricCenter": [
+      110.285,
+      25.2827
+    ]
+  },
+  "梧州市": {
+    "code": "450400",
+    "areaCode": "0774",
+    "geometricCenter": [
+      111.304,
+      23.5036
+    ]
+  },
+  "北海市": {
+    "code": "450500",
+    "areaCode": "0779",
+    "geometricCenter": [
+      109.123,
+      21.4788
+    ]
+  },
+  "防城港市": {
+    "code": "450600",
+    "areaCode": "0770",
+    "geometricCenter": [
+      108.346,
+      21.6146
+    ]
+  },
+  "钦州市": {
+    "code": "450700",
+    "areaCode": "0777",
+    "geometricCenter": [
+      108.609,
+      21.9509
+    ]
+  },
+  "贵港市": {
+    "code": "450800",
+    "areaCode": "0775",
+    "geometricCenter": [
+      109.606,
+      23.0939
+    ]
+  },
+  "玉林市": {
+    "code": "450900",
+    "areaCode": "0775",
+    "geometricCenter": [
+      110.151,
+      22.6255
+    ]
+  },
+  "百色市": {
+    "code": "451000",
+    "areaCode": "0776",
+    "geometricCenter": [
+      106.621,
+      23.9018
+    ]
+  },
+  "贺州市": {
+    "code": "451100",
+    "areaCode": "0774",
+    "geometricCenter": [
+      111.563,
+      24.4279
+    ]
+  },
+  "河池市": {
+    "code": "451200",
+    "areaCode": "0778",
+    "geometricCenter": [
+      108.062,
+      24.6972
+    ]
+  },
+  "来宾市": {
+    "code": "451300",
+    "areaCode": "0772",
+    "geometricCenter": [
+      109.222,
+      23.7351
+    ]
+  },
+  "崇左市": {
+    "code": "451400",
+    "areaCode": "0771",
+    "geometricCenter": [
+      107.339,
+      22.4248
+    ]
+  },
+  "海口市": {
+    "code": "460100",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.32,
+      20.0323
+    ]
+  },
+  "三亚市": {
+    "code": "460200",
+    "areaCode": "0899",
+    "geometricCenter": [
+      109.514,
+      18.2355
+    ]
+  },
+  "五指山市": {
+    "code": "469001",
+    "areaCode": "0898",
+    "geometricCenter": [
+      109.517,
+      18.7773
+    ]
+  },
+  "琼海市": {
+    "code": "469002",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.46,
+      19.248
+    ]
+  },
+  "儋州市": {
+    "code": "469003",
+    "areaCode": "0890",
+    "geometricCenter": [
+      109.579,
+      19.5199
+    ]
+  },
+  "文昌市": {
+    "code": "469005",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.748,
+      19.6159
+    ]
+  },
+  "万宁市": {
+    "code": "469006",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.388,
+      18.8122
+    ]
+  },
+  "东方市": {
+    "code": "469007",
+    "areaCode": "0898",
+    "geometricCenter": [
+      108.693,
+      19.0807
+    ]
+  },
+  "定安县": {
+    "code": "469025",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.447,
+      19.4883
+    ]
+  },
+  "屯昌县": {
+    "code": "469026",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.097,
+      19.3686
+    ]
+  },
+  "澄迈县": {
+    "code": "469027",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.016,
+      19.7302
+    ]
+  },
+  "临高县": {
+    "code": "469028",
+    "areaCode": "0898",
+    "geometricCenter": [
+      109.689,
+      19.8973
+    ]
+  },
+  "白沙黎族自治县": {
+    "code": "469030",
+    "areaCode": "0898",
+    "geometricCenter": [
+      109.44,
+      19.2375
+    ]
+  },
+  "昌江黎族自治县": {
+    "code": "469031",
+    "areaCode": "0898",
+    "geometricCenter": [
+      109.036,
+      19.3083
+    ]
+  },
+  "乐东黎族自治县": {
+    "code": "469033",
+    "areaCode": "0898",
+    "geometricCenter": [
+      109.175,
+      18.7435
+    ]
+  },
+  "陵水黎族自治县": {
+    "code": "469034",
+    "areaCode": "0898",
+    "geometricCenter": [
+      110.029,
+      18.5167
+    ]
+  },
+  "保亭黎族苗族自治县": {
+    "code": "469035",
+    "areaCode": "0898",
+    "geometricCenter": [
+      109.7,
+      18.6263
+    ]
+  },
+  "琼中黎族苗族自治县": {
+    "code": "469036",
+    "areaCode": "0898",
+    "geometricCenter": [
+      109.832,
+      19.0467
+    ]
+  },
+  "成都市": {
+    "code": "510100",
+    "areaCode": "028",
+    "geometricCenter": [
+      104.066,
+      30.6581
+    ]
+  },
+  "自贡市": {
+    "code": "510300",
+    "areaCode": "0813",
+    "geometricCenter": [
+      104.77,
+      29.3534
+    ]
+  },
+  "攀枝花市": {
+    "code": "510400",
+    "areaCode": "0812",
+    "geometricCenter": [
+      101.699,
+      26.5733
+    ]
+  },
+  "泸州市": {
+    "code": "510500",
+    "areaCode": "0830",
+    "geometricCenter": [
+      105.444,
+      28.8889
+    ]
+  },
+  "德阳市": {
+    "code": "510600",
+    "areaCode": "0838",
+    "geometricCenter": [
+      104.388,
+      31.1368
+    ]
+  },
+  "绵阳市": {
+    "code": "510700",
+    "areaCode": "0816",
+    "geometricCenter": [
+      104.726,
+      31.467
+    ]
+  },
+  "广元市": {
+    "code": "510800",
+    "areaCode": "0839",
+    "geometricCenter": [
+      105.834,
+      32.4384
+    ]
+  },
+  "遂宁市": {
+    "code": "510900",
+    "areaCode": "0825",
+    "geometricCenter": [
+      105.583,
+      30.5137
+    ]
+  },
+  "内江市": {
+    "code": "511000",
+    "areaCode": "0832",
+    "geometricCenter": [
+      105.063,
+      29.5825
+    ]
+  },
+  "乐山市": {
+    "code": "511100",
+    "areaCode": "0833",
+    "geometricCenter": [
+      103.746,
+      29.5866
+    ]
+  },
+  "南充市": {
+    "code": "511300",
+    "areaCode": "0817",
+    "geometricCenter": [
+      106.095,
+      30.7844
+    ]
+  },
+  "眉山市": {
+    "code": "511400",
+    "areaCode": "0833",
+    "geometricCenter": [
+      103.826,
+      30.0389
+    ]
+  },
+  "宜宾市": {
+    "code": "511500",
+    "areaCode": "0831",
+    "geometricCenter": [
+      104.621,
+      28.7705
+    ]
+  },
+  "广安市": {
+    "code": "511600",
+    "areaCode": "0826",
+    "geometricCenter": [
+      106.642,
+      30.4706
+    ]
+  },
+  "达州市": {
+    "code": "511700",
+    "areaCode": "0818",
+    "geometricCenter": [
+      107.488,
+      31.2126
+    ]
+  },
+  "雅安市": {
+    "code": "511800",
+    "areaCode": "0835",
+    "geometricCenter": [
+      103.015,
+      29.9937
+    ]
+  },
+  "巴中市": {
+    "code": "511900",
+    "areaCode": "0827",
+    "geometricCenter": [
+      106.755,
+      31.8574
+    ]
+  },
+  "资阳市": {
+    "code": "512000",
+    "areaCode": "0832",
+    "geometricCenter": [
+      104.651,
+      30.1286
+    ]
+  },
+  "阿坝藏族羌族自治州": {
+    "code": "513200",
+    "areaCode": "0837",
+    "geometricCenter": [
+      102.222,
+      31.8992
+    ]
+  },
+  "甘孜藏族自治州": {
+    "code": "513300",
+    "areaCode": "0836",
+    "geometricCenter": [
+      101.866,
+      30.1414
+    ]
+  },
+  "凉山彝族自治州": {
+    "code": "513400",
+    "areaCode": "0834",
+    "geometricCenter": [
+      102.242,
+      27.9095
+    ]
+  },
+  "贵阳市": {
+    "code": "520100",
+    "areaCode": "0851",
+    "geometricCenter": [
+      106.713,
+      26.5768
+    ]
+  },
+  "六盘水市": {
+    "code": "520200",
+    "areaCode": "0858",
+    "geometricCenter": [
+      104.873,
+      26.5821
+    ]
+  },
+  "遵义市": {
+    "code": "520300",
+    "areaCode": "0852",
+    "geometricCenter": [
+      106.931,
+      27.6926
+    ]
+  },
+  "安顺市": {
+    "code": "520400",
+    "areaCode": "0853",
+    "geometricCenter": [
+      105.927,
+      26.2573
+    ]
+  },
+  "铜仁地区": {
+    "code": "522200",
+    "areaCode": "0856",
+    "geometricCenter": [
+      109.188,
+      27.7184
+    ]
+  },
+  "黔西南布依族苗族自治州": {
+    "code": "522300",
+    "areaCode": "0859",
+    "geometricCenter": [
+      104.895,
+      25.0935
+    ]
+  },
+  "毕节地区": {
+    "code": "522400",
+    "areaCode": "0857",
+    "geometricCenter": [
+      105.288,
+      27.3032
+    ]
+  },
+  "黔东南苗族侗族自治州": {
+    "code": "522600",
+    "areaCode": "0855",
+    "geometricCenter": [
+      107.981,
+      26.5831
+    ]
+  },
+  "黔南布依族苗族自治州": {
+    "code": "522700",
+    "areaCode": "0854",
+    "geometricCenter": [
+      107.511,
+      26.283
+    ]
+  },
+  "昆明市": {
+    "code": "530100",
+    "areaCode": "0871",
+    "geometricCenter": [
+      102.703,
+      25.0499
+    ]
+  },
+  "曲靖市": {
+    "code": "530300",
+    "areaCode": "0874",
+    "geometricCenter": [
+      103.784,
+      25.4913
+    ]
+  },
+  "玉溪市": {
+    "code": "530400",
+    "areaCode": "0877",
+    "geometricCenter": [
+      102.536,
+      24.3472
+    ]
+  },
+  "保山市": {
+    "code": "530500",
+    "areaCode": "0875",
+    "geometricCenter": [
+      99.1647,
+      25.1249
+    ]
+  },
+  "昭通市": {
+    "code": "530600",
+    "areaCode": "0870",
+    "geometricCenter": [
+      103.704,
+      27.3656
+    ]
+  },
+  "丽江市": {
+    "code": "530700",
+    "areaCode": "0888",
+    "geometricCenter": [
+      100.277,
+      26.9229
+    ]
+  },
+  "临沧市": {
+    "code": "530900",
+    "areaCode": "0883",
+    "geometricCenter": [
+      100.085,
+      23.8971
+    ]
+  },
+  "楚雄彝族自治州": {
+    "code": "532300",
+    "areaCode": "0878",
+    "geometricCenter": [
+      101.545,
+      25.0549
+    ]
+  },
+  "红河哈尼族彝族自治州": {
+    "code": "532500",
+    "areaCode": "0873",
+    "geometricCenter": [
+      103.18,
+      23.4301
+    ]
+  },
+  "文山壮族苗族自治州": {
+    "code": "532600",
+    "areaCode": "0876",
+    "geometricCenter": [
+      104.255,
+      23.3803
+    ]
+  },
+  "西双版纳傣族自治州": {
+    "code": "532800",
+    "areaCode": "0691",
+    "geometricCenter": [
+      100.799,
+      22.0109
+    ]
+  },
+  "大理白族自治州": {
+    "code": "532900",
+    "areaCode": "0872",
+    "geometricCenter": [
+      100.222,
+      25.5842
+    ]
+  },
+  "德宏傣族景颇族自治州": {
+    "code": "533100",
+    "areaCode": "0692",
+    "geometricCenter": [
+      98.5669,
+      24.4484
+    ]
+  },
+  "怒江傈僳族自治州": {
+    "code": "533300",
+    "areaCode": "0886",
+    "geometricCenter": [
+      98.903,
+      25.8583
+    ]
+  },
+  "迪庆藏族自治州": {
+    "code": "533400",
+    "areaCode": "0887",
+    "geometricCenter": [
+      99.709,
+      27.859
+    ]
+  },
+  "拉萨市": {
+    "code": "540100",
+    "areaCode": "0891",
+    "geometricCenter": [
+      91.1189,
+      29.6553
+    ]
+  },
+  "昌都地区": {
+    "code": "542100",
+    "areaCode": "0895",
+    "geometricCenter": [
+      97.1503,
+      31.1816
+    ]
+  },
+  "山南地区": {
+    "code": "542200",
+    "areaCode": "0893",
+    "geometricCenter": [
+      91.805,
+      29.2407
+    ]
+  },
+  "日喀则地区": {
+    "code": "542300",
+    "areaCode": "0892",
+    "geometricCenter": [
+      88.8884,
+      29.2717
+    ]
+  },
+  "那曲地区": {
+    "code": "542400",
+    "areaCode": "0896",
+    "geometricCenter": [
+      92.0593,
+      31.4524
+    ]
+  },
+  "阿里地区": {
+    "code": "542500",
+    "areaCode": "0897",
+    "geometricCenter": [
+      80.1027,
+      32.5517
+    ]
+  },
+  "林芝地区": {
+    "code": "542600",
+    "areaCode": "0894",
+    "geometricCenter": [
+      94.4083,
+      29.6352
+    ]
+  },
+  "西安市": {
+    "code": "610100",
+    "areaCode": "029",
+    "geometricCenter": [
+      108.954,
+      34.2649
+    ]
+  },
+  "铜川市": {
+    "code": "610200",
+    "areaCode": "0919",
+    "geometricCenter": [
+      108.948,
+      34.9005
+    ]
+  },
+  "宝鸡市": {
+    "code": "610300",
+    "areaCode": "0917",
+    "geometricCenter": [
+      107.139,
+      34.3698
+    ]
+  },
+  "咸阳市": {
+    "code": "610400",
+    "areaCode": "0910",
+    "geometricCenter": [
+      108.71,
+      34.3268
+    ]
+  },
+  "渭南市": {
+    "code": "610500",
+    "areaCode": "0913",
+    "geometricCenter": [
+      109.51,
+      34.5073
+    ]
+  },
+  "延安市": {
+    "code": "610600",
+    "areaCode": "0911",
+    "geometricCenter": [
+      109.496,
+      36.5948
+    ]
+  },
+  "汉中市": {
+    "code": "610700",
+    "areaCode": "0916",
+    "geometricCenter": [
+      107.031,
+      33.0799
+    ]
+  },
+  "榆林市": {
+    "code": "610800",
+    "areaCode": "0912",
+    "geometricCenter": [
+      109.754,
+      38.2954
+    ]
+  },
+  "安康市": {
+    "code": "610900",
+    "areaCode": "0915",
+    "geometricCenter": [
+      109.031,
+      32.6917
+    ]
+  },
+  "商洛市": {
+    "code": "611000",
+    "areaCode": "0914",
+    "geometricCenter": [
+      109.943,
+      33.8825
+    ]
+  },
+  "兰州市": {
+    "code": "620100",
+    "areaCode": "0931",
+    "geometricCenter": [
+      103.835,
+      36.0599
+    ]
+  },
+  "嘉峪关市": {
+    "code": "620200",
+    "areaCode": "0937",
+    "geometricCenter": [
+      98.2536,
+      39.8001
+    ]
+  },
+  "金昌市": {
+    "code": "620300",
+    "areaCode": "0935",
+    "geometricCenter": [
+      102.175,
+      38.4764
+    ]
+  },
+  "白银市": {
+    "code": "620400",
+    "areaCode": "0943",
+    "geometricCenter": [
+      104.151,
+      36.5506
+    ]
+  },
+  "天水市": {
+    "code": "620500",
+    "areaCode": "0938",
+    "geometricCenter": [
+      105.702,
+      34.5875
+    ]
+  },
+  "武威市": {
+    "code": "620600",
+    "areaCode": "0935",
+    "geometricCenter": [
+      102.634,
+      37.9317
+    ]
+  },
+  "张掖市": {
+    "code": "620700",
+    "areaCode": "0936",
+    "geometricCenter": [
+      100.451,
+      38.931
+    ]
+  },
+  "平凉市": {
+    "code": "620800",
+    "areaCode": "0933",
+    "geometricCenter": [
+      106.725,
+      35.5097
+    ]
+  },
+  "酒泉市": {
+    "code": "620900",
+    "areaCode": "0937",
+    "geometricCenter": [
+      98.5139,
+      39.7563
+    ]
+  },
+  "庆阳市": {
+    "code": "621000",
+    "areaCode": "0934",
+    "geometricCenter": [
+      107.862,
+      35.9344
+    ]
+  },
+  "定西市": {
+    "code": "621100",
+    "areaCode": "0932",
+    "geometricCenter": [
+      104.622,
+      35.5852
+    ]
+  },
+  "陇南市": {
+    "code": "621200",
+    "areaCode": "0939",
+    "geometricCenter": [
+      104.934,
+      33.4695
+    ]
+  },
+  "临夏回族自治州": {
+    "code": "622900",
+    "areaCode": "0930",
+    "geometricCenter": [
+      103.201,
+      35.5914
+    ]
+  },
+  "甘南藏族自治州": {
+    "code": "623000",
+    "areaCode": "0941",
+    "geometricCenter": [
+      102.899,
+      34.9854
+    ]
+  },
+  "西宁市": {
+    "code": "630100",
+    "areaCode": "0971",
+    "geometricCenter": [
+      101.777,
+      36.6172
+    ]
+  },
+  "海东地区": {
+    "code": "632100",
+    "areaCode": "0972",
+    "geometricCenter": [
+      102.086,
+      36.5092
+    ]
+  },
+  "海北藏族自治州": {
+    "code": "632200",
+    "areaCode": "0970",
+    "geometricCenter": [
+      100.973,
+      36.9433
+    ]
+  },
+  "黄南藏族自治州": {
+    "code": "632300",
+    "areaCode": "0973",
+    "geometricCenter": [
+      102.027,
+      35.5399
+    ]
+  },
+  "海南藏族自治州": {
+    "code": "632500",
+    "areaCode": "0974",
+    "geometricCenter": [
+      100.638,
+      36.3244
+    ]
+  },
+  "果洛藏族自治州": {
+    "code": "632600",
+    "areaCode": "0975",
+    "geometricCenter": [
+      100.295,
+      34.4775
+    ]
+  },
+  "玉树藏族自治州": {
+    "code": "632700",
+    "areaCode": "0976",
+    "geometricCenter": [
+      97.013,
+      33.0183
+    ]
+  },
+  "海西蒙古族藏族自治州": {
+    "code": "632800",
+    "areaCode": "0977",
+    "geometricCenter": [
+      97.3632,
+      37.4214
+    ]
+  },
+  "银川市": {
+    "code": "640100",
+    "areaCode": "0951",
+    "geometricCenter": [
+      106.283,
+      38.4628
+    ]
+  },
+  "石嘴山市": {
+    "code": "640200",
+    "areaCode": "0952",
+    "geometricCenter": [
+      106.386,
+      39.0146
+    ]
+  },
+  "吴忠市": {
+    "code": "640300",
+    "areaCode": "0953",
+    "geometricCenter": [
+      106.194,
+      37.9852
+    ]
+  },
+  "固原市": {
+    "code": "640400",
+    "areaCode": "0954",
+    "geometricCenter": [
+      106.281,
+      36.011
+    ]
+  },
+  "中卫市": {
+    "code": "640500",
+    "areaCode": "0955",
+    "geometricCenter": [
+      105.686,
+      37.4829
+    ]
+  },
+  "乌鲁木齐市": {
+    "code": "650100",
+    "areaCode": "0991",
+    "geometricCenter": [
+      87.6168,
+      43.8235
+    ]
+  },
+  "克拉玛依市": {
+    "code": "650200",
+    "areaCode": "0990",
+    "geometricCenter": [
+      84.9312,
+      45.5964
+    ]
+  },
+  "吐鲁番地区": {
+    "code": "652100",
+    "areaCode": "0995",
+    "geometricCenter": [
+      89.2107,
+      43.007
+    ]
+  },
+  "哈密地区": {
+    "code": "652200",
+    "areaCode": "0902",
+    "geometricCenter": [
+      93.5502,
+      42.8991
+    ]
+  },
+  "昌吉回族自治州": {
+    "code": "652300",
+    "areaCode": "0994",
+    "geometricCenter": [
+      87.9882,
+      44.0044
+    ]
+  },
+  "博尔塔拉蒙古自治州": {
+    "code": "652700",
+    "areaCode": "0909",
+    "geometricCenter": [
+      82.0787,
+      44.9126
+    ]
+  },
+  "巴音郭楞蒙古自治州": {
+    "code": "652800",
+    "areaCode": "0996",
+    "geometricCenter": [
+      86.1827,
+      41.8974
+    ]
+  },
+  "阿克苏地区": {
+    "code": "652900",
+    "areaCode": "0997",
+    "geometricCenter": [
+      80.2445,
+      41.1239
+    ]
+  },
+  "克孜勒苏柯尔克孜自治州": {
+    "code": "653000",
+    "areaCode": "0908",
+    "geometricCenter": [
+      76.67,
+      39.8878
+    ]
+  },
+  "喀什地区": {
+    "code": "653100",
+    "areaCode": "0998",
+    "geometricCenter": [
+      75.9994,
+      39.4657
+    ]
+  },
+  "和田地区": {
+    "code": "653200",
+    "areaCode": "0903",
+    "geometricCenter": [
+      79.7641,
+      37.2296
+    ]
+  },
+  "伊犁哈萨克自治州": {
+    "code": "654000",
+    "areaCode": "0992",
+    "geometricCenter": [
+      81.3383,
+      43.9233
+    ]
+  },
+  "塔城地区": {
+    "code": "654200",
+    "areaCode": "0901",
+    "geometricCenter": [
+      83.0148,
+      46.7523
+    ]
+  },
+  "阿勒泰地区": {
+    "code": "654300",
+    "areaCode": "0906",
+    "geometricCenter": [
+      88.069,
+      47.81
+    ]
+  },
+  "石河子市": {
+    "code": "659001",
+    "areaCode": "0993",
+    "geometricCenter": [
+      86.0526,
+      44.3051
+    ]
+  },
+  "中国": {
+    "code": "00",
+    "areaCode": "",
+    "geometricCenter": [
+      104.537159,
+      34.332838
+    ]
+  }
+}

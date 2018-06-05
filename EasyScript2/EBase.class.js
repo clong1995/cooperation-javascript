@@ -119,6 +119,7 @@ class EBase {
     ajax(url, {
         method = 'GET',
         headers = {
+            //TODO 需要完善 可以参考jQuery的ajax请求头
             "Content-type": "application/x-www-form-urlencoded"
         },
         mode = 'cros',
@@ -127,18 +128,19 @@ class EBase {
         success = null,
         error = null
     } = {}) {
-        let body = '';
-        Object.keys(data).forEach(value => {
-            body += value + '=' + data[value] + '&'
-        });
-        body = this.trim(body, '&', 'right');
-        fetch(url, {
+
+        let req = {
             method: method,
             headers: headers,
             mode: mode,
-            cache: cache,
-            body: body
-        })
+            cache: cache
+        };
+        if (method !== 'GET') {
+            let body = '';
+            Object.keys(data).forEach(value => body += value + '=' + data[value] + '&');
+            req['body'] = this.trim(body, '&', 'right');
+        }
+        fetch(url, req)
             .then(response => {
                 if (response.status === 200) return response;
             })
@@ -161,7 +163,7 @@ class EBase {
      * @param index -1则在最后插入
      */
     append(obj, child, index = -1) {
-        if(child){
+        if (child) {
             let children = obj.children;
             (index < 0 || index > children.length) ? obj.appendChild(child) : obj.insertBefore(child, children[index]);
         }
@@ -799,6 +801,24 @@ class EBase {
                 callback();
             }
         }
+    }
+
+    /**
+     * 同步加载文件
+     * @param path
+     */
+    loadFileAsync(path) {
+        let oXmlHttp = new XMLHttpRequest();
+        let res = null;
+        oXmlHttp.onreadystatechange = () => {
+            if (oXmlHttp.readyState === 4 && (oXmlHttp.status === 200 || oXmlHttp.status === 304)) {
+                res = JSON.parse(oXmlHttp.responseText);
+            }
+        };
+        oXmlHttp.open('GET', path, false);
+        oXmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        oXmlHttp.send(null);
+        return res;
     }
 
     /**

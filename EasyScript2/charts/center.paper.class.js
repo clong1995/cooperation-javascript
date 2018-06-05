@@ -21,9 +21,6 @@ CLASS(
             }
         }, param);
 
-        //【svg操作类】
-        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
-
 
         //【简化链式查找】
         let
@@ -77,7 +74,7 @@ CLASS(
         }
 
         return {
-            option: null,
+            option: option,
             chartPartMap: chartPartMap,
             sheetMap: new Map(),
             eventMap: new Map(),

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基础地图</title>
+    <style>
+        #box {
+            width: 1400px;
+            height: 700px;
+            background: #fff;
+        }
+    </style>
+    <script src="../../../EasyScript2/EBase.class.js"></script>
+    <script>
+        ejs.ready(() => {
+            //最简单的调用一个组件
+            NEW(ejs.root + 'charts/map/map',{
+                element: '#box'
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="box" style="/*transform: scale(100,100)*/"></div>
+</body>
