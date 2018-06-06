@@ -15,7 +15,19 @@
         ejs.ready(() => {
             //最简单的调用一个组件
             NEW(ejs.root + 'charts/line/line',{
-                element: '#box'
+                element: '#box',
+                /*style:{
+                    axis:{
+                        x:{
+                            tick:{
+                                display:'none',
+                            },
+                            label:{
+                                display:'none',
+                            }
+                        }
+                    }
+                }*/
             })
         })
     </script>

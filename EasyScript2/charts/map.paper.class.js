@@ -19,6 +19,11 @@ CLASS(
                     right: 0,
                     bottom: 0,
                     left: 0
+                },
+                border:{
+                    width:1,
+                    color:'#000',
+                    style:'solid'
                 }
             }
         }, param);
@@ -33,6 +38,7 @@ CLASS(
             //大小
             offsetSize = option.offsetSize,
             zoom = option.zoom,
+            border = option.style.border,
             //定位
             position = option.style.position;
 
@@ -48,8 +54,8 @@ CLASS(
         };
 
         //【svg坐标转逻辑正向笛卡尔坐标】
-        let X = x => x - (zoom-1)*O.x,
-            Y = y => O.y * 2 - y + (zoom-1)*O.y;
+        let X = x => x + (1 - zoom) * O.x,
+            Y = y => O.y * 2 - y + (zoom - 1) * O.y;
 
         //组件容器
         let chartPartMap = new Map();
@@ -71,17 +77,18 @@ CLASS(
 
 
         //中心点
-        let centerPoint = gpsToSvg(center);
+        /*let centerPoint = gpsToSvg(center);
         chartPartMap.set('centerPoint', svg.draw('circle', {
             cx: centerPoint.x,
             cy: centerPoint.y,
-        }));
+        }));*/
 
         //画出轮廓线
         //useMap.map
+
         let stroke = {
-            stroke: '#000',
-            strokeWidth: 1
+            stroke: border.color,
+            strokeWidth: border.width
         };
         useMap.map.features.forEach(v => {
             let geometry = v.geometry;
