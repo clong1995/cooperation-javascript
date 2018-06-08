@@ -16,6 +16,7 @@ CLASS(
         let shot = {};      //简化链式查找
         let chartSize = {}; //图表大小
         let data = {};      //数据容器
+        let dataTemp = {};
         let yAxisData = []; //y轴数据
         let xAxisData = []; //x轴数据
         let maxData = 0;    //数据最大值
@@ -36,6 +37,11 @@ CLASS(
         let oIndex = -1;    //原点所在的索引
         let interval = 0;   //实际间隔
         let O = {};         //逻辑原点
+        let xSpan = 0;
+        let xAxisPoint = [];
+        let yAxisPoint = [];
+        let sheetMap = new Map();//样式
+        let eventMap = new Map();//事件
 
 
         //【参数补全机制】
@@ -183,6 +189,9 @@ CLASS(
 
         //【简化链式查找】
         shot = {
+            //取样
+            capacity: option.capacity,
+
             offsetSize: option.offsetSize,
 
             //定位
@@ -219,7 +228,19 @@ CLASS(
         };
 
         //【数据容器】
-        data = option.data;
+        //计算取样点
+        let capacity = Math.round(option.data.key.length / shot.capacity);
+        capacity = capacity ? capacity : 1;
+        //过滤数据
+        data = {key:[], value:[]};
+        option.data.key.forEach((v,i)=>{
+            if (!(i % capacity)) {
+                data.key.push(option.data.key[i]);
+                data.value.push(option.data.value[i]);
+            }
+        });
+
+
         xAxisData = data.key;
 
 
@@ -298,21 +319,12 @@ CLASS(
 
 
         //【刻度点】
-        let xSpan = axisLength.x / (xAxisData.length + 1);
-        let xAxisPoint = [],
-            yAxisPoint = [];
+        xSpan = axisLength.x / (xAxisData.length + 1);
         for (let i = 1; i < xAxisData.length + 1; ++i)
             xAxisPoint.push(X(xSpan * i));
         for (let i = 0; i < spanValue + 1; ++i) {
             yAxisPoint.push(yAxisStart.y - spanHeight * i);
         }
-
-
-        //【样式】
-        let sheetMap = new Map();
-
-        //【事件】
-        let eventMap = new Map();
 
 
         //【svg坐标转逻辑正向笛卡尔坐标】
@@ -635,9 +647,11 @@ CLASS(
          * 计算关键点
          * */
         function figure() {
+
             //数据关键点
             let datas = [];
             let unit = spanHeight / span;
+
 
             //组装数据
             data.value.forEach((v, i) => {
@@ -652,7 +666,10 @@ CLASS(
             //坐标关键点
             let xPoint = [],
                 yPoint = [];
-            xAxisPoint.forEach(v => xPoint.push({x: v, y: Y(0)}));
+            xAxisPoint.forEach(v => {
+                xPoint.push({x: v, y: Y(0)})
+
+            });
             yAxisPoint.forEach(v => yPoint.push({x: X(0), y: v}));
 
             return {
@@ -696,25 +713,6 @@ CLASS(
             };
         }
 
-        /**
-         * 加载
-         * @param str
-         * @param add
-         */
-        function load(str, add) {
-            if (add) {//增量
-
-            } else {//替换
-
-            }
-
-            //数据传回引擎
-
-
-            console.log(str);
-        }
-
-
         //【组装】
         let chartPartMap = new Map([
             ['axis', drawAxis()],
@@ -732,8 +730,7 @@ CLASS(
             eventMap: eventMap,
             figure: figure(),
             X: X,
-            Y: Y,
-            load: load
+            Y: Y
         };
 
         //危险属性屏蔽

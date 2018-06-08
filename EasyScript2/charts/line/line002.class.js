@@ -72,7 +72,8 @@ CLASS(
             figure,     // 关键点
             setSheet,   // 样式表
             addEvent,   // 事件
-            getPaper    // 坐标纸组件
+            getPaper,    // 坐标纸组件
+            load
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
         // 【defs】
@@ -281,6 +282,8 @@ CLASS(
         ]);
 
         //===向外界抛出你的公共方法 ===\\
-        return {}
+        return {
+            load:load
+        }
     }
 );

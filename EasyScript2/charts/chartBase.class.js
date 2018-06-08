@@ -124,11 +124,22 @@ CLASS(
             });
 
             //清理
-            paper.sheetMap = null;
+            /*paper.sheetMap = null;
             paper.eventMap = null;
-            paper.chartPartMap = null;
+            paper.chartPartMap = null;*/
             return svgNode;
         }
+
+        //加载
+        function load(data,capacity) {
+            //删除旧的
+            ejs.empty(ejs.query(param.element));
+            //重绘新的
+            param.data = data;
+            param.capacity = capacity;
+            NEW(ejs.root + 'charts/'+param.type+'/'+param.call[0],param, fn => {})
+        }
+
 
         //【公共属性】
         return ejs.assignDeep({
@@ -136,7 +147,8 @@ CLASS(
             render: render,
             addEvent: addEvent,
             setSheet: setSheet,
-            getPaper: getPaper
+            getPaper: getPaper,
+            load:load
         }, paper);
     }
 );
