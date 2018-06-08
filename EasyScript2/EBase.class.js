@@ -184,10 +184,19 @@ class EBase {
      * 获取数组最大最小值
      * @param arr 数字数组
      * @param type 默认max min
+     * @param i 时是否返回索引
      * @returns {number}
      */
-    arrMaxMin(arr, type = 'max') {
-        return type === 'max' ? Math.max(...arr) : Math.min(...arr);
+    arrMaxMin(arr, type = 'max', i = false) {
+        let value = type === 'max'
+            ? Math.max(...arr)
+            : Math.min(...arr);
+        let index = type === 'max'
+            ? arr.indexOf(Math.max.apply(Math, arr))
+            : arr.indexOf(Math.min.apply(Math, arr));
+        return i
+            ? {value: value, index: index}
+            : value;
     }
 
     /**

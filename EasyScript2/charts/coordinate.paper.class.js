@@ -228,17 +228,65 @@ CLASS(
         };
 
         //【数据容器】
-        //计算取样点
-        let capacity = Math.round(option.data.key.length / shot.capacity);
-        capacity = capacity ? capacity : 1;
-        //过滤数据
-        data = {key:[], value:[]};
-        option.data.key.forEach((v,i)=>{
-            if (!(i % capacity)) {
-                data.key.push(option.data.key[i]);
-                data.value.push(option.data.value[i]);
+        data = option.data;
+        //【数据取样】
+        /**
+         * 取样算法：找出样本间隔中的最大值和最小值和x轴对应的y标值（特征值），
+         *          这样可以保证数据精度，保留并且累积原始数据的变化率
+         */
+        if (shot.capacity) {
+            //获取取样点
+            if (shot.capacity === 'auto')//自动取样
+                shot.capacity = chartSize.width / 50;
+            let capacity = Math.ceil(option.data.key.length / shot.capacity);
+            capacity = capacity ? capacity : 1;
+
+            //过滤数据
+            data = {key: [], value: []};
+            for (let index = 0; index < option.data.key.length - capacity; index += capacity) {
+                //执行取值
+                if (capacity > 2) {
+                    let spanValue = option.data.value.slice(index, index + capacity);
+
+                    let
+                        orderValueArr = new Array(spanValue.length),
+                        orderKeyArr = new Array(spanValue.length);
+
+                    let spanKey = option.data.key.slice(index, index + capacity);
+                    let max = ejs.arrMaxMin(spanValue, 'max', 'index'),
+                        min = ejs.arrMaxMin(spanValue, 'min', 'index');
+
+                    //最大
+                    orderValueArr[max.index] = max.value;
+                    orderKeyArr[max.index] = '';//spanKey[max.index];
+
+                    //最小
+                    orderValueArr[min.index] = min.value;
+                    orderKeyArr[min.index] = '';//spanKey[min.index];
+
+                    //临近值
+                    for (let i = 0; i < spanValue.length; i += Math.ceil(spanValue.length / 10)) {
+                        orderValueArr[i] = spanValue[i];
+                        orderKeyArr[i] = '';
+                        if(i === 0) orderKeyArr[i] = spanKey[i];
+                    }
+
+                    /*let maxMinValue = [...new Set(Array.from(orderValueArr))].filter(val => val);
+                    let maxMinKey = [...new Set(Array.from(orderKeyArr))].filter(val => val);*/
+
+                    let maxMinValue = orderValueArr.filter(val => val !== undefined),
+                        maxMinKey = orderKeyArr.filter(val => val !== undefined);
+
+                    data.value.push(...maxMinValue);
+                    data.key.push(...maxMinKey);
+                } else {
+                    data.key.push(option.data.key[index]);
+                    data.value.push(option.data.value[index]);
+                }
+
             }
-        });
+
+        }
 
 
         xAxisData = data.key;

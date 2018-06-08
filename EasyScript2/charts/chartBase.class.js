@@ -131,12 +131,11 @@ CLASS(
         }
 
         //加载
-        function load(data,capacity) {
+        function load(data) {
             //删除旧的
             ejs.empty(ejs.query(param.element));
             //重绘新的
             param.data = data;
-            param.capacity = capacity;
             NEW(ejs.root + 'charts/'+param.type+'/'+param.call[0],param, fn => {})
         }
 

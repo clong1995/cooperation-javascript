@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        .total {
+            text-align: center;
+        }
+
         #box {
-            width: 1000px;
+            width: 100%;
             height: 400px;
             background: #fff;
         }
@@ -17,22 +21,45 @@
             NEW(
                 ejs.root + 'charts/line/line003',
                 {
-                    element: '#box'
+                    element: '#box',
+                    capacity: 'auto'//number/auto/false
                 },
                 fn => {
-                    let newData = {
-                        value: [],
-                        key: []
-                    };
-
+                    let stop = 50;
+                    let time = 50;
+                    ejs.html(ejs.query('#time'), time / 1000 + '秒');
+                    let newData = {value: [], key: []};
                     //#模拟更新数据
-                    setInterval(() => {
+                    let random = 200;
+                    let itv = setInterval(() => {
+                        let start = new Date().getTime();
                         for (let i = 0; i < 7; ++i) {
-                            newData.value.push(ejs.randomNum(-200, 200));
+                            newData.value.push(ejs.randomNum(-random, random));
                             newData.key.push(ejs.randomChar());
                         }
-                        fn.load(newData,20);
-                    }, 500)
+                        //跟新
+                        fn.load(newData);
+                        //计数
+                        ejs.html(ejs.query('#num'), newData.value.length);
+                        //渲染频率
+                        let times = (new Date().getTime() - start) / 1000;
+                        ejs.html(ejs.query('#renderer'), times + '秒');
+                        //渲染压力
+                        ejs.html(ejs.query('#pressure'), Math.round(times / (time/ 1000)*100) +'%');
+                        stop--;
+                        if (!stop) {
+                            clearInterval(itv);
+                            ejs.html(ejs.query('#renderer'), '0秒');
+                            ejs.html(ejs.query('#pressure'), '0%');
+                        }
+                        /*random--;
+                        if (!random) {
+                            clearInterval(itv);
+                            ejs.html(ejs.query('#renderer'), '0秒');
+                        }*/
+                    }, time)
+
+
                 }
             );
 
@@ -40,6 +67,12 @@
     </script>
 </head>
 <body>
+<h1 class="total">
+    数据更新频率：<span id="time"></span>，
+    渲染频率：<span id="renderer"></span>，
+    当前数据量：<span id="num"></span>，
+    渲染压力：<span id="pressure"></span>
+</h1>
 <div id="box"></div>
 </body>
 </html>
