@@ -202,7 +202,8 @@ CLASS(
             //创建和返回sheet
             let style = null;
             if (!svg.querySelector('style')) {
-                style = create('style');
+                //style = create('style');//ie不兼容
+                style = ejs.createDom('style');
                 ejs.append(svg, style);
             }
             return style.sheet;
@@ -533,6 +534,9 @@ CLASS(
                     break;
                 case 'circle':
                     figure = circle(option, style);
+                    break;
+                case 'rect':
+                    figure = rect(option, style);
                     break;
                 case 'polygon':
                     figure = polygon(option, style);

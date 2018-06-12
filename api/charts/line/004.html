@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        #box {
+            width: 90%;
+            height: 400px;
+            margin: 0 auto;
+            background: #fff;
+        }
+    </style>
+    <script src="../../../EasyScript2/EBase.class.js"></script>
+    <script>
+
+
+        function bigRandom(total, maximum = 1,multiple=1) {
+            //生产大量数据
+            let remainder = total / maximum;
+            let data = {value: [], key: []};
+            let r = ejs.randomNum(-500, 500);
+            let flag = true;
+            for (; total > 0; --total) {
+                let s = ejs.randomNum(1, 10);
+                let max = ejs.randomNum(0, total * 20);
+                let rm = ejs.randomNum(r / 2, r);
+                if (rm >= max) flag = false;
+                if (rm <= -max) flag = true;
+                if (flag) r += s / 10; else r -= s / 2;
+                //凸显峰值
+                //if (s === 1) rm *= 2;
+                //检测摘要最大值
+                if (!(total % remainder)) rm *= multiple;
+
+                data.value.push(rm);
+                data.key.push(ejs.randomChar(2) + ejs.randomNum(0, 99));
+            }
+            return data;
+        }
+
+        //数据
+        let data = bigRandom(1000,10,2);
+
+        //生成图表
+        ejs.ready(() => {
+            NEW(
+                ejs.root + 'charts/line/line004', {
+                    element: '#box',
+                    data: data
+                }
+            );
+        });
+    </script>
+    <script src="../../../EasyScript2/charts/line/line.class.js"></script>
+</head>
+<body>
+<h1>大批量数据摘要（总数1000）</h1>
+<div id="box"></div>
+</body>
+</html>

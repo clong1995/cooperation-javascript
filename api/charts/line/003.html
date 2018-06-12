@@ -9,15 +9,15 @@
         }
 
         #box {
-            width: 100%;
+            width: 90%;
             height: 400px;
+            margin: 0 auto;
             background: #fff;
         }
     </style>
     <script src="../../../EasyScript2/EBase.class.js"></script>
     <script>
         ejs.ready(() => {
-
             NEW(
                 ejs.root + 'charts/line/line003',
                 {
@@ -25,7 +25,7 @@
                     capacity: 'auto'//number/auto/false
                 },
                 fn => {
-                    let stop = 50;
+                    let stop = 200;
                     let time = 50;
                     ejs.html(ejs.query('#time'), time / 1000 + '秒');
                     let newData = {value: [], key: []};
@@ -35,7 +35,7 @@
                         let start = new Date().getTime();
                         for (let i = 0; i < 7; ++i) {
                             newData.value.push(ejs.randomNum(-random, random));
-                            newData.key.push(ejs.randomChar());
+                            newData.key.push(ejs.randomChar(2)+ejs.randomNum(2));
                         }
                         //跟新
                         fn.load(newData);
@@ -46,7 +46,7 @@
                         ejs.html(ejs.query('#renderer'), times + '秒');
                         //渲染压力
                         ejs.html(ejs.query('#pressure'), Math.round(times / (time/ 1000)*100) +'%');
-                        stop--;
+                        //stop--;
                         if (!stop) {
                             clearInterval(itv);
                             ejs.html(ejs.query('#renderer'), '0秒');
@@ -63,10 +63,11 @@
                 }
             );
 
-        })
+        });
     </script>
 </head>
 <body>
+<h1 class="total">持续累积数据摘要加载压力测试</h1>
 <h1 class="total">
     数据更新频率：<span id="time"></span>，
     渲染频率：<span id="renderer"></span>，

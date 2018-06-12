@@ -42,6 +42,7 @@ CLASS(
         let yAxisPoint = [];
         let sheetMap = new Map();//样式
         let eventMap = new Map();//事件
+        let detailHeight = 0;//底部细节轴
 
 
         //【参数补全机制】
@@ -192,6 +193,9 @@ CLASS(
             //取样
             capacity: option.capacity,
 
+            //细节
+            detail: option.detail,
+
             offsetSize: option.offsetSize,
 
             //定位
@@ -221,76 +225,21 @@ CLASS(
             yGrid: option.style.axis.grid.y
         };
 
+        if (shot.detail) {
+            detailHeight = 30;
+        }
+
         //图表大小
         chartSize = {
             width: shot.offsetSize.width - shot.position.left - shot.position.right,
             height: shot.offsetSize.height - shot.position.top - shot.position.bottom
         };
 
+
         //【数据容器】
-        data = option.data;
-        //【数据取样】
-        /**
-         * 取样算法：找出样本间隔中的最大值和最小值和x轴对应的y标值（特征值），
-         *          这样可以保证数据精度，保留并且累积原始数据的变化率
-         */
-        if (shot.capacity) {
-            //获取取样点
-            if (shot.capacity === 'auto')//自动取样
-                shot.capacity = chartSize.width / 50;
-            let capacity = Math.ceil(option.data.key.length / shot.capacity);
-            capacity = capacity ? capacity : 1;
-
-            //过滤数据
-            data = {key: [], value: []};
-            for (let index = 0; index < option.data.key.length - capacity; index += capacity) {
-                //执行取值
-                if (capacity > 2) {
-                    let spanValue = option.data.value.slice(index, index + capacity);
-
-                    let
-                        orderValueArr = new Array(spanValue.length),
-                        orderKeyArr = new Array(spanValue.length);
-
-                    let spanKey = option.data.key.slice(index, index + capacity);
-                    let max = ejs.arrMaxMin(spanValue, 'max', 'index'),
-                        min = ejs.arrMaxMin(spanValue, 'min', 'index');
-
-                    //最大
-                    orderValueArr[max.index] = max.value;
-                    orderKeyArr[max.index] = '';//spanKey[max.index];
-
-                    //最小
-                    orderValueArr[min.index] = min.value;
-                    orderKeyArr[min.index] = '';//spanKey[min.index];
-
-                    //临近值
-                    for (let i = 0; i < spanValue.length; i += Math.ceil(spanValue.length / 10)) {
-                        orderValueArr[i] = spanValue[i];
-                        orderKeyArr[i] = '';
-                        if(i === 0) orderKeyArr[i] = spanKey[i];
-                    }
-
-                    /*let maxMinValue = [...new Set(Array.from(orderValueArr))].filter(val => val);
-                    let maxMinKey = [...new Set(Array.from(orderKeyArr))].filter(val => val);*/
-
-                    let maxMinValue = orderValueArr.filter(val => val !== undefined),
-                        maxMinKey = orderKeyArr.filter(val => val !== undefined);
-
-                    data.value.push(...maxMinValue);
-                    data.key.push(...maxMinKey);
-                } else {
-                    data.key.push(option.data.key[index]);
-                    data.value.push(option.data.value[index]);
-                }
-
-            }
-
-        }
-
-
+        data = shot.capacity?capacity(option.data) : option.data;
+        // 【x轴数据】
         xAxisData = data.key;
-
 
         //【最值】
         maxData = ejs.arrMaxMin(data.value, 'max');
@@ -313,7 +262,7 @@ CLASS(
         yTickWidth = shot.yTick.display !== 'none' ? shot.yTick.width : 0;
         if (shot.axisY.display === 'none')
             yStrWidth = yTickWidth = 0;
-        yAxisSpace = yStrWidth + yTickWidth + shot.position.left;
+        yAxisSpace = yStrWidth + yTickWidth;
 
 
         //【x轴配置display变化引发的影响合计】
@@ -322,13 +271,13 @@ CLASS(
         xTickHeight = shot.xTick.display !== 'none' ? shot.xTick.height : 0;
         if (shot.axisX.display === 'none')
             xStrHeight = xTickHeight = 0;
-        xAxisSpace = xStrHeight + xTickHeight;
+        xAxisSpace = xStrHeight + xTickHeight + detailHeight;
 
 
         //【逻辑起点】
         yAxisStart = {
             //x位
-            x: yAxisSpace,
+            x: yAxisSpace + shot.position.left,
             //y位
             y: shot.offsetSize.height - shot.position.bottom - xAxisSpace
         };
@@ -374,6 +323,81 @@ CLASS(
             yAxisPoint.push(yAxisStart.y - spanHeight * i);
         }
 
+        /**
+         * 数据取样
+         * 取样算法：根据图表实际大小和指定的像素密度换算取数据段和数据段的取样个数。
+         *          找出每段样本间隔中的最大值和最小值和x轴对应的y标值（特征值），根据图表的实际大小取出一批值丰富折线的平缓度（细节值）。
+         *          这样可以保证数据精度，保留并且累积原始数据的变化率
+         */
+        function capacity(datas) {
+            //获取取样点
+            let px = 10,//像素
+                //图表被分为了多少段
+                pxCount = chartSize.width / px;
+            //数据也同样分capacity多段，在本段数据中进行取样
+            let capacity = Math.ceil(datas.key.length / pxCount);
+
+            //过滤数据
+            data = {key: [], value: []};
+            for (let index = 0; index < datas.key.length - capacity; index += capacity) {
+                //执行取值
+                //取样点超过两个才有取样的意义，因为每单位数据都要保留至少两个值，最大值和最小值
+                if (capacity > 2) {
+                    //取样数据段
+                    let
+                        //取样数据段的value段
+                        valueSpan = datas.value.slice(index, index + capacity),
+                        //取样数据段的key段，这个要和value段对应上并保证顺序不变
+                        keySpan = datas.key.slice(index, index + capacity);
+
+                    //取样段内最值
+                    let
+                        max = ejs.arrMaxMin(valueSpan, 'max', 'index'),
+                        min = ejs.arrMaxMin(valueSpan, 'min', 'index');
+
+                    //保序数组，用来保证每单位数据段顺序的数组，每段数据保证则全部数据就可以保证顺序
+                    let
+                        orderValueArr = new Array(valueSpan.length),
+                        orderKeyArr = new Array(valueSpan.length);
+
+                    //用来丰富细节的值的个数，最多10个
+                    let dataNumInSpan = px / 2;
+                    let orderValueSpan = Math.ceil(valueSpan.length / dataNumInSpan);
+                    for (let i = 0; i < orderValueArr.length; i += orderValueSpan) {
+                        orderValueArr[i] = valueSpan[i];
+                        orderKeyArr[i] = keySpan[i];
+                    }
+
+                    //最大值
+                    orderValueArr[max.index] = max.value;
+                    orderKeyArr[max.index] = keySpan[max.index];
+
+                    //最小值
+                    orderValueArr[min.index] = min.value;
+                    orderKeyArr[min.index] = keySpan[min.index];
+
+                    //洗掉保序数组中的无用索引
+                    /*let valueArr = [...new Set(Array.from(orderValueArr))].filter(val => val !== undefined),
+                        keyArr = [...new Set(Array.from(orderKeyArr))].filter(val => val !== undefined);*/
+                    let valueArr = orderValueArr.filter(val => val !== undefined),
+                        keyArr = orderKeyArr.filter(val => val !== undefined);
+
+                    //给数据容器value赋值
+                    data.value.push(...valueArr);
+                    data.key.push(...keyArr);
+                } else {
+                    data.key.push(datas.key[index]);
+                    data.value.push(datas.value[index]);
+                }
+            }
+
+            //x轴不用全部画出来
+            let tickSpan = Math.floor(5 * px * data.key.length / chartSize.width) + 1;
+            for (let i = 0; i < data.key.length; ++i) {
+                if (i % tickSpan) data.key[i] = '';
+            }
+            return data;
+        }
 
         //【svg坐标转逻辑正向笛卡尔坐标】
         function X(x) {
@@ -521,12 +545,14 @@ CLASS(
                     strokeWidth: shot.xTick.borderWidth,
                 });
 
-                xAxisPoint.forEach(v =>
-                    xTickArr.push(ejs.attr(xTickNode.cloneNode(), {
-                        x1: v,
-                        x2: v
-                    }))
-                );
+                xAxisPoint.forEach((v, i) => {
+                    if (xAxisData[i]) {
+                        xTickArr.push(ejs.attr(xTickNode.cloneNode(), {
+                            x1: v,
+                            x2: v
+                        }))
+                    }
+                });
                 xTickG = svg.g(xTickArr);
                 ejs.addClass(xTickG, xTickClazz);
             }
@@ -589,12 +615,13 @@ CLASS(
 
 
                 xAxisPoint.forEach((v, i) => {
-                        let cloneNode = xAxisLabelNode.cloneNode();
+                    let cloneNode = xAxisLabelNode.cloneNode();
+                    if (xAxisData[i]) {
                         cloneNode.textContent = xAxisData[i];
                         ejs.attr(cloneNode, {x: v});
                         xAxisLabelArr.push(cloneNode);
                     }
-                );
+                });
                 xAxisLabelG = svg.g(xAxisLabelArr);
                 ejs.addClass(xAxisLabelG, xAxisLabelClazz);
             }
@@ -649,12 +676,14 @@ CLASS(
                         strokeWidth: shot.xGrid.borderWidth,
                     });
 
-                    xAxisPoint.forEach(v =>
-                        xGridArr.push(ejs.attr(xGridNode.cloneNode(), {
-                            x1: v,
-                            x2: v
-                        }))
-                    );
+                    xAxisPoint.forEach((v, i) => {
+                        if (xAxisData[i]) {
+                            xGridArr.push(ejs.attr(xGridNode.cloneNode(), {
+                                x1: v,
+                                x2: v
+                            }))
+                        }
+                    });
                     xGridG = svg.g(xGridArr);
                     ejs.addClass(xGridG, xGridClazz);
                 }
@@ -690,26 +719,64 @@ CLASS(
             return svg.g([xGridG, yGridG]);
         }
 
+        /**
+         * 细节展示
+         */
+        function drawDetail() {
+            //矩形
+            if (shot.detail) {
+                //边框
+                let marginTop = shot.axisX.tick.height / 2;
+                let border = svg.create('rect', {
+                    x: shot.position.left + yAxisSpace,
+                    y: chartSize.height - detailHeight + shot.position.top + marginTop,
+                    width: chartSize.width - yAxisSpace,
+                    height: detailHeight - marginTop,
+                    strokeLocation: 'inside',
+                    strokeWidth: 1,
+                    stroke: '#000',
+                    fill: 'none'
+                });
+
+
+                //数据关键点
+                let linePoint = [];
+                let xSpan = axisLength.x / (option.data.key.length + 1);
+                option.data.value.forEach((v, i) => {
+                    linePoint.push({
+                        x: X(xSpan * i),
+                        y: Y(0) - v * (spanHeight / span)
+                    });
+                });
+
+                //划线
+                let line = svg.draw('lines', {
+                    d: linePoint
+                }, {
+                    strokeWidth: 2,
+                    stroke: '#000'
+                });
+                ejs.attr(line, {
+                    transform: 'translate(0, ' + (chartSize.height - (detailHeight - marginTop) / 2) + ') scale(1,' + ((detailHeight) / chartSize.height) + ')',
+                });
+                return svg.g([border, line]);
+            }
+        }
+
 
         /**
          * 计算关键点
          * */
         function figure() {
-
             //数据关键点
-            let datas = [];
-            let unit = spanHeight / span;
-
-
-            //组装数据
+            let linePoint = [];
             data.value.forEach((v, i) => {
-                datas.push({
+                linePoint.push({
                     value: v,
                     x: xAxisPoint[i],
-                    y: Y(0) - v * unit
+                    y: Y(0) - v * (spanHeight / span)
                 });
             });
-
 
             //坐标关键点
             let xPoint = [],
@@ -722,7 +789,7 @@ CLASS(
 
             return {
                 //数据关键点
-                dataPoints: datas,
+                dataPoints: linePoint,
                 maxMinData: {
                     max: maxData,
                     min: minData
@@ -767,7 +834,8 @@ CLASS(
             ['origin', drawOrigin()],
             ['tick', drawTick()],
             ['axisLabel', drawAxisLabel()],
-            ['grid', drawGrid()]
+            ['grid', drawGrid()],
+            ['detail', drawDetail()],
         ]);
 
         //【公共方法】

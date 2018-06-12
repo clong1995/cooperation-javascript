@@ -1311,11 +1311,16 @@ class EBase {
      * 设置css
      * @param selector
      * @param rules
+     *
+     * sheet.insertRule("body { background-color: silver }", 0);  //DOM方法
+     * sheet.addRule("body", "background-color: silver", 0);  //仅对IE有效
+     *
      */
     setSheet(selector, rules) {
         let rulesText = selector + '{';
         for (let k in rules)
             rulesText += this.underscored(k) + ':' + rules[k] + ';';
+
         this._lastSheet.insertRule(rulesText + '}', this._lastSheet.cssRules.length);
         return selector;
     }
@@ -1354,6 +1359,9 @@ class EBase {
      * @returns {{}}
      */
     styleStr2Obj(styleStr, type = 'camelize') {
+
+
+
         let ruleObj = {},
             item = [];
         this.trim(this.trim(styleStr.match(/\{([\s\S]*)\}/)[1]), {
