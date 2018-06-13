@@ -17,13 +17,12 @@
     </style>
     <script src="../../../EasyScript2/EBase.class.js"></script>
     <script>
-
-
-        function bigRandom(total, maximum = 1,multiple=1) {
+        //生成随机数
+        function bigRandom(total, maximum = 1, multiple = 1) {
             //生产大量数据
             let remainder = total / maximum;
             let data = {value: [], key: []};
-            let r = ejs.randomNum(-500, 500);
+            let r = ejs.randomNum(-total / 2, total / 2);
             let flag = true;
             for (; total > 0; --total) {
                 let s = ejs.randomNum(1, 10);
@@ -33,7 +32,7 @@
                 if (rm <= -max) flag = true;
                 if (flag) r += s / 10; else r -= s / 2;
                 //凸显峰值
-                //if (s === 1) rm *= 2;
+                if (s === 1) rm *= 1.2;
                 //检测摘要最大值
                 if (!(total % remainder)) rm *= multiple;
 
@@ -43,23 +42,21 @@
             return data;
         }
 
-        //数据
-        let data = bigRandom(1000,10,2);
-
         //生成图表
         ejs.ready(() => {
-            NEW(
-                ejs.root + 'charts/line/line004', {
-                    element: '#box',
-                    data: data
-                }
-            );
+            //数据
+            let all = 1000;
+            ejs.html(ejs.query('#num'), all);
+            //生层图表
+            NEW(ejs.root + 'charts/line/line004', {
+                element: '#box',
+                data: bigRandom(all)
+            });
         });
     </script>
-    <script src="../../../EasyScript2/charts/line/line.class.js"></script>
 </head>
 <body>
-<h1>大批量数据摘要（总数1000）</h1>
+<h1>大批量数据摘要（总数<span id="num"></span>）</h1>
 <div id="box"></div>
 </body>
 </html>

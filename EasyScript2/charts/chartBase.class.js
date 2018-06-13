@@ -112,11 +112,12 @@ CLASS(
 
             ejs.appendBatch(svgNode, IteratorNode);
 
+
+
             //【注册事件】
-            paper.eventMap.forEach((v, i) => {
-                if (v.click)
-                    ejs.click(svgNode, i, v.click)
-            });
+            /*paper.eventMap.forEach((v, i) => {
+                for(let ev in v) ejs.on(i, ev, v[ev],svgNode)
+            });*/
 
             //【显示svg】
             ejs.css(svgNode, {

@@ -225,9 +225,6 @@ CLASS(
             yGrid: option.style.axis.grid.y
         };
 
-        if (shot.detail) {
-            detailHeight = 30;
-        }
 
         //图表大小
         chartSize = {
@@ -237,7 +234,11 @@ CLASS(
 
 
         //【数据容器】
-        data = shot.capacity?capacity(option.data) : option.data;
+        data = option.data;
+        if (shot.capacity) {
+            data = capacity(option.data);
+            detailHeight = 30;
+        }
         // 【x轴数据】
         xAxisData = data.key;
 
@@ -723,8 +724,7 @@ CLASS(
          * 细节展示
          */
         function drawDetail() {
-            //矩形
-            if (shot.detail) {
+            if (shot.capacity) {
                 //边框
                 let marginTop = shot.axisX.tick.height / 2;
                 let border = svg.create('rect', {
@@ -742,12 +742,10 @@ CLASS(
                 //数据关键点
                 let linePoint = [];
                 let xSpan = axisLength.x / (option.data.key.length + 1);
-                option.data.value.forEach((v, i) => {
-                    linePoint.push({
-                        x: X(xSpan * i),
-                        y: Y(0) - v * (spanHeight / span)
-                    });
-                });
+                option.data.value.forEach((v, i) => linePoint.push({
+                    x: X(xSpan * i),
+                    y: Y(0) - v * (spanHeight / span)
+                }));
 
                 //划线
                 let line = svg.draw('lines', {
@@ -759,7 +757,95 @@ CLASS(
                 ejs.attr(line, {
                     transform: 'translate(0, ' + (chartSize.height - (detailHeight - marginTop) / 2) + ') scale(1,' + ((detailHeight) / chartSize.height) + ')',
                 });
-                return svg.g([border, line]);
+
+                //小视区
+                let viewThumG = svg.g();
+                let width = 200;
+                //中间
+                let thum = svg.create('rect', {
+                    x: shot.position.left + yAxisSpace,
+                    y: chartSize.height - detailHeight + shot.position.top + marginTop,
+                    width: width,
+                    height: detailHeight - marginTop,
+                    fill: 'rgba(0,0,0,.2)',
+                    cursor: 'move'
+                    /*stroke:'rgb(0,0,0)',
+                    strokeWidth:3,
+                    strokeDashoffset:detailHeight - marginTop,
+                    strokeDasharray:detailHeight - marginTop + ','+100*/
+                });
+
+                //左右扩大选区
+                let stick = svg.create('rect', {
+                    y: chartSize.height - detailHeight + shot.position.top + marginTop,
+                    width: 10,
+                    height: detailHeight - marginTop,
+                    fill: 'rgba(0,0,0,.5)'
+                    /*stroke:'rgb(0,0,0)',
+                    strokeWidth:3,
+                    strokeDashoffset:detailHeight - marginTop,
+                    strokeDasharray:detailHeight - marginTop + ','+100*/
+                });
+                let stickLeft = stick.cloneNode();
+                let stickRight = stick.cloneNode();
+                ejs.attr(stickLeft, {
+                    x: shot.position.left + yAxisSpace,
+                    cursor: 'w-resize'
+                });
+                ejs.attr(stickRight, {
+                    x: shot.position.left + yAxisSpace + width - 10,
+                    cursor: 'e-resize'
+                });
+
+                //TODO 有内存泄漏隐患
+                //鼠标按下
+                thum.onmousedown = v => {
+                    let s = v.clientX - parseFloat(ejs.attr(thum, 'x'));
+                    width = parseFloat(ejs.attr(thum, 'width'));
+                    ejs.body.onmousemove = b => {
+                        //中间
+                        ejs.attr(thum, {x: b.clientX - s});
+                        //两边
+                        ejs.attr(stickLeft, {x: b.clientX - s});
+                        ejs.attr(stickRight, {x: b.clientX - s + width - 10});
+                    }
+                };
+
+                //右箭头被拉动
+                stickRight.onmousedown = v => {
+                    let s = v.clientX;
+                    let x = parseFloat(ejs.attr(stickRight, 'x'));
+                    width = parseFloat(ejs.attr(thum, 'width'));
+                    ejs.body.onmousemove = b => {
+                        let move = b.clientX - s;
+                        ejs.attr(thum, {width: width + move});
+                        ejs.attr(stickRight, {x: move + x});
+                    }
+                };
+
+                //左箭头被拉动
+                stickLeft.onmousedown = v => {
+                    let s = v.clientX;
+                    let x = parseFloat(ejs.attr(stickLeft, 'x'));
+                    let thumX = parseFloat(ejs.attr(thum, 'x'));
+                    width = parseFloat(ejs.attr(thum, 'width'));
+                    ejs.body.onmousemove = b => {
+                        let move = b.clientX - s;
+                        ejs.attr(thum, {width: width - move});//长度
+                        ejs.attr(thum, {x:  thumX + move});//位置
+                        ejs.attr(stickLeft, {x: move + x});
+                    }
+                };
+
+
+                //鼠标抬起
+                ejs.body.onmouseup = () => ejs.body.onmousemove = null;
+
+                return svg.g([
+                    border,
+                    line,
+                    svg.g([thum, stickLeft, stickRight])
+                ]);
             }
         }
 

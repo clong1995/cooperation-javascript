@@ -43,13 +43,20 @@ class EBase {
          * @type {WeakMap<object, any>}
          * @private
          */
-        this._weakDate = new WeakMap();
+        //this._weakDate = new WeakMap();
+
+        /**
+         * 用于保存事件
+         * @type {WeakMap<object, any>}
+         * @private
+         */
+        this._domEvent = new Map();
 
         /**
          * 用于记录绑定的事件
          * @type {Set<any>}
          */
-        this._eventSet = new Set();
+        //this._eventSet = new Set();
 
         /**
          * 用于储存绑定的事件，事件均脱强制使用body代理
@@ -277,7 +284,14 @@ class EBase {
     }
 
     click(dom, target = '', callback, useCapture = true) {
-        dom.addEventListener('click', e => {
+
+        console.log(dom);
+        console.log(target);
+        console.log(callback);
+
+        dom.addEventListener()
+
+        /*dom.addEventListener('click', e => {
             if (!target)
                 callback(e);
             else {
@@ -309,7 +323,7 @@ class EBase {
                         return i === domLen;
                     })
             }
-        })
+        })*/
     }
 
     /**
@@ -1094,13 +1108,13 @@ class EBase {
      * @param key 必须是obj
      * @param value
      */
-    onData(key, value) {
+    /*onData(key, value) {
         if (typeof key === "object") this._weakDate.set(key, value);
     }
 
     getData(key) {
         return this._weakDate.get(key);
-    }
+    }*/
 
     //最大公约数
     gcd(a, b) {
@@ -1132,29 +1146,35 @@ class EBase {
      * @param evt
      * @param callback
      */
-    on(selecter, evt, callback, useCapture = true) {
-        //新增事件
-        if (!this._eventSet.has(evt)) {
-            this._eventSet.add(evt);
-            //注册事件
-            this.body.addEventListener(evt, e => {
+    on(selecter, ...params) {
+        let target = this.body;
+        let evt = 'click';
+        let callback = params.pop();
+        //两个参数：selecter,evt,callback
+        if (params.length === 2) evt = params[0];
+        //三个参数：selecter,target,evt,callback
+        if (params.length === 3) {
+            target = params[0];
+            evt = params[1];
+        }
+
+        //增加父元素列表
+        if (!this._domEvent.has(target)) this._domEvent.set(target, new Map());
+        //增加事件元素
+        if (!this._domEvent.get(target).has(selecter)) this._domEvent.get(target).set(selecter, new Map());
+        //增加事件列表
+        if (!this._domEvent.get(target).get(selecter).get(evt)) {
+            this._domEvent.get(target).get(selecter).set(evt, new Set());
+            target.addEventListener(evt, e => {
                 //查找所有元素是否有事件
                 let domLen = e.path.length - 4 - 1;//排除body,html,document,window
                 //冒泡
-                if (useCapture)
-                    for (; domLen + 1; --domLen)
-                        this._onFunction(e.path[domLen], e.type);
-                else //捕获
-                    e.path.some((v, i) => {
-                        this._onFunction(e.path[i], e.type);
-                        return i === domLen;
-                    })
+                for (; domLen + 1; --domLen)
+                    this._onFunction(e.path[domLen], target, e.type);
             })
         }
-        //增加事件响应函数
-        this._eventMap.has(selecter)
-            ? this._eventMap.get(selecter).set(evt, callback)
-            : this._eventMap.set(selecter, new Map([[evt, callback]]));
+        //保存事件
+        this._domEvent.get(target).get(selecter).get(evt).add(callback);
     }
 
     /**
@@ -1162,14 +1182,15 @@ class EBase {
      * @param node
      * @private
      */
-    _onFunction(node, event) {
+    _onFunction(node, target, event) {
         let keyArr = [node.nodeName];
         if (node.id) keyArr.push('#' + node.id);
         node.classList.forEach(v => keyArr.push('.' + v));
         //遍历方法树
-        keyArr.forEach(key => (this._eventMap.has(key) && this._eventMap.get(key).has(event))
-            ? this._eventMap.get(key).get(event)(node)
-            : null)
+        keyArr.forEach(key => (this._domEvent.get(target).get(key) && this._domEvent.get(target).get(key).has(event))
+            ? this._domEvent.get(target).get(key).get(event).forEach(v => v(node))
+            : null
+        )
     }
 
     /**
@@ -1359,7 +1380,6 @@ class EBase {
      * @returns {{}}
      */
     styleStr2Obj(styleStr, type = 'camelize') {
-
 
 
         let ruleObj = {},

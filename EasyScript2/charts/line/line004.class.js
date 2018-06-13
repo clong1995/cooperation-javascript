@@ -12,7 +12,6 @@ CLASS('line004', //类名
         //【默认数据】
         param = ejs.assignDeep({
             capacity: true,//启动自动摘要
-            detail:true,//启动细节查看
             data: {
                 value: [3, 25, 33, 49, 51, 91, -61],
                 key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
