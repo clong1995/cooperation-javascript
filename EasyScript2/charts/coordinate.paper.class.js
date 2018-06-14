@@ -720,6 +720,22 @@ CLASS(
             return svg.g([xGridG, yGridG]);
         }
 
+
+        function reloadData(stickLeft, stickRight) {
+            let
+                start = Math.floor((((ejs.attr(stickLeft, 'x') - (shot.position.left + yAxisSpace)) / (chartSize.width - yAxisSpace))) * 100) / 100,
+                end = Math.ceil(((ejs.attr(stickRight, 'x') - (shot.position.left + yAxisSpace)) / (chartSize.width - yAxisSpace)) * 100) / 100;
+            let startIndex = option.data.value.length * start,
+                endIndex = option.data.value.length * end;
+            let data = capacity({
+                value: option.data.value.slice(startIndex, endIndex),
+                key: option.data.key.slice(startIndex, endIndex)
+            });
+            //重新摘要
+            console.log(data);
+        }
+
+
         /**
          * 细节展示
          */
@@ -759,11 +775,11 @@ CLASS(
                 });
 
                 //小视区
-                let viewThumG = svg.g();
-                let width = 200;
+                let width = chartSize.width / 10;
                 //中间
+                let thumX = shot.position.left + yAxisSpace;
                 let thum = svg.create('rect', {
-                    x: shot.position.left + yAxisSpace,
+                    x: thumX,
                     y: chartSize.height - detailHeight + shot.position.top + marginTop,
                     width: width,
                     height: detailHeight - marginTop,
@@ -776,9 +792,10 @@ CLASS(
                 });
 
                 //左右扩大选区
+                let stickWidth = 10;
                 let stick = svg.create('rect', {
                     y: chartSize.height - detailHeight + shot.position.top + marginTop,
-                    width: 10,
+                    width: stickWidth,
                     height: detailHeight - marginTop,
                     fill: 'rgba(0,0,0,.5)'
                     /*stroke:'rgb(0,0,0)',
@@ -789,25 +806,79 @@ CLASS(
                 let stickLeft = stick.cloneNode();
                 let stickRight = stick.cloneNode();
                 ejs.attr(stickLeft, {
-                    x: shot.position.left + yAxisSpace,
+                    x: thumX,
                     cursor: 'w-resize'
                 });
                 ejs.attr(stickRight, {
-                    x: shot.position.left + yAxisSpace + width - 10,
+                    x: thumX + width - stickWidth,
                     cursor: 'e-resize'
                 });
 
                 //TODO 有内存泄漏隐患
                 //鼠标按下
                 thum.onmousedown = v => {
-                    let s = v.clientX - parseFloat(ejs.attr(thum, 'x'));
+                    let s = v.clientX;
+                    width = parseFloat(ejs.attr(thum, 'width'));
+                    let _thumX = parseFloat(ejs.attr(thum, 'x')),
+                        _stickLeftX = parseFloat(ejs.attr(stickLeft, 'x')),
+                        _stickRightX = parseFloat(ejs.attr(stickRight, 'x'));
+                    ejs.body.onmousemove = b => {
+                        let move = b.clientX - s;
+
+                        //回到到起点
+                        if (_thumX + move < thumX) {
+                            ejs.attr(thum, {x: thumX});
+                            //两边
+                            ejs.attr(stickLeft, {x: thumX});
+                            ejs.attr(stickRight, {x: thumX + width - stickWidth});
+                            return;
+                        }
+                        //回到到终点
+                        if (_thumX + move > axisLength.x + O.x - width) {
+                            ejs.attr(thum, {x: axisLength.x + O.x - width});
+                            //两边
+                            ejs.attr(stickLeft, {x: axisLength.x + O.x - width});
+                            ejs.attr(stickRight, {x: axisLength.x + O.x - stickWidth});
+                            return;
+                        }
+
+                        //没有到达端尽头
+                        //中间
+                        ejs.attr(thum, {x: _thumX + move});
+                        //两边
+                        ejs.attr(stickLeft, {x: _stickLeftX + move});
+                        ejs.attr(stickRight, {x: _stickRightX + move});
+                        //重新摘要全部数据
+                        reloadData(stickLeft, stickRight);
+                    }
+                };
+
+                //左箭头被拉动
+                stickLeft.onmousedown = v => {
+                    let s = v.clientX;
+                    let x = parseFloat(ejs.attr(stickLeft, 'x'));
+                    let _thumX = parseFloat(ejs.attr(thum, 'x'));
                     width = parseFloat(ejs.attr(thum, 'width'));
                     ejs.body.onmousemove = b => {
-                        //中间
-                        ejs.attr(thum, {x: b.clientX - s});
-                        //两边
-                        ejs.attr(stickLeft, {x: b.clientX - s});
-                        ejs.attr(stickRight, {x: b.clientX - s + width - 10});
+                        let move = b.clientX - s;
+                        //回到起点
+                        if (_thumX + move < thumX) {
+                            ejs.attr(thum, {width: parseFloat(ejs.attr(stickRight, 'x')) - thumX});//长度
+                            ejs.attr(thum, {x: thumX});//位置
+                            ejs.attr(stickLeft, {x: thumX});
+                            return;
+                        }
+                        //回到终点
+                        if (x + move >= parseFloat(ejs.attr(stickRight, 'x'))) {
+                            ejs.attr(thum, {width: 0});
+                            ejs.attr(stickLeft, {x: parseFloat(ejs.attr(stickRight, 'x'))});
+                            return;
+                        }
+                        ejs.attr(thum, {width: width - move});//长度
+                        ejs.attr(thum, {x: _thumX + move});//位置
+                        ejs.attr(stickLeft, {x: move + x});
+                        //重新摘要全部数据
+                        reloadData(stickLeft, stickRight);
                     }
                 };
 
@@ -818,22 +889,23 @@ CLASS(
                     width = parseFloat(ejs.attr(thum, 'width'));
                     ejs.body.onmousemove = b => {
                         let move = b.clientX - s;
+                        //回到到终点
+                        if (move + x > axisLength.x + O.x - stickWidth) {
+                            ejs.attr(thum, {width: axisLength.x + O.x - parseFloat(ejs.attr(stickLeft, 'x'))});
+                            ejs.attr(stickRight, {x: axisLength.x + O.x - stickWidth});
+                            return;
+                        }
+                        //回到起点
+                        if (x + move <= parseFloat(ejs.attr(stickLeft, 'x'))) {
+                            ejs.attr(thum, {width: 0});
+                            ejs.attr(stickRight, {x: parseFloat(ejs.attr(stickLeft, 'x'))});
+                            return;
+                        }
                         ejs.attr(thum, {width: width + move});
                         ejs.attr(stickRight, {x: move + x});
-                    }
-                };
 
-                //左箭头被拉动
-                stickLeft.onmousedown = v => {
-                    let s = v.clientX;
-                    let x = parseFloat(ejs.attr(stickLeft, 'x'));
-                    let thumX = parseFloat(ejs.attr(thum, 'x'));
-                    width = parseFloat(ejs.attr(thum, 'width'));
-                    ejs.body.onmousemove = b => {
-                        let move = b.clientX - s;
-                        ejs.attr(thum, {width: width - move});//长度
-                        ejs.attr(thum, {x:  thumX + move});//位置
-                        ejs.attr(stickLeft, {x: move + x});
+                        //重新摘要全部数据
+                        reloadData(stickLeft, stickRight);
                     }
                 };
 
@@ -848,7 +920,6 @@ CLASS(
                 ]);
             }
         }
-
 
         /**
          * 计算关键点
