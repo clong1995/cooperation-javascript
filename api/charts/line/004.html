@@ -17,7 +17,31 @@
     </style>
     <script src="../../../EasyScript2/EBase.class.js"></script>
     <script>
-        //生成随机数
+        /*//生成随机数
+
+
+        //生成图表
+        ejs.ready(() => {
+            //数据
+            let all = 1000;
+            ejs.html(ejs.query('#num'), all);
+            //生层图表
+            NEW(ejs.root + 'charts/line/line004', {
+                element: '#box',
+                data: bigRandom(all)
+            });
+        });*/
+
+        let data1 = {
+            key:[],
+            value:[]
+        };
+
+        for (let i = 0; i < 1000; ++i) {
+            data1.value.push(ejs.randomNum(-200, 200));
+            data1.key.push(ejs.randomChar(2)+ejs.randomNum(2));
+        }
+
         function bigRandom(total, maximum = 1, multiple = 1) {
             //生产大量数据
             let remainder = total / maximum;
@@ -41,18 +65,18 @@
             }
             return data;
         }
+        let data2 = bigRandom(1000);
 
-        //生成图表
+
         ejs.ready(() => {
-            //数据
-            let all = 1000;
-            ejs.html(ejs.query('#num'), all);
             //生层图表
             NEW(ejs.root + 'charts/line/line004', {
                 element: '#box',
-                data: bigRandom(all)
+                data: data1
             });
         });
+
+
     </script>
 </head>
 <body>

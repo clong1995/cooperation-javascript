@@ -29,7 +29,7 @@ CLASS(
             'line': 'coordinate.paper',
             'bar': 'coordinate.paper',
             'pie': 'center.paper',
-            'map':'map.paper'
+            'map': 'map.paper'
         }[param.type];
         if (!currPaper) {
             ejs.log('当前的图标表类型为[' + param.type + ']，此类型暂不支持，详情参阅www.xxxxxx.com/api/xxx', 'error');
@@ -59,15 +59,15 @@ CLASS(
         });
 
         //【使用图纸】
-        const paper = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
+        const {initPaper} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
 
         //【设置样式表】
-        function setSheet(select, rule) {
+        /*function setSheet(select, rule) {
             paper.sheetMap.set(select, rule);
-        }
+        }*/
 
         //【添加事件】
-        function addEvent(type, target, callback) {
+        /*function addEvent(type, target, callback) {
             let event = {
                 click: null,
                 hover: null
@@ -80,17 +80,17 @@ CLASS(
                 paper.eventMap.set(target, event)
             }
             paper.eventMap.get(target)[type] = callback;
-        }
+        }*/
 
         //【获取图纸组件】
-        function getPaper(p = null) {
+        /*function getPaper(p = null) {
             let part = paper.chartPartMap;
             if (p) part = part.get(p);
             return part;
-        }
+        }*/
 
         //【渲染】
-        function render(IteratorNode = []) {
+        function render(fn) {
             //【创建svg元素】
             let svgNode = svg.createSvg();
             ejs.attr(svgNode, {
@@ -99,36 +99,10 @@ CLASS(
             });
             ejs.append(elem, svgNode);
 
-            //【内置样式表】
-            let sheet = svg.sheet(svgNode);
-
-            //【生成样式表】
-            paper.sheetMap.forEach((v, k) => {
-                svg.setSheet(sheet, k, v)
-            });
-
-            //【组装节点】
-            paper.chartPartMap.forEach(v => IteratorNode.unshift(v));
-
-            ejs.appendBatch(svgNode, IteratorNode);
 
 
-
-            //【注册事件】
-            /*paper.eventMap.forEach((v, i) => {
-                for(let ev in v) ejs.on(i, ev, v[ev],svgNode)
-            });*/
-
-            //【显示svg】
-            ejs.css(svgNode, {
-                display: 'block'
-            });
-
-            //清理
-            /*paper.sheetMap = null;
-            paper.eventMap = null;
-            paper.chartPartMap = null;*/
-            return svgNode;
+            //生成图纸
+            initPaper(svgNode,fn);
         }
 
         //加载
@@ -137,18 +111,18 @@ CLASS(
             ejs.empty(ejs.query(param.element));
             //重绘新的
             param.data = data;
-            NEW(ejs.root + 'charts/'+param.type+'/'+param.call[0],param, fn => {})
+            NEW(ejs.root + 'charts/' + param.type + '/' + param.call[0], param, fn => {
+            })
         }
 
 
         //【公共属性】
-        return ejs.assignDeep({
-            svg: svg,
+        return {
             render: render,
-            addEvent: addEvent,
-            setSheet: setSheet,
-            getPaper: getPaper,
-            load:load
-        }, paper);
+            //addEvent: addEvent,
+            //setSheet: setSheet,
+            //getPaper: getPaper,
+            //load: load
+        };
     }
 );

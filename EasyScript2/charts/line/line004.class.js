@@ -8,8 +8,8 @@
 CLASS('line004', //类名
     param => {
         //【图表类型】
-        param.type =  'line';
-        //【默认数据】
+        param.type = 'line';
+        //【默认样式和数据】
         param = ejs.assignDeep({
             capacity: true,//启动自动摘要
             data: {
@@ -18,23 +18,27 @@ CLASS('line004', //类名
             }
         }, param);
 
-        //【基类提供的必要函数】
-        const {svg, render, X, Y, className, option, figure,load} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
+        //【svg操作类】
+        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
-        //【根据数据关键点画线】
-        let line = svg.draw('lines', {
-            d: figure.dataPoints
-        }, {
-            strokeWidth: 2,
-            stroke: '#000'
+        //【基类提供的必要函数】
+        const {render} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
+
+        //【你的渲染逻辑】
+        render(basic => {
+            const {figure} = basic;
+            //【根据数据关键点画线】
+            let line = svg.draw('lines', {
+                d: figure.dataPoints
+            }, {
+                strokeWidth: 2,
+                stroke: '#000'
+            });
+
+            return [line];
         });
 
-        //【执行渲染】
-        render([line]);
-
         //【向外界抛出你的公共方法】
-        return {
-            load:load
-        }
+        return {}
     }
 );

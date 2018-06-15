@@ -1294,8 +1294,7 @@ class EBase {
      * @param callback
      * @private
      */
-    _require(path, option = {}, callback = () => {
-    }, className = path.split('/').pop()) {
+    _require(path, option = {}, callback = () => {}, className = path.split('/').pop()) {
         option.className = className;
         option.call ? option.call.push(className) : option.call = [className];
         this.loadScript(path + '.class.js', () => callback(this._moduleStack.get(className)(option)))
