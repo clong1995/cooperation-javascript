@@ -8,39 +8,21 @@
             text-align: center;
         }
 
-        #box {
+        .box {
             width: 90%;
             height: 400px;
             margin: 0 auto;
             background: #fff;
         }
+
+        .option {
+            text-align: center;
+            margin: 10px 0;
+        }
     </style>
     <script src="../../../EasyScript2/EBase.class.js"></script>
     <script>
-        /*//生成随机数
-
-
-        //生成图表
-        ejs.ready(() => {
-            //数据
-            let all = 1000;
-            ejs.html(ejs.query('#num'), all);
-            //生层图表
-            NEW(ejs.root + 'charts/line/line004', {
-                element: '#box',
-                data: bigRandom(all)
-            });
-        });*/
-
-        let data1 = {
-            key:[],
-            value:[]
-        };
-
-        for (let i = 0; i < 1000; ++i) {
-            data1.value.push(ejs.randomNum(-200, 200));
-            data1.key.push(ejs.randomChar(2)+ejs.randomNum(2));
-        }
+        ejs.ready(() => doIt());
 
         function bigRandom(total, maximum = 1, multiple = 1) {
             //生产大量数据
@@ -65,22 +47,28 @@
             }
             return data;
         }
-        let data2 = bigRandom(1000);
 
+        function doIt() {
+            //TODO 卸载以后完善
+            let chart = ejs.query('#box').childNodes[0];
+            if(chart)ejs.remove(chart);
 
-        ejs.ready(() => {
+            //随机数据
+            let data = bigRandom(ejs.query('#count').value);
             //生层图表
             NEW(ejs.root + 'charts/line/line004', {
                 element: '#box',
-                data: data1
+                data: data
             });
-        });
-
-
+        }
     </script>
 </head>
 <body>
-<h1>大批量数据摘要（总数<span id="num"></span>）</h1>
-<div id="box"></div>
+<h1>大批量数据 摘要+聚合+区选</h1>
+<div class="option">
+    随机数据量：<input type="text" id="count" value="1000"/>
+    <button onclick="doIt()">执行</button>
+</div>
+<div id="box" class="box"></div>
 </body>
 </html>

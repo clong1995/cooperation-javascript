@@ -252,17 +252,43 @@ CLASS(
             //小视区
             thumWidth = chartSize.width / 10;
             let p = Math.ceil(thumWidth / (chartSize.width - yAxisSpace) * 100) / 100;//slice
-            let length = data.key.length * p;
+            let length = Math.ceil(data.key.length * p);
             data = {
                 key: data.key.slice(0, length),
                 value: data.value.slice(0, length),
             };
+
             data = capacity(data);
             detailHeight = 30;
         }
 
+
+        //【x轴配置display变化引发的影响合计】
+        xStrHeight = shot.xLabel.display !== 'none' ? shot.xLabel.lineHeight * 1.25 : 0;
+        //坐标刻度线
+        xTickHeight = shot.xTick.display !== 'none' ? shot.xTick.height : 0;
+        if (shot.axisX.display === 'none')
+            xStrHeight = xTickHeight = 0;
+        xAxisSpace = xStrHeight + xTickHeight + detailHeight;
+
+
+        //【y轴配置display变化引发的影响合计】
+        if (shot.yLabel.display !== 'none') {
+            let //y轴最大文本宽度
+                yMinStrWidth = ejs.strLength(Math.round(ejs.arrMaxMin(option.data.value, 'min')).toString()) * shot.yLabel.fontSize / 1.25,
+                yMaxStrWidth = ejs.strLength(Math.round(ejs.arrMaxMin(option.data.value, 'max')).toString()) * shot.yLabel.fontSize / 1.25;
+
+            yStrWidth = yMinStrWidth > yMaxStrWidth ? yMinStrWidth : yMaxStrWidth
+        }
+        //坐标刻度线
+        yTickWidth = shot.yTick.display !== 'none' ? shot.yTick.width : 0;
+        if (shot.axisY.display === 'none')
+            yStrWidth = yTickWidth = 0;
+        yAxisSpace = yStrWidth + yTickWidth;
+
         function initChart() {
             //重置
+            oIndex = -1;
             xAxisPoint = [];
             yAxisPoint = [];
             yAxisData = [];
@@ -270,13 +296,13 @@ CLASS(
             //【最值】
             maxData = ejs.arrMaxMin(data.value, 'max');
             minData = ejs.arrMaxMin(data.value, 'min');
-            maxData = maxData <= 0 ? 0 :maxData;
+
+            maxData = maxData <= 0 ? 0 : maxData;
             minData = minData >= 0 ? 0 : minData;
 
             //【最小最小】
             yAxisMin = Math.floor(minData / 10) * 10;
             yAxisMax = Math.ceil(maxData / 10) * 10;
-
 
             //寻找0位置的索引，用来确定存在负值时x轴的位置金和原点
             for (let i = 0; true; i += span) {
@@ -285,32 +311,6 @@ CLASS(
                 if (oIndex === -1 && num >= 0) oIndex = i / span;
                 if (num >= yAxisMax) break;
             }
-
-//            console.log(oIndex);
-
-            //【y轴配置display变化引发的影响合计】
-            if (shot.yLabel.display !== 'none') {
-                let //y轴最大文本宽度
-                    yMinStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'min').toString()) * shot.yLabel.fontSize / 1.25,
-                    yMaxStrWidth = ejs.strLength(ejs.arrMaxMin(yAxisData, 'max').toString()) * shot.yLabel.fontSize / 1.25;
-
-                yStrWidth = yMinStrWidth > yMaxStrWidth ? yMinStrWidth : yMaxStrWidth
-            }
-            //坐标刻度线
-            yTickWidth = shot.yTick.display !== 'none' ? shot.yTick.width : 0;
-            if (shot.axisY.display === 'none')
-                yStrWidth = yTickWidth = 0;
-            yAxisSpace = yStrWidth + yTickWidth;
-
-
-            //【x轴配置display变化引发的影响合计】
-            xStrHeight = shot.xLabel.display !== 'none' ? shot.xLabel.lineHeight * 1.25 : 0;
-            //坐标刻度线
-            xTickHeight = shot.xTick.display !== 'none' ? shot.xTick.height : 0;
-            if (shot.axisX.display === 'none')
-                xStrHeight = xTickHeight = 0;
-            xAxisSpace = xStrHeight + xTickHeight + detailHeight;
-
 
             //【逻辑起点】
             yAxisStart = {
@@ -325,11 +325,13 @@ CLASS(
                 x: chartSize.width - yAxisSpace,
                 y: chartSize.height - xAxisSpace
             };
+
+
             //【y轴分段】
             spanValue = (yAxisMax - yAxisMin) / span;
-            spanHeight = axisLength.y / spanValue;
 
-            //【段值】
+
+            spanHeight = axisLength.y / spanValue;
 
 
             //【间隔】
@@ -370,12 +372,12 @@ CLASS(
             //数据也同样分capacity多段，在本段数据中进行取样
             let capacity = Math.ceil(datas.key.length / pxCount);
 
+            //if (capacity > 2) {//取样点超过两个才有取样的意义，因为每单位数据都要保留至少两个值，最大值和最小值
             //过滤数据
             data = {key: [], value: []};
-            for (let index = 0; index < datas.key.length - capacity; index += capacity) {
-                //执行取值
-                //取样点超过两个才有取样的意义，因为每单位数据都要保留至少两个值，最大值和最小值
-                if (capacity > 2) {
+            if (capacity > 2) {
+                for (let index = 0; index < datas.key.length - capacity; index += capacity) {
+                    //执行取值
                     //取样数据段
                     let
                         //取样数据段的value段
@@ -418,17 +420,19 @@ CLASS(
                     //给数据容器value赋值
                     data.value.push(...valueArr);
                     data.key.push(...keyArr);
-                } else {
-                    data.key.push(datas.key[index]);
-                    data.value.push(datas.value[index]);
                 }
+            } else {
+                data = datas;
             }
-
             //x轴不用全部画出来
             let tickSpan = Math.floor(5 * px * data.key.length / chartSize.width) + 1;
             for (let i = 0; i < data.key.length; ++i) {
                 if (i % tickSpan) data.key[i] = '';
             }
+            //} else {
+            //    data = datas;
+            //}
+
             return data;
         }
 
@@ -451,23 +455,12 @@ CLASS(
 
             //x轴
             if (shot.xLine.display !== 'none' && shot.axisX.display !== 'none') {
-                //let xAxisClazz = ejs.simple();
                 xAxis = svg.draw('line', {
                     x1: O.x,
                     y1: O.y,
                     x2: axisLength.x + O.x,
                     y2: O.y
                 });
-
-                //ejs.addClass(xAxis, xAxisClazz);
-
-                //设置默认样式
-                /*sheetMap.set('.' + xAxisClazz, {
-                    stroke: shot.xLine.borderColor,
-                    strokeWidth: shot.xLine.display !== 'none' ? shot.xLine.borderWidth : 0
-                });*/
-
-                //xAxis
 
                 ejs.css(xAxis, {
                     stroke: shot.xLine.borderColor,
@@ -477,30 +470,21 @@ CLASS(
                 if (shot.xLine.borderStyle === 'solid') {
 
                 } else if (shot.xLine.borderStyle === 'dashed') {
-                    sheetMap.get('.' + xAxisClazz).strokeDasharray = shot.xLine.borderWidth * 4 + "," + shot.xLine.borderWidth * 4
+                    //sheetMap.get('.' + xAxisClazz).strokeDasharray = shot.xLine.borderWidth * 4 + "," + shot.xLine.borderWidth * 4
                 } else {
-                    sheetMap.get('.' + xAxisClazz).strokeDasharray = shot.xLine.borderStyle
+                    //sheetMap.get('.' + xAxisClazz).strokeDasharray = shot.xLine.borderStyle
                 }
             }
 
 
             //y轴
             if (shot.yLine.display !== 'none' && shot.axisY.display !== 'none') {
-                //let yAxisClazz = ejs.simple();
                 yAxis = svg.draw('line', {
                     x1: O.x,
                     y1: yAxisStart.y,
                     x2: O.x,
                     y2: shot.position.top
                 });
-
-                //ejs.addClass(yAxis, yAxisClazz);
-
-                //设置默认样式
-                /*sheetMap.set('.' + yAxisClazz, {
-                    stroke: shot.yLine.borderColor,
-                    strokeWidth: shot.yLine.display !== 'none' ? shot.yLine.borderWidth : 0,
-                });*/
 
                 ejs.css(yAxis, {
                     stroke: shot.yLine.borderColor,
@@ -633,21 +617,11 @@ CLASS(
 
             if (shot.xLabel.display !== 'none' && xAxisSpace) {
                 let xAxisLabelArr = [];
-                //let xAxisLabelClazz = ejs.simple();
                 //x轴文本
                 let xAxisLabelNode = svg.create('text', {
                     y: yAxisStart.y + xTickHeight + xStrHeight / 1.25,
                     fontSize: shot.xLabel.fontSize
                 });
-
-                /*sheetMap.set('.' + xAxisLabelClazz, {
-                    fill: shot.xLabel.color,
-                    lineHeight: xStrHeight,
-                    fontWeight: shot.xLabel.fontWeight,
-                    fontFamily: shot.xLabel.fontFamily,
-                    textAnchor: shot.xLabel.align === 'left' ? 'end' : shot.xLabel.align === 'right' ? 'start' : 'middle'
-                });*/
-
 
                 xAxisPoint.forEach((v, i) => {
                     let cloneNode = xAxisLabelNode.cloneNode();
@@ -665,22 +639,14 @@ CLASS(
                     fontFamily: shot.xLabel.fontFamily,
                     textAnchor: shot.xLabel.align === 'left' ? 'end' : shot.xLabel.align === 'right' ? 'start' : 'middle'
                 });
-                //ejs.addClass(xAxisLabelG, xAxisLabelClazz);
             }
 
             if (shot.yLabel.display !== 'none' && yAxisSpace) {
                 let yAxisLabelArr = [];
-                //let yAxisLabelClazz = ejs.simple();
                 let yAxisLabelNode = svg.create('text', {
                     x: X(0) - yTickWidth - yStrWidth / 2,
                     fontSize: shot.yLabel.fontSize
                 });
-                /*sheetMap.set('.' + yAxisLabelClazz, {
-                    fill: shot.yLabel.color,
-                    fontWeight: shot.yLabel.fontWeight,
-                    fontFamily: shot.yLabel.fontFamily,
-                    textAnchor: shot.yLabel.align === 'left' ? 'end' : shot.yLabel.align === 'right' ? 'start' : 'middle'
-                });*/
 
                 yAxisPoint.forEach((v, i) => {
                     if (!(i % interval)) {
@@ -697,7 +663,6 @@ CLASS(
                     fontFamily: shot.yLabel.fontFamily,
                     textAnchor: shot.yLabel.align === 'left' ? 'end' : shot.yLabel.align === 'right' ? 'start' : 'middle'
                 });
-                //ejs.addClass(yAxisLabelG, yAxisLabelClazz);
             }
 
             return svg.g([xAxisLabelG, yAxisLabelG]);
@@ -713,16 +678,11 @@ CLASS(
             if (shot.grid.display !== 'none') {
                 //纵向
                 if (shot.xGrid.display !== 'none') {
-                    //let xGridClazz = ejs.simple();
                     let xGridArr = [];
                     let xGridNode = svg.draw('line', {
                         y1: yAxisStart.y,
                         y2: yAxisStart.y - axisLength.y
                     });
-                    /*sheetMap.set('.' + xGridClazz, {
-                        stroke: shot.xGrid.borderColor,
-                        strokeWidth: shot.xGrid.borderWidth,
-                    });*/
 
                     xAxisPoint.forEach((v, i) => {
                         if (xAxisData[i]) {
@@ -737,21 +697,15 @@ CLASS(
                         stroke: shot.xGrid.borderColor,
                         strokeWidth: shot.xGrid.borderWidth,
                     });
-                    //ejs.addClass(xGridG, xGridClazz);
                 }
 
                 //横向
                 if (shot.yGrid.display !== 'none') {
-                    //let yGridClazz = ejs.simple();
                     let yGridArr = [];
                     let yGridNode = svg.draw('line', {
                         x1: X(0),
                         x2: axisLength.x + O.x
                     });
-                    /*sheetMap.set('.' + yGridClazz, {
-                        stroke: shot.yGrid.borderColor,
-                        strokeWidth: shot.yGrid.borderWidth,
-                    });*/
 
                     yAxisPoint.forEach((v, i) => {
                         if (!(i % Math.round(interval / 2))) {
@@ -762,7 +716,6 @@ CLASS(
                         }
                     });
                     yGridG = svg.g(yGridArr);
-                    //ejs.addClass(yGridG, yGridClazz);
                     ejs.css(yGridG, {
                         stroke: shot.yGrid.borderColor,
                         strokeWidth: shot.yGrid.borderWidth
@@ -780,14 +733,27 @@ CLASS(
          */
         function reloadData() {
             let
-                start = Math.floor((((ejs.attr(stickLeft, 'x') - (shot.position.left + yAxisSpace)) / (chartSize.width - yAxisSpace))) * 100) / 100,
+                start = Math.floor(
+                    (
+                        (
+
+                            parseFloat(ejs.attr(stickLeft, 'x')) - (shot.position.left + yAxisSpace)
+
+                        ) / (chartSize.width - yAxisSpace)
+                    ) * 100
+                ) / 100,
                 end = Math.ceil(((ejs.attr(stickRight, 'x') - (shot.position.left + yAxisSpace)) / (chartSize.width - yAxisSpace)) * 100) / 100;
-            let startIndex = option.data.value.length * start,
-                endIndex = option.data.value.length * end;
+
+
+            let startIndex = Math.floor(option.data.value.length * start),
+                endIndex = Math.ceil(option.data.value.length * end);
+
+
             data = capacity({
                 value: option.data.value.slice(startIndex, endIndex),
                 key: option.data.key.slice(startIndex, endIndex)
             });
+
             //清除图纸图形
             chartPartMap.forEach((v, i) => {
                 if (i !== 'detail') {
@@ -822,6 +788,7 @@ CLASS(
             if (shot.capacity) {
                 detailG = svg.g();
                 //边框
+                let strokeWidth = 1;
                 let marginTop = shot.axisX.tick.height / 2;
                 let border = svg.create('rect', {
                     x: shot.position.left + yAxisSpace,
@@ -829,7 +796,7 @@ CLASS(
                     width: chartSize.width - yAxisSpace,
                     height: detailHeight - marginTop,
                     strokeLocation: 'inside',
-                    strokeWidth: 1,
+                    strokeWidth: strokeWidth,
                     stroke: '#000',
                     fill: 'none'
                 });
@@ -877,7 +844,7 @@ CLASS(
                 ejs.attr(line, {
                     transform:
                     'translate(0, ' + (chartSize.height - detailHeight + shot.position.top + marginTop) + ') ' +
-                    'scale(1,' + ((detailHeight) / chartSize.height) + ')',
+                    'scale(1,' + ((detailHeight - strokeWidth * 2) / chartSize.height) + ')',
                 });
 
                 //中间
@@ -911,7 +878,7 @@ CLASS(
                 });
 
                 //TODO 有内存泄漏隐患
-                //鼠标按下
+                //拉动整体
                 thum.onmousedown = v => {
                     let s = v.clientX;
                     thumWidth = parseFloat(ejs.attr(thum, 'width'));
@@ -999,6 +966,9 @@ CLASS(
                         }
                         ejs.attr(thum, {width: thumWidth + move});
                         ejs.attr(stickRight, {x: move + x});
+
+
+
 
                         //重新摘要全部数据
                         reloadData();

@@ -4,7 +4,7 @@ CLASS('line', //类名
     param => {
         //【图表类型】
         param.type = 'line';
-
+        
         //【默认数据】
         ejs.assignDeep(param,{
             data: {
@@ -15,10 +15,11 @@ CLASS('line', //类名
             }
         });
 
+        //【svg操作类】
+        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
         //【基类提供的必要函数】
         const {
-            svg,        // svg工具类
             render,     // 渲染器
             X,          // 坐标转换器
             Y,          // 坐标转换器

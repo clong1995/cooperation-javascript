@@ -198,12 +198,14 @@ class EBase {
         let value = type === 'max'
             ? Math.max(...arr)
             : Math.min(...arr);
-        let index = type === 'max'
-            ? arr.indexOf(Math.max.apply(Math, arr))
-            : arr.indexOf(Math.min.apply(Math, arr));
-        return i
-            ? {value: value, index: index}
-            : value;
+        if(i){
+            let index = type === 'max'
+                ? arr.indexOf(Math.max.apply(Math, arr))
+                : arr.indexOf(Math.min.apply(Math, arr));
+            return {value: value, index: index}
+        }else{
+            return value;
+        }
     }
 
     /**
