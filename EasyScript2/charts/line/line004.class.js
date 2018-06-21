@@ -13,7 +13,9 @@ CLASS('line004', //类名
         param = ejs.assignDeep({
             capacity: true,//启动自动摘要
             data: {
-                value: [3, 25, 33, 49, 51, 91, -61],
+                value: [
+                    [3, 25, 33, 49, 51, 91, -61]
+                ],
                 key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
             }
         }, param);
@@ -26,16 +28,21 @@ CLASS('line004', //类名
 
         //【你的渲染逻辑】
         render(basic => {
+            let part = [];
             const {figure} = basic;
+
             //【根据数据关键点画线】
-            let line = svg.draw('lines', {
-                d: figure.dataPoints
-            }, {
-                strokeWidth: 2,
-                stroke: '#000'
+            figure.dataPoints.forEach(v=>{
+                let line = svg.draw('lines', {
+                    d: v
+                }, {
+                    strokeWidth: 2,
+                    stroke: '#000'
+                });
+                part.push(line);
             });
 
-            return [line];
+            return part;
         });
 
         //【向外界抛出你的公共方法】

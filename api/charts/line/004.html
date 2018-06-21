@@ -24,37 +24,48 @@
     <script>
         ejs.ready(() => doIt());
 
-        function bigRandom(total, maximum = 1, multiple = 1) {
-            //生产大量数据
-            let remainder = total / maximum;
+        function bigRandom(total, itemCount = 1, maximum = 1, multiple = 1) {
             let data = {value: [], key: []};
-            let r = ejs.randomNum(-total / 2, total / 2);
-            let flag = true;
-            for (; total > 0; --total) {
-                let s = ejs.randomNum(1, 10);
-                let max = ejs.randomNum(0, total * 20);
-                let rm = ejs.randomNum(r / 2, r);
-                if (rm >= max) flag = false;
-                if (rm <= -max) flag = true;
-                if (flag) r += s / 10; else r -= s / 2;
-                //凸显峰值
-                if (s === 1) rm *= 1.2;
-                //检测摘要最大值
-                if (!(total % remainder)) rm *= multiple;
+            for (let i = 0; i < itemCount; ++i) {
+                //生产大量数据
+                let remainder = total / maximum;
+                let r = ejs.randomNum(-total / 2, total / 2);
+                let flag = true;
+                let valueItem = [];
+                for (let t = 0; t < total; ++t) {
+                    let s = ejs.randomNum(1, 10);
+                    let max = ejs.randomNum(0, t * 20);
+                    let rm = ejs.randomNum(r / 2, r);
+                    if (rm >= max) flag = false;
+                    if (rm <= -max) flag = true;
+                    if (flag) r += s / 10; else r -= s / 2;
+                    //凸显峰值
+                    if (s === 1) rm *= 1.2;
+                    //检测摘要最大值
+                    if (!(t % remainder)) rm *= multiple;
 
-                data.value.push(rm);
-                data.key.push(ejs.randomChar(2) + ejs.randomNum(0, 99));
+                    valueItem.push(Math.round(rm));
+                    if (!data.value.length) {
+                        data.key.push(ejs.randomChar(2) + ejs.randomNum(0, 99));
+                    }
+                }
+                data.value.push(valueItem);
             }
             return data;
         }
 
+
+
+
+
         function doIt() {
             //TODO 卸载以后完善
             let chart = ejs.query('#box').childNodes[0];
-            if(chart)ejs.remove(chart);
+            if (chart) ejs.remove(chart);
 
             //随机数据
-            let data = bigRandom(ejs.query('#count').value);
+            let data = bigRandom(ejs.query('#count').value, 3, 1, 1);
+
             //生层图表
             NEW(ejs.root + 'charts/line/line004', {
                 element: '#box',
