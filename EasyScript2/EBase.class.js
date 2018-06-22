@@ -191,20 +191,30 @@ class EBase {
      * 获取数组最大最小值
      * @param arr 数字数组
      * @param type 默认max min
-     * @param i 时是否返回索引
+     * @param index 时是否返回索引
      * @returns {number}
      */
-    arrMaxMin(arr, type = 'max', i = false) {
-        let value = type === 'max'
-            ? Math.max(...arr)
-            : Math.min(...arr);
-        if(i){
-            let index = type === 'max'
-                ? arr.indexOf(Math.max.apply(Math, arr))
-                : arr.indexOf(Math.min.apply(Math, arr));
-            return {value: value, index: index}
-        }else{
-            return value;
+    arrMaxMin(arr, type = 'max', index = false) {
+        try {
+            let value = type === 'max'
+                ? Math.max(...arr)
+                : Math.min(...arr);
+
+            if (index) {
+                let index = type === 'max'
+                    ? arr.indexOf(Math.max.apply(Math, arr))
+                    : arr.indexOf(Math.min.apply(Math, arr));
+                return {value: value, index: index}
+            } else {
+                return value;
+            }
+        } catch (err) {
+            ejs.log('数组太长，超过了最大调用堆栈大小，建议后端处理。此处递归对个数组进行了分段分层处理这，但将有损速度和性能', 'warn');
+            let tempArr = [],
+                i = 0;
+            do tempArr.push(this.arrMaxMin(arr.slice(i, i += 10000), type, index));
+            while (i < arr.length);
+            return this.arrMaxMin(tempArr, type, index);
         }
     }
 
@@ -1296,7 +1306,8 @@ class EBase {
      * @param callback
      * @private
      */
-    _require(path, option = {}, callback = () => {}, className = path.split('/').pop()) {
+    _require(path, option = {}, callback = () => {
+    }, className = path.split('/').pop()) {
         option.className = className;
         option.call ? option.call.push(className) : option.call = [className];
         this.loadScript(path + '.class.js', () => callback(this._moduleStack.get(className)(option)))

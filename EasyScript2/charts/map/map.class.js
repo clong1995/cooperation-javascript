@@ -13,19 +13,16 @@ CLASS('map', //类名
             }
         });
 
-        //【基类提供的必要函数】
-        const {
-            svg,        // svg工具类
-            render,     // 渲染器
-            X,          // 坐标转换器
-            Y,          // 坐标转换器
-            option,     // 配置项
-            figure     // 关键点
-        } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
+        //【svg操作类】
+        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
+        //【基类提供的必要函数】
+        const {render} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
         //渲染
-        render([]);
+        render(basic=>{
+            return []
+        });
 
         //===向外界抛出你的公共方法 ===\\
         return {}

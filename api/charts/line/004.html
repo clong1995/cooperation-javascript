@@ -55,16 +55,18 @@
         }
 
 
-
-
-
         function doIt() {
             //TODO 卸载以后完善
             let chart = ejs.query('#box').childNodes[0];
             if (chart) ejs.remove(chart);
 
             //随机数据
-            let data = bigRandom(ejs.query('#count').value, 3, 1, 1);
+
+            let count = ejs.query('#count').value,
+                item = ejs.query('#item').value;
+            ejs.html(ejs.query('#sum'),count*item);
+
+            let data = bigRandom(count, item, 1, 1);
 
             //生层图表
             NEW(ejs.root + 'charts/line/line004', {
@@ -75,9 +77,14 @@
     </script>
 </head>
 <body>
-<h1>大批量数据 摘要+聚合+区选</h1>
+<h1>百万级大量数据 摘要+聚合+区选</h1>
 <div class="option">
-    随机数据量：<input type="text" id="count" value="1000"/>
+    随机数据量：
+    <input type="text" id="count" value="1000"/>
+    X
+    <input type="text" id="item" value="1"/>
+    =
+    <span id="sum"></span>
     <button onclick="doIt()">执行</button>
 </div>
 <div id="box" class="box"></div>

@@ -407,48 +407,41 @@ CLASS(
          *          这样可以保证数据精度，保留并且累积原始数据的变化率
          */
         function capacity(datas) {
-            //获取取样点
-            let px = 10,//像素
+            let px = 10,//像素间隔的数据
                 //图表被分为了多少段
-                pxCount = chartSize.width / px;
-            //数据也同样分capacity多段，在本段数据中进行取样
-            let capacity = Math.ceil(datas.key.length / pxCount);
+                pxCount = Math.ceil(chartSize.width / px);
 
-            //if (capacity > 2) {//取样点超过两个才有取样的意义，因为每单位数据都要保留至少两个值，最大值和最小值
+            //数据也同样分capacity多段，在本段数据中进行取样
+            let capacity = Math.floor(datas.key.length / pxCount);//一段对应的数据数据量
+            //取样点超过两个才有取样的意义，因为每单位数据都要保留至少两个值，最大值和最小值
             //过滤数据
             if (capacity > 2) {
                 data = {key: [], value: []};
-                for (let i = 0; i < datas.value.length; ++i) {
-                    data.value.push([]);
-                }
-                for (let index = 0; index < datas.key.length - capacity; index += capacity) {
-                    //执行取值
-
+                for (let i = 0; i < datas.value.length; ++i) data.value.push([]);
+                //分段取值
+                for (let index = 0; index < datas.key.length + capacity; index += capacity) {
                     //取样数据段的key段，这个要和value段对应上并保证顺序不变
                     let keySpan = datas.key.slice(index, index + capacity);
 
-                    //取样数据段的value段 //valueSpan = datas.value.slice(index, index + capacity),
+                    //取样数据段的value段
                     let valueSpan = [];
                     datas.value.forEach((v, i) => valueSpan[i] = v.slice(index, index + capacity));
 
                     //保序数组，用来保证每单位数据段顺序的数组，每段数据保证则全部数据就可以保证顺序
                     let length = keySpan.length;
+
                     let orderValueArr = [],
                         orderKeyArr = new Array(length);
                     for (let i = 0; i < valueSpan.length; ++i) orderValueArr.push(new Array(length))
 
                     //用来丰富细节
-                    let orderValueSpan = Math.ceil(keySpan.length / px * 2);
+                    let orderValueSpan = Math.ceil(keySpan.length/2);
                     for (let i = 0; i < length; i += orderValueSpan) {
-                        //orderValueArr[i] = valueSpan[i];
-                        //value
                         for (let j = 0; j < valueSpan.length; ++j) {
                             orderValueArr[j][i] = valueSpan[j][i]
                         }
-                        //key
                         orderKeyArr[i] = keySpan[i];
                     }
-
 
                     //console.log(valueSpan.length);
                     //段内取最值
@@ -476,7 +469,7 @@ CLASS(
 
                         for (let j = 0; j < valueSpan.length; ++j) {
                             valueArr[j] = orderValueArr[j].filter(val => val !== undefined);
-                            if(j === valueSpan.length -1){
+                            if (j === valueSpan.length - 1) {
                                 keyArr = orderKeyArr.filter(val => val !== undefined);
                             }
                         }
@@ -484,7 +477,7 @@ CLASS(
 
                     for (let j = 0; j < valueSpan.length; ++j) {
                         data.value[j].push(...valueArr[j]);
-                        if(j === valueSpan.length -1){
+                        if (j === valueSpan.length - 1) {
                             data.key.push(...keyArr);
                         }
                     }
@@ -493,6 +486,7 @@ CLASS(
             } else {
                 data = datas;
             }
+
             //x轴不用全部画出来
             let tickSpan = Math.floor(5 * px * data.key.length / chartSize.width) + 1;
             for (let i = 0; i < data.key.length; ++i) {
@@ -904,8 +898,8 @@ CLASS(
                     });
                     ejs.attr(line, {
                         transform:
-                        'translate(0, ' + (chartSize.height - detailHeight + shot.position.top + marginTop) + ') ' +
-                        'scale(1,' + ((detailHeight - strokeWidth * 2) / chartSize.height) + ')',
+                        'translate(0, ' + (shot.offsetSize.height - shot.position.bottom - (detailHeight - 2) / 1.3) + ') ' +// + shot.position.top + chartSize.height + shot.position.top
+                        'scale(1,' + ((detailHeight / 2) / (axisLength.y)) + ')',
                     });
                     part.push(line);
                 });
