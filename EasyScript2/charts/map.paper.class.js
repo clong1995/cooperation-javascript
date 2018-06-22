@@ -31,6 +31,15 @@ CLASS(
         //【svg操作类】
         const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
+        let userFn = null;
+        let IteratorNode = null;
+        let svgDom = null;
+        let sheetMap = new Map();//样式
+        let eventMap = new Map();//事件
+        let O = null;
+        let offset = null;
+        //组件容器
+        let chartPartMap = new Map();
 
         //【简化链式查找】
         let
@@ -42,23 +51,71 @@ CLASS(
             //定位
             position = option.style.position;
 
-        //【数据容器】
+
+        function initChart(){
+            //【逻辑原点】
+            O = {
+                //x位
+                x: (offsetSize.width + position.left - position.right) / 2,
+                //y位
+                y: (offsetSize.height + position.top - position.bottom) / 2
+            };
+
+            //计算偏移量
+            let center = useMap.addition[mapName].geometricCenter;
+            offset = {
+                x: O.x / center[0],
+                y: O.y / center[1]
+            };
+
+            //画出轮廓线
+            let stroke = {
+                stroke: border.color,
+                strokeWidth: border.width
+            };
+            useMap.map.features.forEach(v => {
+                let geometry = v.geometry;
+                let g = svg.g();
+                if (geometry.type === 'MultiPolygon') {
+                    geometry.coordinates.forEach(vcs => {
+                        let gi = svg.g();
+                        vcs.forEach(vcsi => {
+                            let d = [];
+                            vcsi.forEach(vcsii => {
+                                d.push(gpsToSvg(vcsii));
+                            });
+                            ejs.append(gi, svg.draw('lines', {
+                                d: d
+                            }, stroke));
+                        });
+                        ejs.append(g, gi);
+                    })
+                }
+
+                if (geometry.type === 'Polygon') {
+                    geometry.coordinates.forEach(vcs => {
+                        let gi = svg.g();
+                        let d = [];
+                        vcs.forEach(vcsi => {
+                            d.push(gpsToSvg(vcsi));
+                        });
+                        ejs.append(gi, svg.draw('lines', {
+                            d: d
+                        }, stroke));
+                        ejs.append(g, gi);
+                    })
+                }
+                chartPartMap.set(v.properties.name, g);
+            });
+        }
 
 
-        //【逻辑原点】
-        let O = {
-            //x位
-            x: (offsetSize.width + position.left - position.right) / 2,
-            //y位
-            y: (offsetSize.height + position.top - position.bottom) / 2
-        };
 
         //【svg坐标转逻辑正向笛卡尔坐标】
         let X = x => x + (1 - zoom) * O.x,
             Y = y => O.y * 2 - y + (zoom - 1) * O.y;
 
-        //组件容器
-        let chartPartMap = new Map();
+
 
         let mapName = map.split('/').pop();
 
@@ -68,12 +125,7 @@ CLASS(
 
         //缩放量
 
-        //计算偏移量
-        let center = useMap.addition[mapName].geometricCenter;
-        let offset = {
-            x: O.x / center[0],
-            y: O.y / center[1]
-        };
+
 
 
         //中心点
@@ -83,47 +135,7 @@ CLASS(
             cy: centerPoint.y,
         }));*/
 
-        //画出轮廓线
-        //useMap.map
 
-        let stroke = {
-            stroke: border.color,
-            strokeWidth: border.width
-        };
-        useMap.map.features.forEach(v => {
-            let geometry = v.geometry;
-            let g = svg.g();
-            if (geometry.type === 'MultiPolygon') {
-                geometry.coordinates.forEach(vcs => {
-                    let gi = svg.g();
-                    vcs.forEach(vcsi => {
-                        let d = [];
-                        vcsi.forEach(vcsii => {
-                            d.push(gpsToSvg(vcsii));
-                        });
-                        ejs.append(gi, svg.draw('lines', {
-                            d: d
-                        }, stroke));
-                    });
-                    ejs.append(g, gi);
-                })
-            }
-
-            if (geometry.type === 'Polygon') {
-                geometry.coordinates.forEach(vcs => {
-                    let gi = svg.g();
-                    let d = [];
-                    vcs.forEach(vcsi => {
-                        d.push(gpsToSvg(vcsi));
-                    });
-                    ejs.append(gi, svg.draw('lines', {
-                        d: d
-                    }, stroke));
-                    ejs.append(g, gi);
-                })
-            }
-            chartPartMap.set(v.properties.name, g);
-        });
 
 
         function gpsToSvg(gps) {
@@ -209,15 +221,47 @@ CLASS(
             }
             return result;
         }
+        
+        function initPaper(svgNode, fn) {
+            //【保存函数句柄】
+            userFn = fn;
+            //【保存SVG句柄】
+            svgDom = svgNode;
 
-        return {
-            option: option,
-            chartPartMap: chartPartMap,
-            sheetMap: new Map(),
-            eventMap: new Map(),
-            figure: figure(),
-            X: X,
-            Y: Y
+            //【内置样式表】
+            let sheet = svg.sheet(svgNode);
+
+            //【生成样式表】
+            sheetMap.forEach((v, k) => svg.setSheet(sheet, k, v));
+
+            //【1初始化图表】
+            initChart();
+
+            //【2生成部件】
+            chartPartMap = new Map(chartPartMap);
+
+            //【3组装节点】
+            IteratorNode = userFn({figure: figure()});
+            let chartPartArray = [];
+            chartPartMap.forEach(v => chartPartArray.push(v));
+            ejs.appendBatch(svgDom, [...chartPartArray, ...IteratorNode]);
+
+            //【4显示svg】
+            ejs.css(svgDom, {display: 'block'});
+        }
+
+        //【公共方法】
+        let publicFn = {
+            //option: option,
+            //chartPartMap: chartPartMap,
+            //sheetMap: sheetMap,
+            //eventMap: eventMap,
+            //figure: figure(),
+            //X: X,
+            //Y: Y,
+            initPaper: initPaper
         };
+
+        return publicFn;
     }
 );

@@ -247,15 +247,12 @@ CLASS(
         };
 
         //【数据容器】
-        //data = option.data;
-
         //拷贝原始数据
         data = {
             key: [...option.data.key],
             value: []
         };
         option.data.value.forEach(v => data.value.push(v));
-
 
         if (shot.capacity) {
             //小视区
@@ -443,7 +440,6 @@ CLASS(
                         orderKeyArr[i] = keySpan[i];
                     }
 
-                    //console.log(valueSpan.length);
                     //段内取最值
                     let valueArr = [],
                         keyArr = null;
