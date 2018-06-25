@@ -260,18 +260,10 @@ CLASS(
             let p = Math.ceil(thumWidth / (chartSize.width - yAxisSpace) * 100) / 100;//slice
             let length = Math.ceil(data.key.length * p);
 
-            /*data = {
-                key: data.key.slice(0, length),
-                value: data.value.slice(0, length),
-            };*/
-
             data.key = data.key.slice(0, length);
             data.value.forEach((v, i) => data.value[i] = v.slice(0, length));
 
-            //console.log(option.data.value[0]);
-
             data = capacity(data);
-
             detailHeight = 30;
         }
 

@@ -2,45 +2,47 @@
 
 CLASS('bar', //类名
     param => {
+        //【图表类型】
+        param.type = 'bar';
+
         //默认数据
-        ejs.assignDeep({
+        ejs.assignDeep(param, {
             data: {
-                value: [3, 25, 33, 49, 51, 91, -61],
+                value: [
+                    [3, 25, 33, 49, 51, 91, 61]
+                ],
                 key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
             }
-        },param);
-
-        //基类提供的必要函数
-        const {
-            svg,        // svg工具类
-            render,     // 渲染器
-            X,          // 坐标转换器
-            Y,          // 坐标转换器
-            className,  // 类名生成器
-            option,     // 配置项
-            figure     // 关键点
-        } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
-
-
-        //你的逻辑
-        let point = [];
-        figure.dataPoints.forEach(v => {
-            point.push(svg.draw('circle', {
-                cx: v.x,
-                cy: v.y,
-                r: 5
-            }));
         });
 
+        //【svg操作类】
+        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
-        //执行渲染
-        render([
-            ...point,//折点
-        ]);
+        //【基类提供的必要函数】
+        const {render} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
-        //向外界抛出你的公共方法
-        return {
+        //【你的渲染逻辑】
+        render(basic => {
+            let part = [];
+            const {figure} = basic;
 
-        }
+            figure.dataPoints[0].forEach(v => {
+                let width = figure.axisSpan.x / 2;
+                let bar = svg.create('rect', {
+                    x: v.x - width / 2,
+                    y: v.y,
+                    width: width,
+                    height: figure.O.y - v.y,
+                    strokeWidth: 1,
+                    strokeLocation: 'inside',
+                    stroke: '#06495a',
+                });
+                part.push(bar);
+            });
+
+            return part;
+        });
+        //【向外界抛出你的公共方法】
+        return {}
     }
 );

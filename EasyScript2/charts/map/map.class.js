@@ -6,12 +6,7 @@ CLASS('map', //类名
         param.type = 'map';
 
         //【默认数据】
-        ejs.assignDeep(param, {
-            data: {
-                value: [13, 25, 33, 49, 51, 91, 61],
-                key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
-            }
-        });
+        ejs.assignDeep(param, {});
 
         //【svg操作类】
         const svg = NEW_ASYNC(ejs.root + 'svg/svg');

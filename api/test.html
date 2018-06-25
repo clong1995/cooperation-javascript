@@ -2,27 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>核心功能完毕</title>
     <style>
-        h1 {
-            text-align: center;
-        }
-
-        .box {
-            width: 90%;
+        .box{
+            width: 1000px;
             height: 400px;
-            margin: 0 auto;
             background: #fff;
+            margin-bottom: 20px;
         }
-
-        .option {
-            text-align: center;
-            margin: 10px 0;
+        .pie{
+            width: 500px;
+            height: 500px;
+            background: #fff;
+            margin-bottom: 20px;
+        }
+        .map{
+            width: 1400px;
+            height: 700px;
+            background: #fff;
+            margin-bottom: 20px;
         }
     </style>
-    <script src="../../../EasyScript2/EBase.class.js"></script>
+    <script src="../EasyScript2/EBase.class.js"></script>
     <script>
-        ejs.ready(() => doIt());
+        ejs.ready(() => {
+            //折线1
+            NEW(ejs.root + 'charts/line/line',{
+                element: '#line1'
+            });
+
+            //折线二
+            NEW(ejs.root + 'charts/line/line004', {
+                element: '#line2',
+                data: bigRandom(1000, 1, 1, 1)
+            });
+
+            // 饼图
+            NEW(ejs.root + 'charts/pie/pie',{
+                element: '#pie'
+            });
+
+            //地图
+            NEW(ejs.root + 'charts/map/map',{
+                element: '#map'
+            });
+
+            //柱状图
+            NEW(ejs.root + 'charts/bar/bar', {element: '#bar'});
+        });
+
         function bigRandom(total, itemCount = 1, maximum = 1, multiple = 1) {
             let data = {value: [], key: []};
             for (let i = 0; i < itemCount; ++i) {
@@ -52,38 +80,26 @@
             }
             return data;
         }
-        function doIt() {
-            //TODO 卸载以后完善
-            let chart = ejs.query('#box').childNodes[0];
-            if (chart) ejs.remove(chart);
 
-            //随机数据
 
-            let count = ejs.query('#count').value,
-                item = ejs.query('#item').value;
-            ejs.html(ejs.query('#sum'),count*item);
-
-            let data = bigRandom(count, item, 1, 1);
-
-            //生层图表
-            NEW(ejs.root + 'charts/line/line004', {
-                element: '#box',
-                data: data
-            });
-        }
     </script>
 </head>
 <body>
-<h1>百万级大量数据 摘要+聚合+区选</h1>
-<div class="option">
-    随机数据量：
-    <input type="text" id="count" value="1000"/>
-    X
-    <input type="text" id="item" value="1"/>
-    =
-    <span id="sum"></span>
-    <button onclick="line2()">执行</button>
-</div>
-<div id="box" class="box"></div>
+
+<h1>折线一</h1>
+<div id="line1" class="box"></div>
+
+<h1>折线二</h1>
+<div id="line2" class="box"></div>
+
+<h1>饼图</h1>
+<div id="pie" class="pie"></div>
+
+<h1>地图</h1>
+<div id="map" class="map"></div>
+
+<h1>地图</h1>
+<div id="bar" class="box"></div>
+
 </body>
 </html>

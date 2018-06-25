@@ -8,9 +8,26 @@
 CLASS(
     'map.paper',
     param => {
+        //【svg操作类】
+        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
+
+        let option = null;
+        let userFn = null;
+        let IteratorNode = null;
+        let svgDom = null;
+        let sheetMap = new Map();//样式
+        let eventMap = new Map();//事件
+        let O = null;
+        let offset = null;
+        //组件容器
+        let chartPartMap = new Map();
+        let shot = null;
+        let useMap = null;
+
         //【参数补全机制】
-        let option = ejs.assignDeep({
+        option = ejs.assignDeep({
             map: '中国/中国/中国',
+            center:null,
             zoom: 1.5,
             style: {
                 //位置
@@ -28,50 +45,48 @@ CLASS(
             }
         }, param);
 
-        //【svg操作类】
-        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
-
-        let userFn = null;
-        let IteratorNode = null;
-        let svgDom = null;
-        let sheetMap = new Map();//样式
-        let eventMap = new Map();//事件
-        let O = null;
-        let offset = null;
-        //组件容器
-        let chartPartMap = new Map();
 
         //【简化链式查找】
-        let
-            map = option.map,
-            //大小
-            offsetSize = option.offsetSize,
-            zoom = option.zoom,
-            border = option.style.border,
-            //定位
-            position = option.style.position;
+        shot = {
+            map : option.map,
+            center:option.center,
+            offsetSize : option.offsetSize,
+            zoom : option.zoom,
+            border : option.style.border,
+            position : option.style.position
+        };
 
+        //TODO 这个函数太耗时且不优雅，要优化
+        useMap = getMap(shot.map);
 
         function initChart(){
+
+            let mapName = shot.map.split('/').pop();
+
             //【逻辑原点】
             O = {
                 //x位
-                x: (offsetSize.width + position.left - position.right) / 2,
+                x: (shot.offsetSize.width + shot.position.left - shot.position.right) / 2,
                 //y位
-                y: (offsetSize.height + position.top - position.bottom) / 2
+                y: (shot.offsetSize.height + shot.position.top - shot.position.bottom) / 2
             };
 
-            //计算偏移量
-            let center = useMap.addition[mapName].geometricCenter;
+            //没有设置中心
+            if(!shot.center){
+                //shot.center = useMap.addition[mapName].geometricCenter;
+                let properties = useMap.map.features[0].properties;
+                shot.center = [properties.X,properties.Y];
+            }
+
             offset = {
-                x: O.x / center[0],
-                y: O.y / center[1]
+                x: O.x / shot.center[0],
+                y: O.y / shot.center[1]
             };
 
             //画出轮廓线
             let stroke = {
-                stroke: border.color,
-                strokeWidth: border.width
+                stroke: shot.border.color,
+                strokeWidth: shot.border.width
             };
             useMap.map.features.forEach(v => {
                 let geometry = v.geometry;
@@ -109,39 +124,27 @@ CLASS(
             });
         }
 
+        function X(x) {
+            return x + (1 - shot.zoom) * O.x;
+        }
+
+        function Y(y) {
+            return O.y * 2 - y + (shot.zoom - 1) * O.y;
+        }
 
 
-        //【svg坐标转逻辑正向笛卡尔坐标】
-        let X = x => x + (1 - zoom) * O.x,
-            Y = y => O.y * 2 - y + (zoom - 1) * O.y;
-
-
-
-        let mapName = map.split('/').pop();
-
-
-        //TODO 这个函数太耗时且不优雅，要优化
-        let useMap = getMap(map);
-
-        //缩放量
-
-
-
-
-        //中心点
-        /*let centerPoint = gpsToSvg(center);
+        /*//中心点
+        let centerPoint = gpsToSvg(shot.center);
         chartPartMap.set('centerPoint', svg.draw('circle', {
             cx: centerPoint.x,
             cy: centerPoint.y,
         }));*/
 
-
-
-
+        //GPS转svg坐标
         function gpsToSvg(gps) {
             return {
-                x: X(gps[0] * offset.x * zoom),
-                y: Y(gps[1] * offset.y * zoom),
+                x: X(gps[0] * offset.x * shot.zoom),
+                y: Y(gps[1] * offset.y * shot.zoom),
             }
         }
 
@@ -155,9 +158,7 @@ CLASS(
             //TODO 这里做法不太优雅。。。以后优化
             let res = {};
             res['map'] = decode(ejs.loadFileAsync(ejs.root + 'charts/map/maps/' + map + '.json'));
-            res['addition'] = ejs.loadFileAsync(ejs.root + 'charts/map/maps/' + map.split('/')[0] + '/addition.json');
-            if (!res['map'] || !res['addition'])
-                ejs.log('地图文件加载失败', 'error');
+            if (!res['map']) ejs.log('地图文件加载失败', 'error');
             return res;
         }
 

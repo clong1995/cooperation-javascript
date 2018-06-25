@@ -31,17 +31,20 @@ CLASS(
             'pie': 'center.paper',
             'map': 'map.paper'
         }[param.type];
+
         if (!currPaper) {
             ejs.log('当前的图标表类型为[' + param.type + ']，此类型暂不支持，详情参阅www.xxxxxx.com/api/xxx', 'error');
             return;
         }
 
+        //【svg操作类】
+        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
+
         //【获取容器大小】
         ejs.css(elem, {padding: 0, position: 'relative'});
         let offsetSize = {width: elem.offsetWidth, height: elem.offsetHeight};
 
-        //【svg操作类】
-        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
+
 
         //【追加信息】
         ejs.assignDeep(param, {
