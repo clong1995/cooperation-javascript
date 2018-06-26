@@ -158,6 +158,7 @@ CLASS(
             //TODO 这里做法不太优雅。。。以后优化
             let res = {};
             res['map'] = decode(ejs.loadFileAsync(ejs.root + 'charts/map/maps/' + map + '.json'));
+
             if (!res['map']) ejs.log('地图文件加载失败', 'error');
             return res;
         }

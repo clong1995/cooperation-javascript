@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .box {
+            width: 950px;
+            height: 500px;
+            float: left;
+        }
+    </style>
+    <script src="../../../EasyScript2/EBase.class.js"></script>
+    <script>
+        ejs.ready(() => {
+            //最简单的调用一个组件
+            NEW(ejs.root + 'charts/bar/01', {
+                element: '#box'
+            });
+            NEW(ejs.root + 'charts/bar/bar', {
+                element: '#box1'
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="box" class="box"></div>
+<div id="box1" class="box"></div>
+</body>
+</html>

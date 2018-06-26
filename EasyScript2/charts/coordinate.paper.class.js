@@ -56,19 +56,24 @@ CLASS(
         //【参数补全机制】
         option = ejs.assignDeep({
             style: {
+                background: '#fff',
+                title: {
+                    x: 'default',
+                    y: 'default',
+                    display: param.theme.display,
+                    fontSize: param.theme.fontSize,
+                    content: 'EasyScrip图表标题！',
+                    color: '#ccc',
+                    fontWeight: param.theme.fontWeight,
+                    fontFamily: param.theme.fontFamily,
+                },
                 //位置
                 position: {
-                    top: param.theme.fontSize,
+                    top: param.theme.fontSize * 3,
                     right: param.theme.fontSize,
                     bottom: param.theme.fontSize,
                     left: param.theme.fontSize
                 },
-                /*position: {
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0
-                },*/
                 //坐标轴
                 axis: {
                     //x轴
@@ -77,7 +82,7 @@ CLASS(
                         //轴线
                         line: {
                             display: param.theme.display,
-                            borderColor: 'rgba(0,0,0,1)',
+                            borderColor: param.theme.color[0],
                             borderWidth: 2,
                             borderStyle: 'solid',//dashed
                         },
@@ -86,26 +91,27 @@ CLASS(
                             display: param.theme.display,
                             height: 10,
                             borderWidth: 2,
-                            borderColor: 'rgba(0,0,0,1)'
+                            borderColor: param.theme.color[0]
                         },
                         //文本
                         label: {
                             display: param.theme.display,
                             fontSize: param.theme.fontSize,
                             lineHeight: param.theme.fontSize,
-                            color: 'rgba(0,0,0,1)',
-                            fontWeight: 'normal',
-                            fontFamily: '\'Microsoft YaHei\',sans-serif',
+                            color: param.theme.color[0],
+                            fontWeight: param.theme.fontWeight,
+                            fontFamily: param.theme.fontFamily,
                             align: 'center'
                         }
                     },
                     //y轴
                     y: {
                         display: param.theme.display,
+                        show: 'all',//odd表示奇数行，even表示偶数行;
                         //轴线
                         line: {
                             display: param.theme.display,
-                            borderColor: 'rgba(0,0,0,1)',
+                            borderColor: param.theme.color[0],
                             borderWidth: 2,
                             borderSyle: 'solid',//dashed
                         },
@@ -114,16 +120,16 @@ CLASS(
                             display: param.theme.display,
                             width: 10,
                             borderWidth: 2,
-                            borderColor: 'rgba(0,0,0,1)'
+                            borderColor: param.theme.color[0]
                         },
                         //文本
                         label: {
                             display: param.theme.display,
                             fontSize: param.theme.fontSize,
                             lineHeight: param.theme.fontSize,
-                            color: 'rgba(0,0,0,1)',
-                            fontWeight: 'normal',
-                            fontFamily: '\'Microsoft YaHei\',sans-serif',
+                            color: param.theme.color[0],
+                            fontWeight: param.theme.fontWeight,
+                            fontFamily: param.theme.fontFamily,
                             align: 'center'
                         }
                     },
@@ -132,7 +138,7 @@ CLASS(
                         display: param.theme.display,
                         point: {
                             display: param.theme.display,
-                            borderColor: 'rgba(0,0,0,1)',
+                            borderColor: param.theme.color[0],
                             borderWidth: 2,
                             width: 5,
                             background: 'rgba(255,255,255,1)',
@@ -145,9 +151,9 @@ CLASS(
                             content: 'O',
                             fontSize: param.theme.fontSize,
                             lineHeight: 20,
-                            color: 'rgba(0,0,0,1)',
-                            fontWeight: 'normal',
-                            fontFamily: '\'Microsoft YaHei\',sans-serif',
+                            color: param.theme.color[0],
+                            fontWeight: param.theme.fontWeight,
+                            fontFamily: param.theme.fontFamily,
                             align: 'center'
                         }
                     },
@@ -204,6 +210,10 @@ CLASS(
 
         //【简化链式查找】
         shot = {
+
+            //背景
+            title: option.style.title,
+
             //取样
             capacity: option.capacity,
 
@@ -424,7 +434,7 @@ CLASS(
                     for (let i = 0; i < valueSpan.length; ++i) orderValueArr.push(new Array(length))
 
                     //用来丰富细节
-                    let orderValueSpan = Math.ceil(keySpan.length/2);
+                    let orderValueSpan = Math.ceil(keySpan.length / 2);
                     for (let i = 0; i < length; i += orderValueSpan) {
                         for (let j = 0; j < valueSpan.length; ++j) {
                             orderValueArr[j][i] = valueSpan[j][i]
@@ -637,10 +647,13 @@ CLASS(
 
                 yAxisPoint.forEach((v, i) => {
                     if (!(i % interval)) {
-                        yTickArr.push(ejs.attr(yTickNode.cloneNode(), {
-                            y1: v,
-                            y2: v
-                        }))
+                        if (oddEven(i)) {
+                            yTickArr.push(ejs.attr(yTickNode.cloneNode(), {
+                                y1: v,
+                                y2: v
+                            }))
+                        }
+
                     }
                 });
                 yTickG = svg.g(yTickArr);
@@ -651,6 +664,17 @@ CLASS(
             }
             //x刻度和y刻度,目前混合到一块处理
             return svg.g([xTickG, yTickG]);
+        }
+
+
+        function oddEven(index) {
+            let flag = true;
+            if (shot.axisY.show !== 'all') {
+                flag = !(index % 2);
+                if (shot.axisY.show !== 'even')//偶数
+                    flag = !flag;
+            }
+            return flag;
         }
 
 
@@ -697,10 +721,12 @@ CLASS(
 
                 yAxisPoint.forEach((v, i) => {
                     if (!(i % interval)) {
-                        let cloneNode = yAxisLabelNode.cloneNode();
-                        cloneNode.textContent = yAxisData[i];
-                        ejs.attr(cloneNode, {y: v + shot.yLabel.lineHeight / 5});
-                        yAxisLabelArr.push(cloneNode);
+                        if (oddEven(i)) {
+                            let cloneNode = yAxisLabelNode.cloneNode();
+                            cloneNode.textContent = yAxisData[i];
+                            ejs.attr(cloneNode, {y: v + shot.yLabel.lineHeight / 5});
+                            yAxisLabelArr.push(cloneNode);
+                        }
                     }
                 });
                 yAxisLabelG = svg.g(yAxisLabelArr);
@@ -724,48 +750,50 @@ CLASS(
 
             if (shot.grid.display !== 'none') {
                 //纵向
-                if (shot.xGrid.display !== 'none') {
-                    let xGridArr = [];
-                    let xGridNode = svg.draw('line', {
+                if (shot.yGrid.display !== 'none') {
+                    let yGridArr = [];
+                    let yGridNode = svg.draw('line', {
                         y1: yAxisStart.y,
                         y2: yAxisStart.y - axisLength.y
                     });
 
                     xAxisPoint.forEach((v, i) => {
                         if (xAxisData[i]) {
-                            xGridArr.push(ejs.attr(xGridNode.cloneNode(), {
+                            yGridArr.push(ejs.attr(yGridNode.cloneNode(), {
                                 x1: v,
                                 x2: v
-                            }))
-                        }
-                    });
-                    xGridG = svg.g(xGridArr);
-                    ejs.css(xGridG, {
-                        stroke: shot.xGrid.borderColor,
-                        strokeWidth: shot.xGrid.borderWidth,
-                    });
-                }
-
-                //横向
-                if (shot.yGrid.display !== 'none') {
-                    let yGridArr = [];
-                    let yGridNode = svg.draw('line', {
-                        x1: X(0),
-                        x2: axisLength.x + O.x
-                    });
-
-                    yAxisPoint.forEach((v, i) => {
-                        if (!(i % Math.round(interval / 2))) {
-                            yGridArr.push(ejs.attr(yGridNode.cloneNode(), {
-                                y1: v,
-                                y2: v
                             }))
                         }
                     });
                     yGridG = svg.g(yGridArr);
                     ejs.css(yGridG, {
                         stroke: shot.yGrid.borderColor,
-                        strokeWidth: shot.yGrid.borderWidth
+                        strokeWidth: shot.yGrid.borderWidth,
+                    });
+                }
+
+                //横向
+                if (shot.xGrid.display !== 'none') {
+                    let xGridArr = [];
+                    let xGridNode = svg.draw('line', {
+                        x1: X(0),
+                        x2: axisLength.x + O.x
+                    });
+
+                    yAxisPoint.forEach((v, i) => {
+                        if (!(i % Math.round(interval / 2))) {
+                            if (oddEven(i)) {
+                                xGridArr.push(ejs.attr(xGridNode.cloneNode(), {
+                                    y1: v,
+                                    y2: v
+                                }))
+                            }
+                        }
+                    });
+                    xGridG = svg.g(xGridArr);
+                    ejs.css(xGridG, {
+                        stroke: shot.xGrid.borderColor,
+                        strokeWidth: shot.xGrid.borderWidth
                     });
                 }
             }
@@ -1046,6 +1074,32 @@ CLASS(
             }
         }
 
+        //标题
+        function title() {
+            let title = null;
+            if (shot.title.display !== 'none') {
+                let x = O.x,
+                    y = yAxisStart.y - axisLength.y - shot.title.fontSize;
+                if (shot.title.x !== 'default') {
+                    x = shot.title.x;
+                }
+                if (shot.title.y !== 'default') {
+                    y = shot.title.y;
+                }
+
+                title = svg.draw('text', {
+                    x: x,
+                    y: y,
+                    text: shot.title.content
+                }, {
+                    fill: shot.title.color,
+                    fontSize: shot.title.fontSize
+                });
+            }
+
+            return svg.g([title]);
+        }
+
         /**
          * 计算关键点
          * */
@@ -1130,6 +1184,7 @@ CLASS(
 
             //【2生成部件】
             chartPartMap = new Map([
+                ['title', title()],
                 ['axis', drawAxis()],
                 ['origin', drawOrigin()],
                 ['tick', drawTick()],
@@ -1151,7 +1206,7 @@ CLASS(
 
         //【公共方法】
         let publicFn = {
-            //option: option,
+            option: option,
             //chartPartMap: chartPartMap,
             //sheetMap: sheetMap,
             //eventMap: eventMap,

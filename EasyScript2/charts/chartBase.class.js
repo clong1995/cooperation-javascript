@@ -41,7 +41,10 @@ CLASS(
         const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
         //【获取容器大小】
-        ejs.css(elem, {padding: 0, position: 'relative'});
+        ejs.css(elem, {
+            padding: 0,
+            position: 'relative'
+        });
         let offsetSize = {width: elem.offsetWidth, height: elem.offsetHeight};
 
 
@@ -62,7 +65,7 @@ CLASS(
         });
 
         //【使用图纸】
-        const {initPaper} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
+        const {option,initPaper} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
 
         //【设置样式表】
         /*function setSheet(select, rule) {
@@ -99,6 +102,9 @@ CLASS(
             ejs.attr(svgNode, {
                 viewBox: "0 0 " + offsetSize.width + " " + offsetSize.height,
                 //preserveAspectRatio:"none"//无比例填充
+            });
+            ejs.css(elem, {
+                background: option.style.background
             });
             ejs.append(elem, svgNode);
 
