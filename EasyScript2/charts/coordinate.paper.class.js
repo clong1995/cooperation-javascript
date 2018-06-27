@@ -52,6 +52,8 @@ CLASS(
         let IteratorNode = null;
         let detailHeight = 0;//底部细节轴
 
+        //【主题】 TODO 后面要删除掉 theme call className offsetSize type 等危险属性给二次开发
+        let theme = param.theme;
 
         //【参数补全机制】
         option = ejs.assignDeep({
@@ -60,85 +62,85 @@ CLASS(
                 title: {
                     x: 'default',
                     y: 'default',
-                    display: param.theme.display,
-                    fontSize: param.theme.fontSize,
+                    display: theme.display,
+                    fontSize: theme.fontSize,
                     content: 'EasyScrip图表标题！',
-                    color: '#ccc',
-                    fontWeight: param.theme.fontWeight,
-                    fontFamily: param.theme.fontFamily,
+                    color: theme.color,
+                    fontWeight: theme.fontWeight,
+                    fontFamily: theme.fontFamily,
                 },
                 //位置
                 position: {
-                    top: param.theme.fontSize * 3,
-                    right: param.theme.fontSize,
-                    bottom: param.theme.fontSize,
-                    left: param.theme.fontSize
+                    top: theme.fontSize * 3,
+                    right: theme.fontSize,
+                    bottom: theme.fontSize,
+                    left: theme.fontSize
                 },
                 //坐标轴
                 axis: {
                     //x轴
                     x: {
-                        display: param.theme.display,
+                        display: theme.display,
                         //轴线
                         line: {
-                            display: param.theme.display,
-                            borderColor: param.theme.color[0],
+                            display: theme.display,
+                            borderColor: theme.color,
                             borderWidth: 2,
                             borderStyle: 'solid',//dashed
                         },
                         //坐标刻度线
                         tick: {
-                            display: param.theme.display,
+                            display: theme.display,
                             height: 10,
                             borderWidth: 2,
-                            borderColor: param.theme.color[0]
+                            borderColor: theme.color
                         },
                         //文本
                         label: {
-                            display: param.theme.display,
-                            fontSize: param.theme.fontSize,
-                            lineHeight: param.theme.fontSize,
-                            color: param.theme.color[0],
-                            fontWeight: param.theme.fontWeight,
-                            fontFamily: param.theme.fontFamily,
+                            display: theme.display,
+                            fontSize: theme.fontSize,
+                            lineHeight: theme.fontSize,
+                            color: theme.color,
+                            fontWeight: theme.fontWeight,
+                            fontFamily: theme.fontFamily,
                             align: 'center'
                         }
                     },
                     //y轴
                     y: {
-                        display: param.theme.display,
+                        display: theme.display,
                         show: 'all',//odd表示奇数行，even表示偶数行;
                         //轴线
                         line: {
-                            display: param.theme.display,
-                            borderColor: param.theme.color[0],
+                            display: theme.display,
+                            borderColor: theme.color,
                             borderWidth: 2,
                             borderSyle: 'solid',//dashed
                         },
                         //坐标刻度线
                         tick: {
-                            display: param.theme.display,
+                            display: theme.display,
                             width: 10,
                             borderWidth: 2,
-                            borderColor: param.theme.color[0]
+                            borderColor: theme.color
                         },
                         //文本
                         label: {
-                            display: param.theme.display,
-                            fontSize: param.theme.fontSize,
-                            lineHeight: param.theme.fontSize,
-                            color: param.theme.color[0],
-                            fontWeight: param.theme.fontWeight,
-                            fontFamily: param.theme.fontFamily,
+                            display: theme.display,
+                            fontSize: theme.fontSize,
+                            lineHeight: theme.fontSize,
+                            color: theme.color,
+                            fontWeight: theme.fontWeight,
+                            fontFamily: theme.fontFamily,
                             align: 'center'
                         }
                     },
                     //原点
                     origin: {
-                        display: param.theme.display,
+                        display: theme.display,
                         point: {
-                            display: param.theme.display,
-                            borderColor: param.theme.color[0],
+                            display: theme.display,
+                            borderColor: theme.color,
                             borderWidth: 2,
                             width: 5,
                             background: 'rgba(255,255,255,1)',
@@ -147,28 +149,28 @@ CLASS(
                         },
                         //文本
                         label: {
-                            display: param.theme.display,
+                            display: theme.display,
                             content: 'O',
-                            fontSize: param.theme.fontSize,
+                            fontSize: theme.fontSize,
                             lineHeight: 20,
-                            color: param.theme.color[0],
-                            fontWeight: param.theme.fontWeight,
-                            fontFamily: param.theme.fontFamily,
+                            color: theme.color,
+                            fontWeight: theme.fontWeight,
+                            fontFamily: theme.fontFamily,
                             align: 'center'
                         }
                     },
                     //网格线
                     grid: {
-                        display: param.theme.display,
+                        display: theme.display,
                         x: {
                             borderWidth: 1,
                             borderColor: 'rgba(0,0,0,0.2)',
-                            display: param.theme.display
+                            display: theme.display
                         },
                         y: {
                             borderWidth: 1,
                             borderColor: 'rgba(0,0,0,0.1)',
-                            display: param.theme.display
+                            display: theme.display
                         }
                     },
                     //辅助
@@ -188,31 +190,27 @@ CLASS(
                 },
                 //图例
                 legend: {
-                    //标题
-                    title: {
-                        /*css rule*/
-                    },
+                    display: theme.display,
+                    x: 'default',
+                    y: 'default',
+                    col: 1,
+                    content: [],
                     //图例项
-                    item: {
-                        //标志
-                        marker: {
-                            /*css rule*/
-                        },
-                        //文本
-                        label: {
-                            /*css rule*/
-                        }
-                    }
+                    marker: [],
+                    fontSize: theme.fontSize,
+                    fontWeight: theme.fontWeight,
+                    fontFamily: theme.fontFamily,
                 }
             }
         }, param);
 
-
         //【简化链式查找】
         shot = {
-
-            //背景
+            //标题
             title: option.style.title,
+
+            //图例
+            legend: option.style.legend,
 
             //取样
             capacity: option.capacity,
@@ -1167,6 +1165,67 @@ CLASS(
             };
         }
 
+
+        function legend() {
+            let legend = [];
+            if (shot.legend.display !== 'none') {
+                if (shot.legend.content.length === 0) {
+                    for (let i = 1; i <= data.value.length; i++) shot.legend.content.push('类目' + i);
+                }
+            }
+
+
+            //方块
+            let iconWidth = 10,
+                iconHeight = 10;
+
+            let x = chartSize.width
+                - (JSON.stringify(shot.legend.content).length
+                    - shot.legend.content.length * 2 //"
+                    - 2//[
+                    - shot.legend.content.length - 1//,
+                ) * shot.legend.fontSize
+                - iconWidth * shot.legend.content.length
+                - shot.position.right,
+                y = yAxisStart.y - axisLength.y - shot.legend.fontSize;
+
+            if (shot.legend.x !== 'default') {
+                x = shot.legend.x;
+            }
+            if (shot.legend.y !== 'default') {
+                y = shot.legend.y;
+            }
+
+            shot.legend.content.forEach((v, i) => {
+                //icon
+                let icon = svg.create('rect', {
+                    x: x,
+                    y: y - iconHeight,
+                    width: iconWidth,
+                    height: iconHeight,
+                    fill: theme.colors[i],
+                    stroke: 'none',
+                });
+
+                //文本
+                let text = svg.draw('text', {
+                    x: x + iconWidth + shot.legend.fontSize / 2,
+                    y: y,
+                    text: v
+                }, {
+                    fill: theme.colors[i],
+                    fontSize: shot.legend.fontSize
+                });
+
+                x += iconWidth + shot.legend.fontSize * v.length * 1.4;
+
+                legend.push(icon, text);
+            });
+
+            return svg.g(legend);
+        }
+
+
         function initPaper(svgNode, fn) {
             //【保存函数句柄】
             userFn = fn;
@@ -1190,11 +1249,12 @@ CLASS(
                 ['tick', drawTick()],
                 ['axisLabel', drawAxisLabel()],
                 ['grid', drawGrid()],
+                ['legend', legend()],
                 ['detail', drawDetail()]
             ]);
 
             //【3组装节点】
-            IteratorNode = userFn({figure: figure()});
+            IteratorNode = userFn(figure());
             let chartPartArray = [];
             chartPartMap.forEach(v => chartPartArray.push(v));
             ejs.appendBatch(svgDom, [...chartPartArray, ...IteratorNode]);

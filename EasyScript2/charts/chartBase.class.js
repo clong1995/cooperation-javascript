@@ -47,22 +47,20 @@ CLASS(
         });
         let offsetSize = {width: elem.offsetWidth, height: elem.offsetHeight};
 
-
-
         //【追加信息】
-        ejs.assignDeep(param, {
-            // 【大小】
-            offsetSize: offsetSize,
+        param['offsetSize'] = offsetSize;
+        param = ejs.assignDeep({
             //【默认样式】
             theme: {
                 display: 'block',
-                color: ['#333', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
+                colors: ['#61a0a8', '#2f4554', '#c23531', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
+                color:'#333',
                 fontSize: 14,
                 fontWeight: 'normal',
-                fontFamily: '\'Microsoft YaHei\',sans-serif',
+                fontFamily: 'Microsoft YaHei,sans-serif',
                 borderWidth: 2
             }
-        });
+        },param);
 
         //【使用图纸】
         const {option,initPaper} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
@@ -107,9 +105,6 @@ CLASS(
                 background: option.style.background
             });
             ejs.append(elem, svgNode);
-
-
-
             //生成图纸
             initPaper(svgNode,fn);
         }
@@ -128,6 +123,8 @@ CLASS(
         //【公共属性】
         return {
             render: render,
+            option:option,
+            svg:svg
             //addEvent: addEvent,
             //setSheet: setSheet,
             //getPaper: getPaper,

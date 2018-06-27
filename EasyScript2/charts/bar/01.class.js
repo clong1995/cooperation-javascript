@@ -7,20 +7,41 @@ CLASS('01', //类名
         //【默认数据】
         param = ejs.assignDeep({
             data: {
-                value: [[3, 25, 33, 49, 51, 91, 61]],
-                key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
+                value: [
+                    [3, 25, 33, 91, 51, 21, 61],
+                    [13, 5, 23, 39, 21, 41, 51],
+                    [23, 15, 3, 9, 61, 81, 21],
+                    [2, 45, 13, 19, 5, 28, 8]
+                ],
+                key: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            },
+            theme: {
+                colors: [
+                    "#4AD2EE",
+                    "#E61E79",
+                    "#6AD8C3",
+                    "#1B4667",
+                    "#2A7590",
+                    "#4C184B"]
             },
             style: {
                 background: '#091239',
-                title:{
-                    y:50,
-                    fontSize:18
+                title: {
+                    y: 50,
+                    fontSize: 18,
+                    color: '#fff',
+                    content: '平铺柱状图'
                 },
-                position:{
-                    top:90,
-                    right:50,
-                    bottom:20,
-                    left:30
+                legend: {
+                    y: 50,
+                    fontSize: 16,
+                    content: ['蒸发量', '降水量', '温度', '湿度'],
+                },
+                position: {
+                    top: 90,
+                    right: 50,
+                    bottom: 20,
+                    left: 30
                 },
                 axis: {
                     x: {
@@ -32,12 +53,12 @@ CLASS('01', //类名
                         },
                         label: {
                             color: '#48CCE9',
-                            fontSize:18,
-                            lineHeight:21
+                            fontSize: 18,
+                            lineHeight: 21
                         }
                     },
                     y: {
-                        show:'even',
+                        show: 'even',
                         line: {
                             display: 'none',
                         },
@@ -46,7 +67,7 @@ CLASS('01', //类名
                         },
                         label: {
                             color: '#48CCE9',
-                            fontSize:18
+                            fontSize: 18
                         }
                     },
                     origin: {
@@ -65,31 +86,34 @@ CLASS('01', //类名
 
             },
         }, param);
-
-        //【svg操作类】
-        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
         //【基类提供的必要函数】
-        const {render} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
+        const {
+            render,//渲染函数
+            option,//最终配置
+            svg //svg操作类
+        } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
-        render(basic => {
-            //关键数据
-            const {figure} = basic;
+        console.log(option);
 
+        render(figure => {
             //根据数据绘制图像
             let bars = [];//柱子
-            figure.dataPoints[0].forEach(v => {
-                let width = figure.axisSpan.x / 5;
-                let bar = svg.create('rect', {
-                    x: v.x - width / 2,
-                    y: v.y,
-                    width: width,
-                    height: figure.O.y - v.y,
-                    strokeWidth: 1,
-                    strokeLocation: 'inside',
-                    fill:'#56BAD4',
-                    stroke: 'none',
+            let barWidth = figure.axisSpan.x / figure.dataPoints.length;
+            if (barWidth > 15) barWidth = 15;
+            //生成图形
+            figure.dataPoints.forEach((v, i) => {
+                v.forEach((vi) => {
+                    let x = vi.x - (figure.dataPoints.length / 2) * (barWidth + barWidth / 2) + (barWidth / 4) + (barWidth + barWidth / 2) * i;
+                    let bar = svg.create('rect', {
+                        x: x,
+                        y: vi.y,
+                        width: barWidth,
+                        height: figure.O.y - vi.y,
+                        fill: option.theme.colors[i],
+                        stroke: 'none',
+                    });
+                    bars.push(bar);
                 });
-                bars.push(bar);
             });
 
             return [...bars];
