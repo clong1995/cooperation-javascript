@@ -22,8 +22,8 @@ CLASS('bar', //类名
         render(figure => {
             //根据数据绘制图像
             let bars = [];//柱子
-            let barWidth = figure.axisSpan.x / figure.dataPoints.length;
-            if (barWidth > 15) barWidth = 15;
+            let barWidth = figure.axisSpan.x / figure.dataPoints.length / 2;
+
             //生成图形
             figure.dataPoints.forEach((v, i) => {
                 v.forEach((vi) => {

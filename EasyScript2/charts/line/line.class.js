@@ -16,29 +16,22 @@ CLASS('line', //类名
                 key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
             }
         });
-
-        //【svg操作类】
-        const svg = NEW_ASYNC(ejs.root + 'svg/svg');
-
         //【基类提供的必要函数】
-        const {render} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
+        const {render,option,svg} = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
         //【你的渲染逻辑】
-        render(basic => {
+        render(figure => {
             let part = [];
-            const {figure} = basic;
-
             //【根据数据关键点画线】
-            figure.dataPoints.forEach(v=>{
+            figure.dataPoints.forEach((v,i)=>{
                 let line = svg.draw('lines', {
                     d: v
                 }, {
                     strokeWidth: 2,
-                    stroke: '#000'
+                    stroke: option.theme.colors[i]
                 });
                 part.push(line);
             });
-
             return part;
         });
         //【向外界抛出你的公共方法】

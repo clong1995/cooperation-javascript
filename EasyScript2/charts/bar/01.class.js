@@ -11,7 +11,9 @@ CLASS('01', //类名
                     [3, 25, 33, 91, 51, 21, 61],
                     [13, 5, 23, 39, 21, 41, 51],
                     [23, 15, 3, 9, 61, 81, 21],
-                    [2, 45, 13, 19, 5, 28, 8]
+                    [2, 45, 13, 19, 5, 28, 8],
+                    [22, 35, 43, 59, 45, 38, 18],
+                    [32, 45, 53, 79, 65, 58, 48]
                 ],
                 key: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
             },
@@ -35,7 +37,7 @@ CLASS('01', //类名
                 legend: {
                     y: 50,
                     fontSize: 16,
-                    content: ['蒸发量', '降水量', '温度', '湿度'],
+                    content: ['蒸发量', '降水量', '温度', '湿度','紫外线','空气密度'],
                 },
                 position: {
                     top: 90,
@@ -98,8 +100,8 @@ CLASS('01', //类名
         render(figure => {
             //根据数据绘制图像
             let bars = [];//柱子
-            let barWidth = figure.axisSpan.x / figure.dataPoints.length;
-            if (barWidth > 15) barWidth = 15;
+            let barWidth = figure.axisSpan.x / figure.dataPoints.length / 2;
+
             //生成图形
             figure.dataPoints.forEach((v, i) => {
                 v.forEach((vi) => {

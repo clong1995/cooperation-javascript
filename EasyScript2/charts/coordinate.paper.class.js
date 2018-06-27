@@ -1181,10 +1181,10 @@ CLASS(
 
             let x = chartSize.width
                 - (JSON.stringify(shot.legend.content).length
+                    - 2//[]
                     - shot.legend.content.length * 2 //"
-                    - 2//[
-                    - shot.legend.content.length - 1//,
-                ) * shot.legend.fontSize
+                    - shot.legend.content.length//,
+                ) * shot.legend.fontSize * 1.25
                 - iconWidth * shot.legend.content.length
                 - shot.position.right,
                 y = yAxisStart.y - axisLength.y - shot.legend.fontSize;
@@ -1217,7 +1217,7 @@ CLASS(
                     fontSize: shot.legend.fontSize
                 });
 
-                x += iconWidth + shot.legend.fontSize * v.length * 1.4;
+                x += iconWidth + shot.legend.fontSize * (v.length + 1);
 
                 legend.push(icon, text);
             });
