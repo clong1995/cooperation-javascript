@@ -734,7 +734,7 @@ class EBase {
                 }
             }));
             this._animation.set('none', this.setSheet('.' + this.simple(), {
-                display: 'none',
+                display: 'none !important',
                 opacity: 0,
                 visibility: 'hidden'
             }).substr(1));
@@ -779,7 +779,7 @@ class EBase {
                 }
             }));
             this._animation.set('block', this.setSheet('.' + this.simple(), {
-                display: 'block',
+                display: 'block !important',
                 opacity: 1,
                 visibility: 'visible'
             }).substr(1));
@@ -1155,49 +1155,59 @@ class EBase {
     /**
      * 绑定事件
      * @param selecter
-     * @param evt
-     * @param callback
+     * @param params
      */
     on(selecter, ...params) {
         let target = this.body;
         let evt = 'click';
         let callback = params.pop();
         //两个参数：selecter,evt,callback
-        if (params.length === 2) evt = params[0];
+        if (params.length === 1) evt = params[0];
         //三个参数：selecter,target,evt,callback
-        if (params.length === 3) {
+        if (params.length === 2) {
             target = params[0];
             evt = params[1];
         }
 
         //增加父元素列表
         if (!this._domEvent.has(target)) this._domEvent.set(target, new Map());
-        //增加事件元素
-        if (!this._domEvent.get(target).has(selecter)) this._domEvent.get(target).set(selecter, new Map());
-        //增加事件列表
-        if (!this._domEvent.get(target).get(selecter).get(evt)) {
-            this._domEvent.get(target).get(selecter).set(evt, new Set());
+
+        if(!this._eventMap.get(target)) this._eventMap.set(target,new Set());
+        if(!this._eventMap.get(target).has(evt)){
+            this._eventMap.get(target).add(evt);
             target.addEventListener(evt, e => {
                 //查找所有元素是否有事件
                 let domLen = e.path.length - 4 - 1;//排除body,html,document,window
                 //冒泡
-                for (; domLen + 1; --domLen)
+                for (; domLen + 1; --domLen){
                     this._onFunction(e.path[domLen], target, e.type);
+                }
             })
         }
+
+        //增加事件元素
+        if (!this._domEvent.get(target).has(selecter)) this._domEvent.get(target).set(selecter, new Map());
+        //增加事件列表
+        if (!this._domEvent.get(target).get(selecter).get(evt)) this._domEvent.get(target).get(selecter).set(evt, new Set());
         //保存事件
         this._domEvent.get(target).get(selecter).get(evt).add(callback);
+
+
+
     }
 
     /**
      * 执行on方法
      * @param node
+     * @param target
+     * @param event
      * @private
      */
     _onFunction(node, target, event) {
         let keyArr = [node.nodeName];
         if (node.id) keyArr.push('#' + node.id);
         node.classList.forEach(v => keyArr.push('.' + v));
+
         //遍历方法树
         keyArr.forEach(key => (this._domEvent.get(target).get(key) && this._domEvent.get(target).get(key).has(event))
             ? this._domEvent.get(target).get(key).get(event).forEach(v => v(node))
