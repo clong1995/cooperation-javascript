@@ -28,7 +28,7 @@ CLASS('line', //类名
                     d: v
                 }, {
                     strokeWidth: 2,
-                    stroke: option.theme.colors[i]
+                    stroke: option.theme.colors[i][0]
                 });
                 part.push(line);
             });

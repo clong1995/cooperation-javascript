@@ -39,8 +39,7 @@ CLASS(
             }
             delete attr.strokeLocation;
             for (let key in attr) {
-                if (attr[key] !== null)
-                    elem.setAttribute(ejs.underscored(key), attr[key]);
+                if (attr[key] !== null) elem.setAttribute(key, attr[key]);
             }
             return elem;
         }
@@ -101,12 +100,53 @@ CLASS(
             return def;
         }
 
+        //模糊
+        function blur(defs, spreadWidth, spreadHeight, {
+            blur = (spreadWidth + spreadHeight) / 4,
+            inset = 'in',
+            x = 0,
+            y = 0
+        } = {}) {
+            let id = ejs.simple();
+            let filter = create('filter', {
+                id: id,
+                width: spreadWidth,
+                height: spreadHeight,
+                y: spreadHeight / -2,
+                x: spreadWidth / -2
+            });
+            let feGaussianBlur = create('feGaussianBlur', {
+                in: "SourceGraphic",
+                stdDeviation: blur
+            });
+            let feOffset = create('feOffset', {
+                dx: x,
+                dy: y
+            });
+            let feMerge = null;
+            if (inset !== 'in') {
+                feMerge = create('feMerge');
+                ejs.appendBatch(feMerge, [
+                    create('feMergeNode'),
+                    create('feMergeNode', {
+                        in: "SourceGraphic"
+                    })
+                ])
+            }
+            ejs.append(defs, ejs.appendBatch(filter, [
+                feGaussianBlur,
+                feOffset,
+                feMerge
+            ]));
+            return "#" + id;
+        }
+
 
         function linearGradient(defs, {
             x1 = 0,
             y1 = 0,
-            x2 = "100%",
-            y2 = 0,
+            x2 = 0,
+            y2 = "100%",
             offset = {
                 "0%": {
                     color: 'rgb(14,171,212)',
@@ -525,24 +565,24 @@ CLASS(
 
         //画圆
         function text({
-                            x = 10,
-                            y = 10,
-                            text = '',
-                            align = 'right'
-                        } = {}, style = {}) {
+                          x = 10,
+                          y = 10,
+                          text = '',
+                          align = 'right'
+                      } = {}, style = {}) {
 
             let shape = create('text', {
                 x: x,
                 y: y
             });
-            if(align === 'center'){
-                style['textAnchor']='middle';
-            }else if(align === 'right'){
-                style['textAnchor']='start';
-            }else{
-                style['textAnchor']='end';
+            if (align === 'center') {
+                style['textAnchor'] = 'middle';
+            } else if (align === 'right') {
+                style['textAnchor'] = 'start';
+            } else {
+                style['textAnchor'] = 'end';
             }
-            if (text) ejs.html(shape,text);
+            if (text) ejs.html(shape, text);
             if (style) ejs.css(shape, style);
             return shape;
         }
@@ -597,7 +637,8 @@ CLASS(
             initDefs: initDefs,
             draw: draw,
             radialGradient: radialGradient,
-            linearGradient: linearGradient
+            linearGradient: linearGradient,
+            blur: blur
             /*bezier: bezier,
             getControlPoints:getControlPoints*/
         }

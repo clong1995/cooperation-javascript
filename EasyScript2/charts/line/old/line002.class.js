@@ -101,6 +101,7 @@ CLASS(
             itemDataBg = ejs.attr(svg.symbol(), {id: ejs.simple(), y: figure.axisStartEnd.yAxis.end.y}),
             itemDataBgStart = X(0) + figure.axisSpan.x / 2,
             itemDataBgWidth = .8;
+
         //柱状背景渐变
         let bgLinear = svg.linearGradient(defs);
         svg.def(defs, ejs.appendBatch(itemDataBg, [

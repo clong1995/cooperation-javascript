@@ -305,6 +305,10 @@ CLASS(
         yAxisSpace = yStrWidth + yTickWidth;
 
 
+        // 【defs】
+        let defs = svg.initDefs();
+
+
         /**
          * 提取最大最小数据
          * @param dataArr
@@ -1203,7 +1207,7 @@ CLASS(
                     y: y - iconHeight,
                     width: iconWidth,
                     height: iconHeight,
-                    fill: theme.colors[i],
+                    fill: theme.colors[i][0],
                     stroke: 'none',
                 });
 
@@ -1213,7 +1217,7 @@ CLASS(
                     y: y,
                     text: v
                 }, {
-                    fill: theme.colors[i],
+                    fill: theme.colors[i][0],
                     fontSize: shot.legend.fontSize
                 });
 
@@ -1241,8 +1245,12 @@ CLASS(
             //【1初始化图表】
             initChart();
 
+            /*console.log(defs);
+            console.log(title());*/
+
             //【2生成部件】
             chartPartMap = new Map([
+                ['defs', defs],
                 ['title', title()],
                 ['axis', drawAxis()],
                 ['origin', drawOrigin()],
@@ -1254,10 +1262,10 @@ CLASS(
             ]);
 
             //【3组装节点】
-            IteratorNode = userFn(figure());
+            IteratorNode = svg.g(userFn(figure()));
             let chartPartArray = [];
             chartPartMap.forEach(v => chartPartArray.push(v));
-            ejs.appendBatch(svgDom, [...chartPartArray, ...IteratorNode]);
+            ejs.appendBatch(svgDom, [...chartPartArray, IteratorNode]);
 
             //【4显示svg】
             ejs.css(svgDom, {display: 'block'});
@@ -1267,6 +1275,7 @@ CLASS(
         //【公共方法】
         let publicFn = {
             option: option,
+            defs:defs,
             //chartPartMap: chartPartMap,
             //sheetMap: sheetMap,
             //eventMap: eventMap,

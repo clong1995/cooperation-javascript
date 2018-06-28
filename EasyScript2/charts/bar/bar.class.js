@@ -33,7 +33,7 @@ CLASS('bar', //类名
                         y: vi.y,
                         width: barWidth,
                         height: figure.O.y - vi.y,
-                        fill: option.theme.colors[i],
+                        fill: option.theme.colors[i][0],
                         stroke: 'none',
                     });
                     bars.push(bar);
