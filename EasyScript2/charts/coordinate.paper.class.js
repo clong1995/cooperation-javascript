@@ -71,7 +71,7 @@ CLASS(
                 },
                 //位置
                 position: {
-                    top: theme.fontSize * 3,
+                    top: theme.fontSize * 4,
                     right: theme.fontSize,
                     bottom: theme.fontSize,
                     left: theme.fontSize
@@ -93,17 +93,31 @@ CLASS(
                             display: theme.display,
                             height: 10,
                             borderWidth: 2,
-                            borderColor: theme.color
+                            borderColor: theme.color,
+                            dx: 0,
+                            dy: 0
                         },
                         //文本
                         label: {
                             display: theme.display,
                             fontSize: theme.fontSize,
-                            lineHeight: theme.fontSize,
                             color: theme.color,
                             fontWeight: theme.fontWeight,
                             fontFamily: theme.fontFamily,
                             align: 'center'
+                        },
+                        //单位
+                        unit: {
+                            display: theme.display,
+                            content: 'x轴单位',
+                            color: theme.color,
+                            fontSize: theme.fontSize,
+                            fontWeight: theme.fontWeight,
+                            fontFamily: theme.fontFamily,
+                            dx: 0,
+                            dy: 0,
+                            x: 'default',
+                            y: 'default'
                         }
                     },
                     //y轴
@@ -122,17 +136,33 @@ CLASS(
                             display: theme.display,
                             width: 10,
                             borderWidth: 2,
-                            borderColor: theme.color
+                            borderColor: theme.color,
+                            dx: 0,
+                            dy: 0
                         },
                         //文本
                         label: {
                             display: theme.display,
                             fontSize: theme.fontSize,
-                            lineHeight: theme.fontSize,
                             color: theme.color,
                             fontWeight: theme.fontWeight,
                             fontFamily: theme.fontFamily,
-                            align: 'center'
+                            align: 'center',
+                            dx: 0,
+                            dy: 0
+                        },
+                        //单位
+                        unit: {
+                            display: theme.display,
+                            content: 'y轴单位',
+                            color: theme.color,
+                            fontSize: theme.fontSize,
+                            fontWeight: theme.fontWeight,
+                            fontFamily: theme.fontFamily,
+                            dx: 0,
+                            dy: 0,
+                            x: 'default',
+                            y: 'default'
                         }
                     },
                     //原点
@@ -152,7 +182,6 @@ CLASS(
                             display: theme.display,
                             content: 'O',
                             fontSize: theme.fontSize,
-                            lineHeight: 20,
                             color: theme.color,
                             fontWeight: theme.fontWeight,
                             fontFamily: theme.fontFamily,
@@ -228,12 +257,14 @@ CLASS(
             xLine: option.style.axis.x.line,
             xTick: option.style.axis.x.tick,
             xLabel: option.style.axis.x.label,
+            xUnit: option.style.axis.x.unit,
 
             //y轴系列
             axisY: option.style.axis.y,
             yLine: option.style.axis.y.line,
             yTick: option.style.axis.y.tick,
             yLabel: option.style.axis.y.label,
+            yUnit: option.style.axis.y.unit,
 
 
             //坐标原点
@@ -277,7 +308,7 @@ CLASS(
 
 
         //【x轴配置display变化引发的影响合计】
-        xStrHeight = shot.xLabel.display !== 'none' ? shot.xLabel.lineHeight * 1.25 : 0;
+        xStrHeight = shot.xLabel.display !== 'none' ? shot.xLabel.fontSize * 1.25 : 0;
         //坐标刻度线
         xTickHeight = shot.xTick.display !== 'none' ? shot.xTick.height : 0;
         if (shot.axisX.display === 'none')
@@ -302,7 +333,8 @@ CLASS(
         yTickWidth = shot.yTick.display !== 'none' ? shot.yTick.width : 0;
         if (shot.axisY.display === 'none')
             yStrWidth = yTickWidth = 0;
-        yAxisSpace = yStrWidth + yTickWidth;
+
+        yAxisSpace = yStrWidth + yTickWidth - (yStrWidth * shot.yLabel.dx);
 
 
         // 【defs】
@@ -595,7 +627,6 @@ CLASS(
                     sheetMap.set('.' + OTextClazz, {
                         fill: shot.originLabel.color,
                         fontSize: shot.originLabel.fontSize,
-                        lineHeight: shot.originLabel.lineHeight,
                         fontWeight: shot.originLabel.fontWeight,
                         fontFamily: shot.originLabel.fontFamily,
                         textAnchor: shot.originLabel.align === 'left' ? 'end' : shot.originLabel.align === 'right' ? 'start' : 'middle'
@@ -621,14 +652,14 @@ CLASS(
             if (shot.xTick.display !== 'none' && shot.axisX.display !== 'none') {
                 let xTickArr = [];
                 let xTickNode = svg.draw('line', {
-                    y1: yAxisStart.y,
-                    y2: yAxisStart.y + xTickHeight
+                    y1: yAxisStart.y + (shot.xTick.height * shot.xTick.dy),
+                    y2: yAxisStart.y + xTickHeight + (shot.xTick.height * shot.xTick.dy)
                 });
                 xAxisPoint.forEach((v, i) => {
                     if (xAxisData[i]) {
                         xTickArr.push(ejs.attr(xTickNode.cloneNode(), {
-                            x1: v,
-                            x2: v
+                            x1: v + (xSpan * shot.xTick.dx),
+                            x2: v + (xSpan * shot.xTick.dx)
                         }))
                     }
                 });
@@ -688,12 +719,11 @@ CLASS(
             let xAxisLabelG = null,
                 yAxisLabelG = null;
 
-            if (shot.xLabel.display !== 'none' && xAxisSpace) {
+            if (shot.xLabel.display !== 'none') {
                 let xAxisLabelArr = [];
                 //x轴文本
                 let xAxisLabelNode = svg.create('text', {
-                    y: yAxisStart.y + xTickHeight + xStrHeight / 1.25,
-                    fontSize: shot.xLabel.fontSize
+                    y: yAxisStart.y + xTickHeight + xStrHeight / 1.25
                 });
 
                 xAxisPoint.forEach((v, i) => {
@@ -706,27 +736,27 @@ CLASS(
                 });
                 xAxisLabelG = svg.g(xAxisLabelArr);
                 ejs.css(xAxisLabelG, {
+                    fontSize: shot.xLabel.fontSize,
                     fill: shot.xLabel.color,
-                    lineHeight: xStrHeight,
                     fontWeight: shot.xLabel.fontWeight,
                     fontFamily: shot.xLabel.fontFamily,
                     textAnchor: shot.xLabel.align === 'left' ? 'end' : shot.xLabel.align === 'right' ? 'start' : 'middle'
                 });
             }
 
-            if (shot.yLabel.display !== 'none' && yAxisSpace) {
+            if (shot.yLabel.display !== 'none') {
                 let yAxisLabelArr = [];
                 let yAxisLabelNode = svg.create('text', {
-                    x: X(0) - yTickWidth - yStrWidth / 2,
-                    fontSize: shot.yLabel.fontSize
+                    x: X(0) - yTickWidth - yStrWidth / 2 + (shot.yLabel.dx * yStrWidth)
                 });
+                ejs.css(yAxisLabelNode, {fontSize: shot.xLabel.fontSize});
 
                 yAxisPoint.forEach((v, i) => {
                     if (!(i % interval)) {
                         if (oddEven(i)) {
                             let cloneNode = yAxisLabelNode.cloneNode();
                             cloneNode.textContent = yAxisData[i];
-                            ejs.attr(cloneNode, {y: v + shot.yLabel.lineHeight / 5});
+                            ejs.attr(cloneNode, {y: v + shot.yLabel.fontSize / 3 + (shot.yLabel.fontSize / 3) * shot.yLabel.dy});
                             yAxisLabelArr.push(cloneNode);
                         }
                     }
@@ -1077,11 +1107,11 @@ CLASS(
         }
 
         //标题
-        function title() {
+        function drawTitle() {
             let title = null;
             if (shot.title.display !== 'none') {
                 let x = O.x,
-                    y = yAxisStart.y - axisLength.y - shot.title.fontSize;
+                    y = shot.title.fontSize * 2;
                 if (shot.title.x !== 'default') {
                     x = shot.title.x;
                 }
@@ -1170,7 +1200,7 @@ CLASS(
         }
 
 
-        function legend() {
+        function drawLegend() {
             let legend = [];
             if (shot.legend.display !== 'none') {
                 if (shot.legend.content.length === 0) {
@@ -1180,8 +1210,8 @@ CLASS(
 
 
             //方块
-            let iconWidth = 10,
-                iconHeight = 10;
+            let iconWidth = shot.legend.fontSize/1.25,
+                iconHeight = shot.legend.fontSize/1.25;
 
             let x = chartSize.width
                 - (JSON.stringify(shot.legend.content).length
@@ -1191,7 +1221,7 @@ CLASS(
                 ) * shot.legend.fontSize * 1.25
                 - iconWidth * shot.legend.content.length
                 - shot.position.right,
-                y = yAxisStart.y - axisLength.y - shot.legend.fontSize;
+                y = shot.legend.fontSize * 2;
 
             if (shot.legend.x !== 'default') {
                 x = shot.legend.x;
@@ -1229,6 +1259,49 @@ CLASS(
             return svg.g(legend);
         }
 
+        function drawUnit() {
+            let unit = [];
+            if (shot.xUnit.display !== 'none') {
+                let x = axisLength.x + O.x - shot.yUnit.content.length * shot.yUnit.fontSize,
+                    y = shot.offsetSize.height - shot.position.bottom - (shot.xLabel.fontSize) / 4;
+                if (shot.yUnit.x !== 'default') {
+                    x = shot.yUnit.x;
+                }
+                if (shot.yUnit.y !== 'default') {
+                    y = shot.yUnit.y;
+                }
+
+                unit.push(svg.draw('text', {
+                    x: x,
+                    y: y,
+                    text: shot.xUnit.content
+                }, {
+                    fill: shot.xUnit.color,
+                    fontSize: shot.xUnit.fontSize
+                }));
+            }
+            if (shot.yUnit.display !== 'none') {
+                let x = O.x + shot.xUnit.fontSize / 2,
+                    y = yAxisStart.y - axisLength.y + shot.yLabel.fontSize / 4;
+
+                if (shot.xUnit.x !== 'default') {
+                    x = shot.xUnit.x;
+                }
+                if (shot.xUnit.y !== 'default') {
+                    y = shot.xUnit.y;
+                }
+
+                unit.push(svg.draw('text', {
+                    x: x + shot.yUnit.content.length * shot.yUnit.fontSize / 2 * shot.yUnit.dx,
+                    y: y + shot.yLabel.fontSize/4 * shot.yUnit.dy,
+                    text: shot.yUnit.content
+                }, {
+                    fill: shot.yUnit.color,
+                    fontSize: shot.yUnit.fontSize
+                }));
+            }
+            return svg.g(unit);
+        }
 
         function initPaper(svgNode, fn) {
             //【保存函数句柄】
@@ -1251,13 +1324,14 @@ CLASS(
             //【2生成部件】
             chartPartMap = new Map([
                 ['defs', defs],
-                ['title', title()],
+                ['title', drawTitle()],
                 ['axis', drawAxis()],
                 ['origin', drawOrigin()],
                 ['tick', drawTick()],
                 ['axisLabel', drawAxisLabel()],
                 ['grid', drawGrid()],
-                ['legend', legend()],
+                ['legend', drawLegend()],
+                ['unit', drawUnit()],
                 ['detail', drawDetail()]
             ]);
 
@@ -1275,8 +1349,8 @@ CLASS(
         //【公共方法】
         let publicFn = {
             option: option,
-            defs:defs,
-            //chartPartMap: chartPartMap,
+            defs: defs,
+            chartPartMap: chartPartMap,
             //sheetMap: sheetMap,
             //eventMap: eventMap,
             //figure: figure(),

@@ -74,7 +74,7 @@ CLASS(
         }, param);
 
         //【使用图纸】
-        const {option, initPaper, defs} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
+        const {option, initPaper, defs,chartPartMap} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
 
         //渐变
         function gradient(type = 'linear', opt={}) {
@@ -153,7 +153,8 @@ CLASS(
             option: option,
             svg: svg,
             gradient:gradient,
-            blur:blur
+            blur:blur,
+            chartPartMap:chartPartMap
             //addEvent: addEvent,
             //setSheet: setSheet,
             //getPaper: getPaper,

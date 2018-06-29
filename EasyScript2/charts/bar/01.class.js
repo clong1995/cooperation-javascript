@@ -30,21 +30,21 @@ CLASS('01', //类名
             style: {
                 background: '#091239',
                 title: {
-                    y: 50,
-                    fontSize: 18,
+                    y: 30,
+                    fontSize: 19,
                     color: '#fff',
                     content: '平铺柱状图'
                 },
                 legend: {
-                    y: 50,
-                    fontSize: 16,
+                    y: 30,
+                    fontSize: 19,
                     content: ['蒸发量', '降水量', '温度'/*, '湿度','紫外线','空气密度'*/],
                 },
                 position: {
                     top: 90,
                     right: 50,
                     bottom: 20,
-                    left: 30
+                    left: 40
                 },
                 axis: {
                     x: {
@@ -52,12 +52,18 @@ CLASS('01', //类名
                             borderColor: '#183158'
                         },
                         tick: {
-                            borderColor: '#183158'
+                            borderColor: '#183158',
+                            dx: 0.5,
+                            dy: -1
                         },
                         label: {
                             color: '#48CCE9',
+                            fontSize: 18
+                        },
+                        unit: {
                             fontSize: 18,
-                            lineHeight: 21
+                            color: '#48CCE9',
+                            content: '/天'
                         }
                     },
                     y: {
@@ -70,7 +76,16 @@ CLASS('01', //类名
                         },
                         label: {
                             color: '#48CCE9',
-                            fontSize: 18
+                            fontSize: 18,
+                            dx: 1,
+                            dy: -3
+                        },
+                        unit: {
+                            fontSize: 18,
+                            dx: 1,
+                            dy: -4,
+                            color: '#48CCE9',
+                            content: '/单位'
                         }
                     },
                     origin: {
@@ -95,25 +110,28 @@ CLASS('01', //类名
             option,//最终配置
             svg, //svg操作类
             gradient, //渐变
+            chartPartMap,//图纸的各个部分
             blur
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
         render(figure => {
+
+
             //根据数据绘制图像
             let bars = [];//柱子
             let barWidth = figure.axisSpan.x / figure.dataPoints.length / 3;
             //生成图形
             figure.dataPoints.forEach((v, i) => {
                 //定义渐变
-                let linear = gradient('linear',{
-                    offset : {
+                let linear = gradient('linear', {
+                    offset: {
                         "0%": {color: option.theme.colors[i][0], opacity: 1},
                         "90%": {color: option.theme.colors[i][1], opacity: 1}
                     }
                 });
 
                 //定义模糊
-                let blurOut = blur(barWidth,barWidth,{
+                let blurOut = blur(barWidth, barWidth, {
                     inset: 'out'
                 });
 
@@ -129,12 +147,9 @@ CLASS('01', //类名
                         width: barWidth,
                         height: barWidth,
                         fill: '#fff',
-                        filter:blurOut,
+                        filter: blurOut,
                         stroke: 'none',
                     });
-
-
-
 
                     //柱子
                     let bar = svg.create('rect', {
@@ -145,7 +160,7 @@ CLASS('01', //类名
                         fill: linear,
                         stroke: 'none',
                     });
-                    bars.push(hat,bar);
+                    bars.push(hat, bar);
                 });
             });
 
