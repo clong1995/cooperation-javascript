@@ -1,3 +1,15 @@
+@font-face {
+    font-family: 'iconfont';
+    src: url('../../index/iconfont.ttf') format('truetype');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
 html,body{
     width: 100%;
     height: 100%;
@@ -19,11 +31,15 @@ html,body{
     font-size: 14px;
     color:#fff;
     width: calc(100% - 20px);
-    height: 50px;
-    line-height: 50px;
+    height: 55px;
+    line-height: 55px;
     padding:0 0 0 20px;
     display: block;
     text-decoration:none;
+}
+.left >a>i{
+    margin-right: 10px;
+    font-size: 28px;
 }
 .left > a:hover{
     background: rgba(0,0,0,.3);
@@ -33,9 +49,10 @@ html,body{
     background: rgba(0,0,0,.3);
 }
 
-.left >h3 {
-    font-size: 16px;
+.left > h3 {
+    font-size: 14px;
     text-align: center;
+    color:#333666;
 }
 
 .main{

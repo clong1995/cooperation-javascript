@@ -131,6 +131,7 @@ class EBase {
         },
         mode = 'cros',
         cache = 'no-cache',
+        credentials = 'same-origin',
         data = {},
         success = null,
         error = null
@@ -140,6 +141,7 @@ class EBase {
             method: method,
             headers: headers,
             mode: mode,
+            credentials:credentials,
             cache: cache
         };
         if (method !== 'GET') {

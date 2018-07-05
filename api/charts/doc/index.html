@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/hybrid.min.css" rel="stylesheet">
+    <style>
+        .hljs-comment {
+            color: #00ca00;
+        }
+        pre{
+            margin:0;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<h1>开发者文档</h1>
+<p class="">
+    开发之前，你需要有 <a href="#">ES6</a>、<a href="#">SVG</a>的相关知识！
+</p>
+<p>
+    本库提供了许多基础设施，<br>
+    <a href="#">Base类</a>类提供了许多基于es6的实用方法，本库的底层基于<a href="#">Base类</a>。<br>
+    SVG类提供了许多绘图的实用方法，<a href="#">chartbase类</a>封装了更高层的绘制方法，用于方便的绘制图表中的图形
+</p>
+<p>
+    chart部分的开发工程图：<br>
+    <img src="../../index/img/chart.png" height="602" width="1377"/>
+</p>
+<p>
+    开发和使用的方式:<br>
+    非全职普通开发者使用:<br>
+</p>
+<pre>
+    <code>
+        function initChart() {
+            data.value.forEach(v => sum += v);
+            data.key.forEach((v, i) => {
+                dataGroup.push({
+                    name: v,
+                    value: data.value[i],
+                    angle: data.value[i] * 360 / sum,
+                    color: option.theme.color[colorIndex]
+                });
+                colorIndex === option.theme.color.length ? colorIndex = 0 : colorIndex++;
+            });
+
+            //【逻辑原点】
+            O = {
+                //x位
+                x: (shot.offsetSize.width + shot.position.left - shot.position.right) / 2,
+                //y位
+                y: (shot.offsetSize.height + shot.position.top - shot.position.bottom) / 2
+            };
+        }
+    </code>
+</pre>
+</body>
+</html>
