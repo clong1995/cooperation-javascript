@@ -18,7 +18,8 @@ CLASS('electron',
             let key = ejs.md5(route + JSON.stringify(data));
 
             //保存回调
-            renderEvent.set(key, callback);
+            if (callback)
+                renderEvent.set(key, callback);
 
             //匹配缓存
 
@@ -30,15 +31,16 @@ CLASS('electron',
         function sendSync(route, data = {}) {
             return ipcRenderer.sendSync(ipcToken, route, JSON.stringify(data));
         }
+        */
 
         //监听主进程的消息
         function listen(route, fn) {
             renderEvent.set(route, fn);
-        }*/
+        }
 
         return {
             send: send,
-            /*sendSync: sendSync,
-            listen: listen*/
+            /*sendSync: sendSync,*/
+            listen: listen
         }
     });

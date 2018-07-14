@@ -119,6 +119,7 @@ class EBase {
      * @param headers :自己查http协议去
      * @param mode :same-origin,cors(默认),cors-with-forced-preflight,no-cors
      * @param cache :default,no-store,no-cache(默认),reload,force-cache,only-if-cached
+     * @param credentials :同源策略
      * @param data :{}
      * @param success
      * @param error
@@ -141,7 +142,7 @@ class EBase {
             method: method,
             headers: headers,
             mode: mode,
-            credentials:credentials,
+            credentials: credentials,
             cache: cache
         };
         if (method !== 'GET') {
@@ -561,6 +562,10 @@ class EBase {
                 border: 0
             }
             
+            label{
+                cursor:pointer;
+            }
+            
             table {
                 border-collapse: collapse;
                 border-spacing: 0
@@ -845,16 +850,12 @@ class EBase {
      * @param path
      */
     loadFileAsync(path) {
-        let oXmlHttp = new XMLHttpRequest();
-        let res = null;
-        oXmlHttp.onreadystatechange = () => {
-            if (oXmlHttp.readyState === 4 && (oXmlHttp.status === 200 || oXmlHttp.status === 304)) {
-                res = JSON.parse(oXmlHttp.responseText);
-            }
-        };
-        oXmlHttp.open('GET', path, false);
-        oXmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        oXmlHttp.send(null);
+        let xhr = new XMLHttpRequest(),
+            res = null;
+        xhr.onload = () => res = JSON.parse(xhr.responseText);
+        xhr.open("GET", path, false);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(null);
         return res;
     }
 
@@ -864,22 +865,25 @@ class EBase {
      */
     loadScriptAsync(path) {
         if (!this._scriptSet.has(path)) {
-            let oXmlHttp = new XMLHttpRequest();
-            oXmlHttp.onreadystatechange = () => {
-                if (oXmlHttp.readyState === 4 && (oXmlHttp.status === 200 || oXmlHttp.status === 304)) {
-                    if (!oXmlHttp.responseText) return;
+            let xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+                if (xhr.responseText) {
                     let oScript = this.createDom("script", {
                         language: "javascript",
                         type: "text/javascript"
                     });
-                    oScript.text = oXmlHttp.responseText;
+                    oScript.text = xhr.responseText;
                     this.append(this._head, oScript);
-                    this.remove(oScript);
                     this._scriptSet.add(path);
+                    this.remove(oScript);
+                }else{
+                    ejs.log('加载js失败！','error');
+                    return null;
                 }
             };
-            oXmlHttp.open('GET', path, false);
-            oXmlHttp.send(null);
+            xhr.open('GET', path, false);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(null);
         }
     }
 
@@ -915,7 +919,6 @@ class EBase {
     }
 
     md5(string) {
-
         let utftext = "",
             cca = null;
         for (let n = 0; n < string.length; n++) {
@@ -967,7 +970,7 @@ class EBase {
         };
 
         let AddUnsigned = (lX, lY) => {
-            var lX4, lY4, lX8, lY8, lResult;
+            let lX4, lY4, lX8, lY8, lResult;
             lX8 = (lX & 0x80000000);
             lY8 = (lY & 0x80000000);
             lX4 = (lX & 0x40000000);
@@ -1045,7 +1048,7 @@ class EBase {
             BB = b;
             CC = c;
             DD = d;
-            a = FF(a, b, c, d, x[k + 0], S11, 0xD76AA478);
+            a = FF(a, b, c, d, x[k], S11, 0xD76AA478);
             d = FF(d, a, b, c, x[k + 1], S12, 0xE8C7B756);
             c = FF(c, d, a, b, x[k + 2], S13, 0x242070DB);
             b = FF(b, c, d, a, x[k + 3], S14, 0xC1BDCEEE);
@@ -1064,7 +1067,7 @@ class EBase {
             a = GG(a, b, c, d, x[k + 1], S21, 0xF61E2562);
             d = GG(d, a, b, c, x[k + 6], S22, 0xC040B340);
             c = GG(c, d, a, b, x[k + 11], S23, 0x265E5A51);
-            b = GG(b, c, d, a, x[k + 0], S24, 0xE9B6C7AA);
+            b = GG(b, c, d, a, x[k], S24, 0xE9B6C7AA);
             a = GG(a, b, c, d, x[k + 5], S21, 0xD62F105D);
             d = GG(d, a, b, c, x[k + 10], S22, 0x2441453);
             c = GG(c, d, a, b, x[k + 15], S23, 0xD8A1E681);
@@ -1086,14 +1089,14 @@ class EBase {
             c = HH(c, d, a, b, x[k + 7], S33, 0xF6BB4B60);
             b = HH(b, c, d, a, x[k + 10], S34, 0xBEBFBC70);
             a = HH(a, b, c, d, x[k + 13], S31, 0x289B7EC6);
-            d = HH(d, a, b, c, x[k + 0], S32, 0xEAA127FA);
+            d = HH(d, a, b, c, x[k], S32, 0xEAA127FA);
             c = HH(c, d, a, b, x[k + 3], S33, 0xD4EF3085);
             b = HH(b, c, d, a, x[k + 6], S34, 0x4881D05);
             a = HH(a, b, c, d, x[k + 9], S31, 0xD9D4D039);
             d = HH(d, a, b, c, x[k + 12], S32, 0xE6DB99E5);
             c = HH(c, d, a, b, x[k + 15], S33, 0x1FA27CF8);
             b = HH(b, c, d, a, x[k + 2], S34, 0xC4AC5665);
-            a = II(a, b, c, d, x[k + 0], S41, 0xF4292244);
+            a = II(a, b, c, d, x[k], S41, 0xF4292244);
             d = II(d, a, b, c, x[k + 7], S42, 0x432AFF97);
             c = II(c, d, a, b, x[k + 14], S43, 0xAB9423A7);
             b = II(b, c, d, a, x[k + 5], S44, 0xFC93A039);
@@ -1174,14 +1177,14 @@ class EBase {
         //增加父元素列表
         if (!this._domEvent.has(target)) this._domEvent.set(target, new Map());
 
-        if(!this._eventMap.get(target)) this._eventMap.set(target,new Set());
-        if(!this._eventMap.get(target).has(evt)){
+        if (!this._eventMap.get(target)) this._eventMap.set(target, new Set());
+        if (!this._eventMap.get(target).has(evt)) {
             this._eventMap.get(target).add(evt);
             target.addEventListener(evt, e => {
                 //查找所有元素是否有事件
                 let domLen = e.path.length - 4 - 1;//排除body,html,document,window
                 //冒泡
-                for (; domLen + 1; --domLen){
+                for (; domLen + 1; --domLen) {
                     this._onFunction(e.path[domLen], target, e.type);
                 }
             })
@@ -1193,7 +1196,6 @@ class EBase {
         if (!this._domEvent.get(target).get(selecter).get(evt)) this._domEvent.get(target).get(selecter).set(evt, new Set());
         //保存事件
         this._domEvent.get(target).get(selecter).get(evt).add(callback);
-
 
 
     }
@@ -1564,6 +1566,18 @@ class EBase {
             ww: this.body.offsetWidth,
             wh: this.body.offsetHeight
         }
+    }
+
+    wrap(target, wrap) {
+        let index = 0;
+        [...target.parentNode.childNodes].some(v => {
+            if (v.nodeName !== '#text') {
+                ++index;
+                return v === target
+            }
+        });
+        this.append(target.parentNode, wrap, index);
+        this.append(wrap, target);
     }
 }
 
