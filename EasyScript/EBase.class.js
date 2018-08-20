@@ -759,7 +759,7 @@ class EBase {
         return name;
     }
 
-    hide(dom, {
+    /*hide(dom, {
         duration = .5,
         timing = 'ease',
         iteration = 1,
@@ -802,9 +802,9 @@ class EBase {
             this.removeClass(dom, hideClass);
         }, duration * 1000);
         return dom;
-    }
+    }*/
 
-    show(dom, {
+    /*show(dom, {
         duration = .5,
         timing = 'ease',
         iteration = 1,
@@ -847,6 +847,16 @@ class EBase {
             this.removeClass(dom, showClass);
         }, duration * 1000);
         return dom;
+    }*/
+
+    hide(dom) {
+        this.css(dom, {
+            display: 'none'
+        })
+    }
+
+    show(dom) {
+        dom.style.display = '';
     }
 
     // 交集
