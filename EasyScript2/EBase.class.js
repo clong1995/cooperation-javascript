@@ -11,7 +11,15 @@
  *      8、svg操作，
  *      9、用户行为采集（未实现），
  *      10、日志监控
- *
+ * 需要实现
+ *    session 参数
+ *    屏蔽css攻击，css()函数做检测，上传的时候做检测
+ *    支持本地存储
+ *    websocket
+ *    click和change实现代理blur和focus。封装drag拖拽事件
+ *    扩展empty(),清空的时候遍历一遍事件树，被清空的节点在事件树上就销毁事件
+ *    加载插件的时候，保存在storage里，带版本号，下次用的时候，先查storage里面有没有，要维护更新和删除，图片，css,也存一下
+ *    html5的离线应用
  */
 'use strict';
 
@@ -103,6 +111,7 @@ class EBase {
 
 
     /**
+     * TODO 一次添加多个样式
      * 添加类名
      * @param dom
      * @param clazz
@@ -472,13 +481,20 @@ class EBase {
      * 清空指定元素
      * @param dom 目标对象
      * @param rep 不写默认清空，是节点或者是字符串则填充
+     * @param text 是否以字符模式填充
      */
-    empty(dom, rep = '') {
+    empty(dom, rep = null, text = false) {
         dom.innerHTML = '';
-        if (typeof rep === 'object')
-            dom.appendChild(rep);
-        else if (rep)
-            dom.innerHTML = rep
+        if (rep) {
+            if (typeof rep === 'object')//对象
+                dom.appendChild(rep);
+            else if (typeof rep === 'string') {
+                if (text)//字符
+                    this.text(dom, rep);
+                else//html
+                    this.html(dom, rep)
+            }
+        }
     }
 
     /**
@@ -509,7 +525,8 @@ class EBase {
                 width:100%;
                 height:100%;
                 cursor:auto;
-                user-select:auto
+                user-select:auto;
+                overflow:hidden;
             }
             
             body, button, input, select, textarea, a, li {
@@ -653,12 +670,32 @@ class EBase {
      * @param dom
      * @param str
      * @param plus
+     * @returns {string|*}
      */
-    html(dom, str, plus = true) {
-        let textNode = this.textNode(str);
-        plus ? dom.innerHTML = '' : null;
-        this.append(dom, textNode);
-        return dom;
+    html(dom, str = null, plus = false) {
+        if (str)
+            plus ? dom.innerHTML += str : dom.innerHTML = str;
+        else
+            return dom.innerHTML;
+    }
+
+    /**
+     *
+     * @param dom
+     * @param str
+     * @param plus
+     * @returns {string}
+     */
+    text(dom, str = null, plus = false) {
+        if (str) {
+            let textNode = this.textNode(str);
+            if(!plus){
+                dom.innerText = ''
+            }
+            this.append(dom, textNode)
+        } else {
+            return dom.innerText;
+        }
     }
 
     /**
@@ -822,7 +859,15 @@ class EBase {
      * @param url
      * @param target
      */
-    link(url, target = 'self') {
+    link(url, data = {}) {
+        let param = '?';
+        for (let k in data) {
+            param += k + '=' + data[k] + '&';
+        }
+        if (param !== '?') {
+            param = param.substring(0, param.length - 1);
+            url += param;
+        }
         window.location.href = url;
     }
 
@@ -876,8 +921,8 @@ class EBase {
                     this.append(this._head, oScript);
                     this._scriptSet.add(path);
                     this.remove(oScript);
-                }else{
-                    ejs.log('加载js失败！','error');
+                } else {
+                    ejs.log('加载js失败！', 'error');
                     return null;
                 }
             };
@@ -1208,6 +1253,7 @@ class EBase {
      * @private
      */
     _onFunction(node, target, event) {
+
         let keyArr = [node.nodeName];
         if (node.id) keyArr.push('#' + node.id);
         node.classList.forEach(v => keyArr.push('.' + v));
