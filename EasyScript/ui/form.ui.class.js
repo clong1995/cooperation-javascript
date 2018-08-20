@@ -100,7 +100,7 @@ CLASS(
             return data;
         } else {
             return {
-                state: 'fail',
+                state: false,
                 data: error
             }
         }

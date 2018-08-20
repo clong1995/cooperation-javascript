@@ -132,6 +132,7 @@ class EBase {
      * @param data :{}
      * @param success
      * @param error
+     * @param res
      */
     ajax(url, {
         method = 'GET',
@@ -144,7 +145,8 @@ class EBase {
         credentials = 'same-origin',
         data = {},
         success = null,
-        error = null
+        error = null,
+        res = 'json'
     } = {}) {
 
         let req = {
@@ -164,7 +166,7 @@ class EBase {
                 if (response.status === 200) return response;
             })
             .then(data => {
-                return data.json()
+                return res === 'json' ? data.json() : data.text();
             })
             .then(json => {
                 if (typeof success === 'function') success(json)
@@ -689,7 +691,7 @@ class EBase {
     text(dom, str = null, plus = false) {
         if (str) {
             let textNode = this.textNode(str);
-            if(!plus){
+            if (!plus) {
                 dom.innerText = ''
             }
             this.append(dom, textNode)

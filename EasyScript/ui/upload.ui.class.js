@@ -7,7 +7,7 @@
 CLASS(
     'upload.ui',
     ({
-         size = 200,//文件最大
+         size = 1024,//文件最大
          multiple = false,//开启多选
          accept = [],//文件类型参见MIME表
          content = null,//本地预览，只有图片可以本地预览
