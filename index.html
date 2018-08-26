@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .map {
+            width: 100%;
+            height: 100%;
+            background: #ccc;
+            margin: 0 auto;
+        }
+    </style>
+    <script src="EasyScript/EBase.class.js"></script>
+    <script>
+        //引用的模块
+        ejs.ready(() => {
+            let map = ejs.query('.map');
+            NEW(ejs.root + 'map/imgMap', {
+                mapImgSrc: 'school.jpg',
+                mapDom: map
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="map" id="map"></div>
+</body>
+</html>

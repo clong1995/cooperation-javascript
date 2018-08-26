@@ -20,6 +20,8 @@
  *    扩展empty(),清空的时候遍历一遍事件树，被清空的节点在事件树上就销毁事件
  *    加载插件的时候，保存在storage里，带版本号，下次用的时候，先查storage里面有没有，要维护更新和删除，图片，css,也存一下
  *    html5的离线应用
+ *    用websocket实现的不定时长的超级http
+ *    监听元素大小等的变化
  */
 'use strict';
 
@@ -883,6 +885,14 @@ class EBase {
         window.location.href = url;
     }
 
+
+    loadImg(src, cb) {
+        let img = new Image();
+        img.src = src;
+        img.onload = () => cb(img);
+        img.onerror = e => this.log(e, 'error');
+    }
+
     /**
      * 加载js
      * @param path
@@ -1437,9 +1447,9 @@ class EBase {
      */
     simple(len = 4) {
         let simpleSelecterName = this.randomChar(len);
-        if (document.querySelector(simpleSelecterName))
+        if (document.querySelector('.' + simpleSelecterName) || document.querySelector('#' + simpleSelecterName))
             this.simple();
-        else if (!this.getStyleSheet(simpleSelecterName).size)
+        else if (!this.getStyleSheet('.' + simpleSelecterName).size || !this.getStyleSheet('#' + simpleSelecterName).size)
             return simpleSelecterName;
         else
             this.simple();
@@ -1613,6 +1623,13 @@ class EBase {
     verify(type, value) {
         let res = false;
         let reg = null;
+    }
+
+    domSize(dom) {
+        return {
+            width: dom.offsetWidth,
+            height: dom.offsetHeight
+        }
     }
 
     /**
