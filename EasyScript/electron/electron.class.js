@@ -12,11 +12,12 @@ CLASS('electron',
 
         //向主进异步程发送消息
         function send(route, data = {}, callback) {
-
+            //用于异步响应的句柄
+            let key = null;
             //保存回调
             if (callback) {
                 //生成令牌 MD5摘要路由和数据
-                let key = ejs.md5(route + JSON.stringify(data));
+                key = ejs.md5(route + JSON.stringify(data));
                 renderEvent.set(key, callback);
             }
 
@@ -24,6 +25,7 @@ CLASS('electron',
 
             //发送数据
             ipcRenderer.send(ipcToken, route, JSON.stringify(data));
+            return key;
         }
 
         /*//向主进程同步发送消息
@@ -33,8 +35,8 @@ CLASS('electron',
         */
 
         //监听主进程的消息
-        function listen(route, fn) {
-            renderEvent.set(route, fn);
+        function listen(key, fn) {
+            renderEvent.set(key, fn);
         }
 
         return {
