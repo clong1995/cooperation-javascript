@@ -25,8 +25,11 @@ CLASS('imgMap', ({
         ebx, //结束x
         eby,//结束y
         img,//图片
-        mapClass,
-        mapImgClass;//图片样式
+        mapClass,//图片类
+        mapImgClass,//图片样式
+        handle = null,
+        handleClass = null,
+        handleMove = false;
 
     //规范容器
     ejs.css(mapDom, {
@@ -102,7 +105,7 @@ CLASS('imgMap', ({
             width: '30px',
             height: '200px',
             margin: '0 auto',
-            background: 'red',
+            background: 'orange',
             position: 'relative'
         });
         ejs.append(controlDom, zoomControl);
@@ -114,35 +117,102 @@ CLASS('imgMap', ({
             cursor: 'pointer',
             bottom: 0
         });
-        let handle = ejs.createDom();
+
+        //缩放拉杆
+        handleClass = ejs.simple();
+        handle = ejs.createDom('div', {class: handleClass});
         ejs.append(zoomControl, handle);
 
-        //事件
+        //方向按键事件
         controlDom.onclick = e => moveMap(e.target.className);
+
+        //拉动缩放轴
+        let shy, top;
+        handle.onmousedown = e => {
+            //移动限制在拉杆上
+            if (!ejs.hasClass(e.target, handleClass)) return;
+            //开启移动
+            handleMove = true;
+            shy = e.pageY;//起点
+            top = parseInt(handle.style.top);
+        };
+
+        document.body.onmousemove = e => {
+            if (!handleMove) return;
+            let handleTop = top + e.pageY - shy;
+            if (handleTop < 0) handleTop = 0;
+            if (handleTop > 200) handleTop = 200;
+
+            //算出地图的缩放比例
+            let zoomRank = (1 - handleTop / 200) * (maxRank - realMinRank) + realMinRank;
+            ejs.css(handle, {
+                top: handleTop + 'px'
+            });
+
+            zoom(zoomRank, true);
+        }
     }
 
     //加载图片
     ejs.loadImg(mapImgSrc, t => {
-        img = t;
-        //调整图片样式
-        mapImgClass = ejs.simple();
-        ejs.addClass(img, mapImgClass);
-        ejs.append(mapDom, img);
-        imgMapSize = ejs.domSize(img);
-        containerSize = ejs.domSize(mapDom);
 
+        //添加一个图层
+        mapImgClass = ejs.simple();
+        img = ejs.createDom('div', {class: mapImgClass});
         ejs.setSheet('.' + mapImgClass, {
             position: 'absolute',
-            /*top: '0px',
-            left: '0px',*/
-            'pointer-events': 'none'
+            pointerEvents: 'none'
         });
+
+
+
+        ejs.append(mapDom, img);
+        ejs.append(img, t);
+
+
+
+        //================ 测试缩放========================
+        let testDom = ejs.createDom();
+        ejs.css(testDom, {
+            top: '60%',
+            left: '45%',
+            width: '10%',
+            height: '10%',
+            background:'red',
+            position:'absolute'
+        });
+        ejs.append(img, testDom);
+        //========================================
+
+
+
+
+
+
+
+
 
         //大小
         originalImgMapSize = {
-            width: imgMapSize.width,
-            height: imgMapSize.height,
+            width: t.width,
+            height: t.height,
         };
+
+        //异步指定地图大小
+        ejs.css(img, {
+            width: t.width + 'px',
+            height: t.height + 'px'
+        });
+
+        imgMapSize = ejs.domSize(img);
+
+        //重置图片
+        ejs.css(t, {
+            width: '100%',
+            height: '100%'
+        });
+
+        containerSize = ejs.domSize(mapDom);
 
 
         //激活移动
@@ -158,11 +228,13 @@ CLASS('imgMap', ({
             eby = parseInt(img.style.top || 0);
             ebx = parseInt(img.style.left || 0);
         };
-
         //关闭移动
-        document.body.onmouseup = () => move = false;
-
-
+        document.body.onmouseup = () => {
+            //关闭地图移动
+            move = false;
+            //关不缩放移动
+            handleMove = false;
+        };
         //执行移动
         mapDom.onmousemove = e => {
             if (!move) return;
@@ -204,13 +276,6 @@ CLASS('imgMap', ({
         //缩放操作
         mapDom.onmousewheel = e => {
             e.deltaY < 0 ? rank += .1 : rank -= .1;
-
-            /*if ( || rank > maxRank) {
-                return;
-            }
-
-            rank < realMinRank?*/
-
             //执行缩放
             zoom(rank);
         };
@@ -220,17 +285,17 @@ CLASS('imgMap', ({
     });
 
     //地图缩放
-    function zoom(r) {
-
-
+    function zoom(r, isHandle = false) {
         //检测最小缩放比例
         let r1 = containerSize.width / originalImgMapSize.width;
         let r2 = containerSize.height / originalImgMapSize.height;
         realMinRank = r1 > r2 ? r1 : r2;
+
         //系统内最小
         rank = r < realMinRank ? realMinRank : r;
         //开发者指定最小
         rank = rank > minRank ? rank : minRank;
+
         //系统内最大，无限大
         //开发者指定最大
         rank = rank < maxRank ? rank : maxRank;
@@ -261,6 +326,19 @@ CLASS('imgMap', ({
 
         //重置图片
         imgMapSize = ejs.domSize(img);
+
+        /**
+         * 处理拉杆
+         * 地图缩放等级逆向推到算出拉杆移动位置的算法:
+         *        拉杆位置 = 拉杆最大移动距离 * ( 1- (缩放等级 - 最小等级) * (1 / (最大等级 - 最小等级)))
+         * 通过简单数学归纳得到如下,我天...原来就这样啊...脑子笨,饶了一圈,初中数学白学了...
+         */
+        if (!isHandle) {
+            let handleRank = (rank - realMinRank) / (maxRank - realMinRank);
+            ejs.css(handle, {
+                top: (200 * (1 - handleRank)) + 'px'
+            });
+        }
     }
 
     //地图移动
@@ -273,19 +351,19 @@ CLASS('imgMap', ({
         switch (type) {
             case 'up':
                 vertical = prev.top - controlStep;
-                if (vertical > topMax) img.style.top = vertical+'px';
+                if (vertical > topMax) img.style.top = vertical + 'px';
                 break;
             case 'down':
                 vertical = prev.top + controlStep;
-                if (vertical < 0) img.style.top = vertical+'px';
+                if (vertical < 0) img.style.top = vertical + 'px';
                 break;
             case 'left':
                 horizontal = prev.left - controlStep;
-                if (horizontal > leftMax) img.style.left = horizontal+'px';
+                if (horizontal > leftMax) img.style.left = horizontal + 'px';
                 break;
             case 'right':
                 horizontal = prev.left + controlStep;
-                if (horizontal < 0) img.style.left = horizontal+'px';
+                if (horizontal < 0) img.style.left = horizontal + 'px';
                 break;
         }
     }
