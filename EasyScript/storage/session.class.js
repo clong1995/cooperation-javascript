@@ -28,16 +28,17 @@ CLASS('session',
         }
 
         //改
-        function update(key,value) {
+        function update(key, value) {
             if (has(key)) {
                 sessionStorage.setItem(key, value);
             } else {
                 ejs.log(notExistsError, 'error');
             }
         }
-        
-        function replace() {
-            
+
+
+        function replace(key, value) {
+            sessionStorage.setItem(key, value);
         }
 
         //查询
@@ -51,7 +52,8 @@ CLASS('session',
 
         //是否有
         function has(key) {
-            return typeof sessionStorage.getItem(key) !== 'undefined';
+            let item = sessionStorage.getItem(key);
+            return !(item === 'undefined' || item === null || item === '');
         }
 
         //销毁
@@ -66,7 +68,8 @@ CLASS('session',
             update: update,
             get: get,
             has: has,
-            destroy:destroy
+            destroy: destroy,
+            replace: replace
         }
     }
 );

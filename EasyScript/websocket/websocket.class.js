@@ -46,8 +46,13 @@ CLASS('websocket',
                     }, autoConnInterval)
                 }
             };
+            
             //接受消息
-            wsHandle.onmessage = e => listenBack && listenBack(JSON.parse(e.data));
+            wsHandle.onmessage = e => {
+                ejs.log('接收消息====>');
+                ejs.log(e.data);
+                listenBack && listenBack(JSON.parse(e.data));
+            }
         })(ws);
 
 
@@ -59,10 +64,12 @@ CLASS('websocket',
         //发送消息
         function send(data) {
             if (isOpen && !isClose) {
+                ejs.log('发送消息====>');
+                ejs.log(data);
                 ws.send(JSON.stringify(data));
             } else {
                 let siv = setInterval(() => {
-                    if (!isClose)
+                    if (isClose)
                         clearInterval(siv);
                     else if (isOpen) {
                         clearInterval(siv);

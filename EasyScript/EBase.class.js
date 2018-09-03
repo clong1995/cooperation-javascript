@@ -142,7 +142,7 @@ class EBase {
             //TODO 需要完善 可以参考jQuery的ajax请求头
             "Content-type": "application/x-www-form-urlencoded"
         },
-        mode = 'cros',
+        cros = false,
         cache = 'no-cache',
         credentials = 'same-origin',
         data = {},
@@ -154,15 +154,19 @@ class EBase {
         let req = {
             method: method,
             headers: headers,
-            mode: mode,
             credentials: credentials,
             cache: cache
         };
+
+        if (cros)
+            req['mode'] = 'cros';
+
         if (method !== 'GET') {
             let body = '';
             Object.keys(data).forEach(value => body += value + '=' + data[value] + '&');
-            req['body'] = this.trim(body, '&', 'right');
+            req['body'] = this.trim(body, {char: '&', position: 'right'});
         }
+
         fetch(url, req)
             .then(response => {
                 if (response.status === 200) return response;
@@ -1366,7 +1370,7 @@ class EBase {
      * @param clazz
      */
     removeClass(dom, clazz) {
-        dom.classList.remove(clazz)
+        dom && dom.classList.remove(clazz);
     }
 
     /**
@@ -1386,10 +1390,10 @@ class EBase {
      * @param path
      * @param option
      * @param callback
+     * @param className
      * @private
      */
-    _require(path, option = {}, callback = () => {
-    }, className = path.split('/').pop()) {
+    _require(path, option = {}, callback = () => {}, className = path.split('/').pop()) {
         //option.className = className;
         option.call ? option.call.push(className) : option.call = [className];
         this.loadScript(path + '.class.js', () => callback(this._moduleStack.get(className)(option)))
@@ -1399,6 +1403,7 @@ class EBase {
      * 同步加载模块
      * @param path
      * @param option
+     * @param className
      * @returns {*}
      * @private
      */
